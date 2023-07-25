@@ -41,11 +41,11 @@ class SignupPage extends StatelessWidget {
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 5,
                   ),
                   Text(
                     "재학중인 학교의 이메일로 회원가입할 수 있습니다.",
-                    style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                   ),
                 ],
               ),

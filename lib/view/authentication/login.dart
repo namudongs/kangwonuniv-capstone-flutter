@@ -49,7 +49,7 @@ class LoginPage extends StatelessWidget {
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                         Text(
                           "재학중인 학교의 이메일로 로그인하세요.",

@@ -22,8 +22,8 @@ class HomePage extends StatelessWidget {
         child: Container(
           color: Colors.white,
           width: double.infinity,
-          height: MediaQuery.of(context).size.height - 100,
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.fromLTRB(30, 70, 30, 40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,12 +35,12 @@ class HomePage extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Text(
-                    "실시간 질의응답 어플리케이션을 통해 대학생활을 더욱 즐겁게!",
+                    "실시간 질의응답으로 대학생활을 더 즐겁게",
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[700], fontSize: 13),
+                    style: TextStyle(color: Colors.grey[700], fontSize: 15),
                   ),
                 ],
               ),
@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 3, left: 3),
