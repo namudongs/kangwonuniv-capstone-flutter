@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:capstone_flutter/view/login.dart';
-import 'package:capstone_flutter/view/signup.dart';
+import 'package:capstone_flutter/view/authentication/login.dart';
+import 'package:capstone_flutter/view/authentication/signup.dart';
 import 'package:lottie/lottie.dart';
 
 void main() {

@@ -22,10 +22,15 @@ class _HomeNavBarState extends State<HomeNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text(
-          "@capstone_",
-          style: TextStyle(fontSize: 20),
+      body: Center(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: const Text(
+            "@previous_page",
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       ),
       bottomNavigationBar: SalomonBottomBar(
