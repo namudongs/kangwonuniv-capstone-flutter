@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/view/home.dart';
+import 'package:capstone_flutter/view/authentication/signup_page.dart';
+import 'package:capstone_flutter/view/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -8,6 +10,7 @@ import 'package:lottie/lottie.dart';
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   LoginPage({super.key});
 
   @override
@@ -88,13 +91,20 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {
                             String email = emailController.text;
                             String password = passwordController.text;
-                            print('로그인 버튼 클릭');
-                            print('이메일: $email, 비밀번호: $password');
 
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
+                            FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                    email: email, password: password)
+                                .then((value) {
+                              print('로그인 성공\n이메일: $email, 비밀번호: $password');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const HomePage()));
+                            }).catchError((e) {
+                              print('로그인 실패\n이메일: $email, 비밀번호: $password');
+                              print(e);
+                            });
                           },
                           color: Colors.lightBlueAccent,
                           elevation: 0,
@@ -117,6 +127,10 @@ class LoginPage extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               print('회원가입 버튼 클릭');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignupPage()));
                             },
                             child: const Text(
                               "회원가입",

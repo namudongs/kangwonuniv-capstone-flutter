@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/view/home.dart';
+import 'package:capstone_flutter/view/authentication/login_page.dart';
+import 'package:capstone_flutter/view/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -82,11 +84,22 @@ class SignupPage extends StatelessWidget {
                     String email = emailController.text;
                     String password = passwordController.text;
                     String pwconfirm = pwconfirmController.text;
-                    print('이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
 
-                    print('회원가입 버튼 클릭');
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const Home()));
+                    FirebaseAuth.instance
+                        .createUserWithEmailAndPassword(
+                            email: email, password: password)
+                        .then((value) {
+                      print(
+                          '회원가입 성공\n이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()));
+                    }).catchError((error) {
+                      print(
+                          '회원가입 실패\n이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
+                      print('error: $error');
+                    });
                   },
                   color: Colors.blueAccent,
                   elevation: 0,
@@ -107,6 +120,10 @@ class SignupPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         print('로그인 버튼 클릭');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()));
                       },
                       child: const Text(
                         "로그인",

@@ -1,17 +1,18 @@
 // ignore_for_file: avoid_print
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeState createState() => _HomeState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
 
   @override
@@ -25,10 +26,11 @@ class _HomeState extends State<Home> {
       body: Center(
         child: GestureDetector(
           onTap: () {
-            Navigator.pop(context);
+            FirebaseAuth.instance.signOut();
+            print('firebase logout');
           },
           child: const Text(
-            "@previous_page",
+            "@logout",
             style: TextStyle(fontSize: 20),
           ),
         ),

@@ -1,20 +1,38 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone_flutter/view/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone_flutter/view/authentication/login.dart';
-import 'package:capstone_flutter/view/authentication/signup.dart';
+import 'package:capstone_flutter/view/authentication/login_page.dart';
+import 'package:capstone_flutter/view/authentication/signup_page.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MaterialApp(
     theme: ThemeData(scaffoldBackgroundColor: Colors.white),
     debugShowCheckedModeBanner: false,
-    home: const HomePage(),
+    home: StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return const HomePage();
+        } else {
+          return const MainPage();
+        }
+      },
+    ),
   ));
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MainPage extends StatelessWidget {
+  const MainPage({super.key});
 
   @override
   Widget build(BuildContext context) {
