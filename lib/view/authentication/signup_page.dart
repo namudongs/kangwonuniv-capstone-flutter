@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:capstone_flutter/view/authentication/login_page.dart';
-import 'package:capstone_flutter/view/home_page.dart';
+import 'package:capstone_flutter/view/navbar/bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -94,7 +94,7 @@ class SignupPage extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const HomePage()));
+                              builder: (context) => const BottomNavBar()));
                     }).catchError((error) {
                       print(
                           '회원가입 실패\n이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
