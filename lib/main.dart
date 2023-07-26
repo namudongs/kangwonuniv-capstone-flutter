@@ -6,9 +6,10 @@ import 'package:capstone_flutter/view/authentication/signup.dart';
 import 'package:lottie/lottie.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp(MaterialApp(
+    theme: ThemeData(scaffoldBackgroundColor: Colors.white),
     debugShowCheckedModeBanner: false,
-    home: HomePage(),
+    home: const HomePage(),
   ));
 }
 
@@ -20,7 +21,6 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          color: Colors.white,
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
           padding: const EdgeInsets.fromLTRB(30, 70, 30, 40),
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignupPage()));
+                                builder: (context) => SignupPage()));
                       },
                       color: Colors.lightBlue,
                       elevation: 0,

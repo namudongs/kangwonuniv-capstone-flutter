@@ -1,16 +1,19 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone_flutter/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController pwconfirmController = TextEditingController();
+  SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -51,9 +54,15 @@ class SignupPage extends StatelessWidget {
               ),
               Column(
                 children: <Widget>[
-                  makeInput(label: "이메일"),
-                  makeInput(label: "비밀번호", obscureText: true),
-                  makeInput(label: "비밀번호 확인", obscureText: true),
+                  makeInput(label: "이메일", controller: emailController),
+                  makeInput(
+                      label: "비밀번호",
+                      obscureText: true,
+                      controller: passwordController),
+                  makeInput(
+                      label: "비밀번호 확인",
+                      obscureText: true,
+                      controller: pwconfirmController),
                 ],
               ),
               Container(
@@ -70,7 +79,14 @@ class SignupPage extends StatelessWidget {
                   minWidth: double.infinity,
                   height: 60,
                   onPressed: () {
+                    String email = emailController.text;
+                    String password = passwordController.text;
+                    String pwconfirm = pwconfirmController.text;
+                    print('이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
+
                     print('회원가입 버튼 클릭');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Home()));
                   },
                   color: Colors.blueAccent,
                   elevation: 0,
@@ -109,7 +125,8 @@ class SignupPage extends StatelessWidget {
     );
   }
 
-  Widget makeInput({label, obscureText = false}) {
+  Widget makeInput(
+      {label, obscureText = false, required TextEditingController controller}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -124,6 +141,7 @@ class SignupPage extends StatelessWidget {
           height: 5,
         ),
         TextField(
+          controller: controller,
           obscureText: obscureText,
           decoration: InputDecoration(
             contentPadding:

@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class HomeNavBar extends StatefulWidget {
-  const HomeNavBar({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
-  _HomeNavBarState createState() => _HomeNavBarState();
+  _HomeState createState() => _HomeState();
 }
 
-class _HomeNavBarState extends State<HomeNavBar> {
+class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
   @override
