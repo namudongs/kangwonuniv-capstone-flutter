@@ -5,8 +5,6 @@ import 'package:capstone_flutter/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyPage());
-
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
