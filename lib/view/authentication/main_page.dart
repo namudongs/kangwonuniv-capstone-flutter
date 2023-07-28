@@ -34,7 +34,7 @@ class MainPage extends StatelessWidget {
               child: Lottie.asset('assets/lottie/animation_lkiiozif.json'),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 children: <Widget>[
                   MaterialButton(
