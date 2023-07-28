@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/view/authentication/signup_page.dart';
-import 'package:capstone_flutter/view/navbar/bottom_nav_bar.dart';
+import 'package:capstone_flutter/authentication/signup_page.dart';
+import 'package:capstone_flutter/components/bottom_nav_bar.dart';
+import 'package:capstone_flutter/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,51 +75,32 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 3, left: 3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: const Border(
-                              bottom: BorderSide(color: Colors.black),
-                              top: BorderSide(color: Colors.black),
-                              left: BorderSide(color: Colors.black),
-                              right: BorderSide(color: Colors.black),
-                            )),
-                        child: MaterialButton(
-                          minWidth: double.infinity,
-                          height: 60,
-                          onPressed: () {
-                            String email = emailController.text;
-                            String password = passwordController.text;
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: ColorRoundButton(
+                            tapFunc: () {
+                              String email = emailController.text;
+                              String password = passwordController.text;
 
-                            FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: email, password: password)
-                                .then((value) {
-                              print('로그인 성공\n이메일: $email, 비밀번호: $password');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const BottomNavBar()));
-                            }).catchError((e) {
-                              print('로그인 실패\n이메일: $email, 비밀번호: $password');
-                              print(e);
-                            });
-                          },
-                          color: Colors.lightBlueAccent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
-                          child: const Text(
-                            "로그인",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
-                      ),
-                    ),
+                              FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                      email: email, password: password)
+                                  .then((value) {
+                                print('로그인 성공\n이메일: $email, 비밀번호: $password');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BottomNavBar()));
+                              }).catchError((e) {
+                                print('로그인 실패\n이메일: $email, 비밀번호: $password');
+                                print(e);
+                              });
+                            },
+                            title: "로그인",
+                            color: Colors.lightBlueAccent,
+                            buttonWidth: double.infinity,
+                            buttonHeight: 60,
+                            fontSize: 18)),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
                       child: Row(

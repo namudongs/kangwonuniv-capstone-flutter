@@ -1,7 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/view/authentication/login_page.dart';
-import 'package:capstone_flutter/view/navbar/bottom_nav_bar.dart';
+import 'package:capstone_flutter/authentication/login_page.dart';
+import 'package:capstone_flutter/components/bottom_nav_bar.dart';
+import 'package:capstone_flutter/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,50 +68,48 @@ class SignupPage extends StatelessWidget {
                       controller: pwconfirmController),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.only(top: 3, left: 3),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: const Border(
-                      bottom: BorderSide(color: Colors.black),
-                      top: BorderSide(color: Colors.black),
-                      left: BorderSide(color: Colors.black),
-                      right: BorderSide(color: Colors.black),
-                    )),
-                child: MaterialButton(
-                  minWidth: double.infinity,
-                  height: 60,
-                  onPressed: () {
+              ColorRoundButton(
+                  tapFunc: () {
                     String email = emailController.text;
                     String password = passwordController.text;
                     String pwconfirm = pwconfirmController.text;
 
-                    FirebaseAuth.instance
-                        .createUserWithEmailAndPassword(
-                            email: email, password: password)
-                        .then((value) {
-                      print(
-                          '회원가입 성공\n이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const BottomNavBar()));
-                    }).catchError((error) {
-                      print(
-                          '회원가입 실패\n이메일: $email, 비밀번호: $password, 비밀번호 확인: $pwconfirm');
-                      print('error: $error');
-                    });
+                    if (email == '' || password == '' || pwconfirm == '') {
+                      print('빈칸이 있습니다.');
+                      return;
+                    } else if (password != pwconfirm) {
+                      print('비밀번호가 일치하지 않습니다.');
+                      return;
+                    } else if (password.length < 6) {
+                      print('비밀번호는 6자리 이상이어야 합니다.');
+                      return;
+                    } else if (!email.contains('@')) {
+                      print('이메일 형식이 아닙니다.');
+                      return;
+                    } else if (!email.contains('.ac.kr')) {
+                      print('학교 이메일이 아닙니다.');
+                      return;
+                    } else {
+                      print('회원가입 버튼 클릭');
+                      FirebaseAuth.instance
+                          .createUserWithEmailAndPassword(
+                              email: email, password: password)
+                          .then((value) {
+                        print('회원가입 성공');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const BottomNavBar()));
+                      }).catchError((err) {
+                        print(err);
+                      });
+                    }
                   },
-                  color: Colors.blueAccent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  child: const Text(
-                    "회원가입",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                ),
-              ),
+                  title: "회원가입",
+                  color: Colors.blue,
+                  buttonWidth: double.infinity,
+                  buttonHeight: 60,
+                  fontSize: 18),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Row(

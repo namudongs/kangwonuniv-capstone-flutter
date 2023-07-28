@@ -39,6 +39,7 @@ dependencies:
   lottie: ^2.5.0
   firebase_core: ^2.15.0
   firebase_auth: ^4.7.2
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   flutter_test:
