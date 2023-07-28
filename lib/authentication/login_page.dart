@@ -1,12 +1,15 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/authentication/signup_page.dart';
-import 'package:capstone_flutter/components/bottom_nav_bar.dart';
-import 'package:capstone_flutter/components/color_round_button.dart';
+import 'package:capstone_flutter/components/make_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
+
+import 'package:capstone_flutter/authentication/signup_page.dart';
+import 'package:capstone_flutter/components/bottom_nav_bar.dart';
+import 'package:capstone_flutter/components/color_round_button.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -69,9 +72,11 @@ class LoginPage extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 40),
                         child: Column(
                           children: <Widget>[
-                            makeInput(
-                                label: "이메일", controller: emailController),
-                            makeInput(
+                            MakeInput(
+                                label: "이메일",
+                                obscureText: false,
+                                controller: emailController),
+                            MakeInput(
                               label: "비밀번호",
                               obscureText: true,
                               controller: passwordController,
@@ -162,41 +167,6 @@ class LoginPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget makeInput(
-      {label, obscureText = false, required TextEditingController controller}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          label,
-          style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: Colors.black87),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        TextField(
-          controller: controller,
-          obscureText: obscureText,
-          style: const TextStyle(fontSize: 15, color: Colors.black87),
-          decoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-      ],
     );
   }
 }

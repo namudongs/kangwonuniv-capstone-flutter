@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:capstone_flutter/authentication/login_page.dart';
+import 'package:capstone_flutter/components/make_input.dart';
 import 'package:capstone_flutter/components/bottom_nav_bar.dart';
 import 'package:capstone_flutter/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,12 +63,15 @@ class SignupPage extends StatelessWidget {
                 ),
                 Column(
                   children: <Widget>[
-                    makeInput(label: "이메일", controller: emailController),
-                    makeInput(
+                    MakeInput(
+                        label: "이메일",
+                        obscureText: false,
+                        controller: emailController),
+                    MakeInput(
                         label: "비밀번호",
                         obscureText: true,
                         controller: passwordController),
-                    makeInput(
+                    MakeInput(
                         label: "비밀번호 확인",
                         obscureText: true,
                         controller: pwconfirmController),
@@ -153,37 +157,37 @@ class SignupPage extends StatelessWidget {
     );
   }
 
-  Widget makeInput(
-      {label, obscureText = false, required TextEditingController controller}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          label,
-          style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.normal,
-              color: Colors.black87),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        TextField(
-          controller: controller,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-          ),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-      ],
-    );
-  }
+  // Widget makeInput(
+  //     {label, obscureText = false, required TextEditingController controller}) {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: <Widget>[
+  //       Text(
+  //         label,
+  //         style: const TextStyle(
+  //             fontSize: 15,
+  //             fontWeight: FontWeight.normal,
+  //             color: Colors.black87),
+  //       ),
+  //       const SizedBox(
+  //         height: 5,
+  //       ),
+  //       TextField(
+  //         controller: controller,
+  //         obscureText: obscureText,
+  //         decoration: InputDecoration(
+  //           contentPadding:
+  //               const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+  //           enabledBorder: OutlineInputBorder(
+  //               borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
+  //           border: OutlineInputBorder(
+  //               borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
+  //         ),
+  //       ),
+  //       const SizedBox(
+  //         height: 30,
+  //       ),
+  //     ],
+  //   );
+  // }
 }

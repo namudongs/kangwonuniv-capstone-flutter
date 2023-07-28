@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ColorRoundButton extends StatelessWidget {
-  Function? tapFunc;
-  String? title;
-  Color? color;
-  double? buttonWidth;
-  double? buttonHeight;
-  double? fontSize;
+  final Function? tapFunc;
+  final String? title;
+  final Color? color;
+  final double? buttonWidth;
+  final double? buttonHeight;
+  final double? fontSize;
 
-  ColorRoundButton({
+  const ColorRoundButton({
     super.key,
     required this.tapFunc,
     required this.title,

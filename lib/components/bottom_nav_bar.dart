@@ -49,7 +49,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       bottomNavigationBar: SalomonBottomBar(
         currentIndex: _currentIndex,
-        margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+        margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
         onTap: (index) {
           setState(() {
             _currentIndex = index;
