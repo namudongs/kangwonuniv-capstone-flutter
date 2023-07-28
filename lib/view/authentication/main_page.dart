@@ -10,37 +10,35 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.fromLTRB(30, 70, 30, 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  const Text(
-                    "환영합니다!",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "실시간 질의응답으로 대학생활을 더 즐겁게",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
-                child: Lottie.asset('assets/lottie/animation_lkiiozif.json'),
-              ),
-              Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                const Text(
+                  "환영합니다!",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "실시간 질의응답으로 대학생활을 더 즐겁게",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[700], fontSize: 15),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Lottie.asset('assets/lottie/animation_lkiiozif.json'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Column(
                 children: <Widget>[
                   MaterialButton(
+                    color: Colors.white,
                     minWidth: double.infinity,
                     height: 60,
                     onPressed: () {
@@ -90,9 +88,9 @@ class MainPage extends StatelessWidget {
                     ),
                   )
                 ],
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
