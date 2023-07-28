@@ -81,20 +81,37 @@ class LoginPage extends StatelessWidget {
                               String email = emailController.text;
                               String password = passwordController.text;
 
-                              FirebaseAuth.instance
-                                  .signInWithEmailAndPassword(
-                                      email: email, password: password)
-                                  .then((value) {
-                                print('로그인 성공\n이메일: $email, 비밀번호: $password');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BottomNavBar()));
-                              }).catchError((e) {
-                                print('로그인 실패\n이메일: $email, 비밀번호: $password');
-                                print(e);
-                              });
+                              if (email.isEmpty || password.isEmpty) {
+                                print('이메일 또는 비밀번호를 입력해주세요.');
+                                return;
+                              } else if (!email.contains('@')) {
+                                print('이메일 형식이 올바르지 않습니다.');
+                                return;
+                              } else if (!email.contains('.ac.kr')) {
+                                print('재학중인 학교의 이메일을 입력해 주세요.');
+                                return;
+                              } else if (password.length < 6) {
+                                print('비밀번호는 6자리 이상이어야 합니다.');
+                                return;
+                              } else if (password.contains(' ')) {
+                                print('비밀번호에 공백이 포함되어 있습니다.');
+                                return;
+                              } else {
+                                FirebaseAuth.instance
+                                    .signInWithEmailAndPassword(
+                                        email: email, password: password)
+                                    .then((value) {
+                                  print('로그인 성공\n이메일: $email, 비밀번호: $password');
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BottomNavBar()));
+                                }).catchError((e) {
+                                  print('로그인 실패\n이메일: $email, 비밀번호: $password');
+                                  print(e);
+                                });
+                              }
                             },
                             title: "로그인",
                             color: Colors.lightBlueAccent,

@@ -74,20 +74,26 @@ class SignupPage extends StatelessWidget {
                     String password = passwordController.text;
                     String pwconfirm = pwconfirmController.text;
 
-                    if (email == '' || password == '' || pwconfirm == '') {
+                    if (email.isEmpty ||
+                        password.isEmpty ||
+                        pwconfirm.isEmpty) {
                       print('빈칸이 있습니다.');
                       return;
-                    } else if (password != pwconfirm) {
-                      print('비밀번호가 일치하지 않습니다.');
+                    } else if (!email.contains('@')) {
+                      print('이메일 형식이 올바르지 않습니다.');
+                      return;
+                    } else if (!email.contains('.ac.kr')) {
+                      print('재학중인 학교의 이메일을 입력해 주세요.');
                       return;
                     } else if (password.length < 6) {
                       print('비밀번호는 6자리 이상이어야 합니다.');
                       return;
-                    } else if (!email.contains('@')) {
-                      print('이메일 형식이 아닙니다.');
+                    } else if (password.contains(' ') &&
+                        pwconfirm.contains(' ')) {
+                      print('비밀번호에 공백이 포함되어 있습니다.');
                       return;
-                    } else if (!email.contains('.ac.kr')) {
-                      print('학교 이메일이 아닙니다.');
+                    } else if (password != pwconfirm) {
+                      print('비밀번호가 일치하지 않습니다.');
                       return;
                     } else {
                       print('회원가입 버튼 클릭');
