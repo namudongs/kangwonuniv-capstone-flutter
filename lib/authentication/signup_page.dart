@@ -156,38 +156,4 @@ class SignupPage extends StatelessWidget {
       ),
     );
   }
-
-  // Widget makeInput(
-  //     {label, obscureText = false, required TextEditingController controller}) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: <Widget>[
-  //       Text(
-  //         label,
-  //         style: const TextStyle(
-  //             fontSize: 15,
-  //             fontWeight: FontWeight.normal,
-  //             color: Colors.black87),
-  //       ),
-  //       const SizedBox(
-  //         height: 5,
-  //       ),
-  //       TextField(
-  //         controller: controller,
-  //         obscureText: obscureText,
-  //         decoration: InputDecoration(
-  //           contentPadding:
-  //               const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-  //           enabledBorder: OutlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-  //           border: OutlineInputBorder(
-  //               borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
-  //         ),
-  //       ),
-  //       const SizedBox(
-  //         height: 30,
-  //       ),
-  //     ],
-  //   );
-  // }
 }
