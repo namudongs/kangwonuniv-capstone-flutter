@@ -13,18 +13,22 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MaterialApp(
-    theme: ThemeData(scaffoldBackgroundColor: Colors.white),
-    debugShowCheckedModeBanner: false,
-    home: StreamBuilder(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return const BottomNavBar();
-        } else {
-          return const MainPage();
-        }
-      },
+  runApp(
+    MaterialApp(
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+      ),
+      debugShowCheckedModeBanner: false,
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return const BottomNavBar();
+          } else {
+            return const MainPage();
+          }
+        },
+      ),
     ),
-  ));
+  );
 }
