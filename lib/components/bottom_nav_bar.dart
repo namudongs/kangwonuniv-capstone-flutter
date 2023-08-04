@@ -2,6 +2,7 @@
 
 import 'package:capstone_flutter/home/home_page.dart';
 import 'package:capstone_flutter/mypage/my_page.dart';
+import 'package:capstone_flutter/timetable/time_page.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -18,11 +19,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List _pages = [
     const HomePage(),
-    const Text(
-      "시간표 페이지 만들어서 연결하기",
-      style: TextStyle(fontSize: 15),
-      textAlign: TextAlign.center,
-    ),
+    const TimePage(),
     const Text(
       "질의응답 페이지 만들어서 연결하기",
       style: TextStyle(fontSize: 15),
