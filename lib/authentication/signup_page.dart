@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/authentication/login_page.dart';
-import 'package:capstone_flutter/components/make_input.dart';
-import 'package:capstone_flutter/components/bottom_nav_bar.dart';
-import 'package:capstone_flutter/components/color_round_button.dart';
+import 'package:capstone/authentication/login_page.dart';
+import 'package:capstone/components/make_input.dart';
+import 'package:capstone/components/bottom_nav_bar.dart';
+import 'package:capstone/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

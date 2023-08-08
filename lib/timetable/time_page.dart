@@ -17,30 +17,32 @@ class _TimePageState extends State<TimePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Center(
-      child: Container(
-        width: kBoxSize * 7 + 15,
-        height: kColumnLength / 2 * kBoxSize + kColumnLength,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            // 첫 번째 열에는 시간표가 들어갑니다.
-            Column(
-              children: [
-                buildTimeColumn(),
-              ],
-            ),
+      child: SingleChildScrollView(
+        child: Container(
+          width: kBoxSize * 7 + 15,
+          height: kColumnLength / 2 * kBoxSize + kColumnLength,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              // 첫 번째 열에는 시간표가 들어갑니다.
+              Column(
+                children: [
+                  buildTimeColumn(),
+                ],
+              ),
 
-            // 두 번째 열에는 요일(Column)이 들어갑니다.
-            // buildDayColumn 메서드를 호출하여 요일(Column)을 생성합니다.
-            ...buildDayColumn(0), // 월요일
-            ...buildDayColumn(1), // 화요일
-            ...buildDayColumn(2), // 수요일
-            ...buildDayColumn(3), // 목요일
-            ...buildDayColumn(4), // 금요일
-          ],
+              // 두 번째 열에는 요일(Column)이 들어갑니다.
+              // buildDayColumn 메서드를 호출하여 요일(Column)을 생성합니다.
+              ...buildDayColumn(0), // 월요일
+              ...buildDayColumn(1), // 화요일
+              ...buildDayColumn(2), // 수요일
+              ...buildDayColumn(3), // 목요일
+              ...buildDayColumn(4), // 금요일
+            ],
+          ),
         ),
       ),
     ));

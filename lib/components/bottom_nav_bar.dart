@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/home/home_page.dart';
-import 'package:capstone_flutter/mypage/my_page.dart';
-import 'package:capstone_flutter/timetable/time_page.dart';
+import 'package:capstone/home/home_page.dart';
+import 'package:capstone/mypage/my_page.dart';
+import 'package:capstone/timetable/time_page.dart';
 import 'package:flutter/material.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 

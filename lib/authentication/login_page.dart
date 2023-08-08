@@ -1,15 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/components/make_input.dart';
+import 'package:capstone/components/make_input.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:capstone_flutter/authentication/signup_page.dart';
-import 'package:capstone_flutter/components/bottom_nav_bar.dart';
-import 'package:capstone_flutter/components/color_round_button.dart';
+import 'package:capstone/authentication/signup_page.dart';
+import 'package:capstone/components/bottom_nav_bar.dart';
+import 'package:capstone/components/color_round_button.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

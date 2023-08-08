@@ -1,7 +1,7 @@
-import 'package:capstone_flutter/components/color_round_button.dart';
+import 'package:capstone/components/color_round_button.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone_flutter/authentication/login_page.dart';
-import 'package:capstone_flutter/authentication/signup_page.dart';
+import 'package:capstone/authentication/login_page.dart';
+import 'package:capstone/authentication/signup_page.dart';
 import 'package:lottie/lottie.dart';
 
 class MainPage extends StatelessWidget {

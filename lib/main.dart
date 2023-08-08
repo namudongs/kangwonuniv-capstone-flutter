@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone_flutter/authentication/main_page.dart';
-import 'package:capstone_flutter/components/bottom_nav_bar.dart';
+import 'package:capstone/authentication/main_page.dart';
+import 'package:capstone/components/bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
