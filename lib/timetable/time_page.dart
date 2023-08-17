@@ -31,7 +31,7 @@ class _TimePageState extends State<TimePage> {
                 children: [
                   Container(height: 10),
                   const Text(
-                    '2021년 2학기',
+                    '2023년 2학기',
                     style: TextStyle(color: Palette.everyRed, fontSize: 13),
                   ),
                   const Text(
@@ -109,25 +109,19 @@ class _TimePageState extends State<TimePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               myTable("월", [
-                                TimeSlot(6, 15, Colors.red),
-                                TimeSlot(40, 45, Colors.blue),
+                                TimeSlot(0, 9, Colors.red.shade200),
+                                TimeSlot(9, 18, Colors.blue.shade200),
+                                TimeSlot(27, 36, Colors.green.shade200),
                               ]),
-                              myTable("화", [
-                                TimeSlot(12, 24, Colors.green),
-                                TimeSlot(0, 6, Colors.purple),
-                                TimeSlot(36, 48, Colors.greenAccent),
-                              ]),
-                              myTable("수", [
-                                TimeSlot(10, 20, Colors.brown),
-                                TimeSlot(40, 45, Colors.pink),
-                              ]),
+                              myTable("화", []),
+                              myTable("수", []),
                               myTable("목", [
-                                TimeSlot(10, 20, Colors.yellow),
-                                TimeSlot(40, 45, Colors.teal),
+                                TimeSlot(0, 9, Colors.yellow.shade200),
+                                TimeSlot(9, 18, Colors.teal.shade200),
+                                TimeSlot(27, 36, Colors.pink.shade200),
                               ]),
                               myTable("금", [
-                                TimeSlot(10, 20, Colors.limeAccent),
-                                TimeSlot(40, 45, Colors.orangeAccent),
+                                TimeSlot(0, 24, Colors.brown.shade200),
                               ])
                             ],
                           ),
