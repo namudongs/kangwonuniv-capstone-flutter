@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.only(top: 50),
               color: Colors.grey[300],
               child: const Text(
-                "capstone_0805",
+                "capstone_0817",
                 style: TextStyle(fontSize: 15),
                 textAlign: TextAlign.center,
               ),
