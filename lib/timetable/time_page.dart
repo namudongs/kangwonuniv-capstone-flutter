@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,15 +108,27 @@ class _TimePageState extends State<TimePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              myTable("월", const Color(0xffe28b7b),
-                                  startnum: 27, endnum: 50, subject: "운영체제"),
-                              myTable("화", const Color(0xff90cec1),
-                                  startnum: 42, endnum: 59, subject: "알고리즘"),
-                              myTable("수", const Color(0xff90cec1),
-                                  startnum: 13, endnum: 20, subject: "알고리즘"),
-                              myTable("목", Colors.grey.shade300),
-                              myTable("금", const Color(0xffffc476),
-                                  startnum: 9, endnum: 29, subject: "자료구조"),
+                              myTable("월", [
+                                TimeSlot(6, 15, Colors.red),
+                                TimeSlot(40, 45, Colors.blue),
+                              ]),
+                              myTable("화", [
+                                TimeSlot(12, 24, Colors.green),
+                                TimeSlot(0, 6, Colors.purple),
+                                TimeSlot(36, 48, Colors.greenAccent),
+                              ]),
+                              myTable("수", [
+                                TimeSlot(10, 20, Colors.brown),
+                                TimeSlot(40, 45, Colors.pink),
+                              ]),
+                              myTable("목", [
+                                TimeSlot(10, 20, Colors.yellow),
+                                TimeSlot(40, 45, Colors.teal),
+                              ]),
+                              myTable("금", [
+                                TimeSlot(10, 20, Colors.limeAccent),
+                                TimeSlot(40, 45, Colors.orangeAccent),
+                              ])
                             ],
                           ),
                         ),
@@ -276,8 +290,7 @@ Widget friendName(String name) {
           ]));
 }
 
-Widget myTable(String week, Color col,
-    {int startnum = 0, int endnum = 0, String subject = ""}) {
+Widget myTable(String week, List<TimeSlot> timeSlots) {
   return Expanded(
     child: Table(
       border: TableBorder(
@@ -298,22 +311,50 @@ Widget myTable(String week, Color col,
             ]),
         for (int i = 0; i < 60; i++)
           TableRow(children: [
-            Container(
-              decoration: BoxDecoration(
-                color: i >= startnum && i < endnum ? col : Colors.transparent,
-                border: Border(
-                  top: BorderSide(
-                      width: 0.50,
-                      color: i % 6 == 0 && !(i >= startnum && i < endnum)
-                          ? Colors.grey.shade300
-                          : Colors.transparent),
-                  bottom: const BorderSide(width: 0, color: Colors.transparent),
+            Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border(
+                      top: BorderSide(
+                          width: 0.50,
+                          color: i % 6 == 0
+                              ? Colors.grey.shade300
+                              : Colors.transparent),
+                      bottom:
+                          const BorderSide(width: 0, color: Colors.transparent),
+                    ),
+                  ),
+                  height: 10.0,
                 ),
-              ),
-              height: 10.0,
+                ...timeSlots.map((slot) {
+                  if (i >= slot.start && i < slot.end) {
+                    return Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Container(
+                          color: slot.color, // 과목 색상
+                          height: 10.0,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                }).toList(),
+              ],
             ),
           ]),
       ],
     ),
   );
+}
+
+class TimeSlot {
+  final int start;
+  final int end;
+  final Color color;
+
+  TimeSlot(this.start, this.end, this.color);
 }
