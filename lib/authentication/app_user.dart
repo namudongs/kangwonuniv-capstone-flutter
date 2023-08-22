@@ -23,4 +23,14 @@ class AppUser {
       'major': major,
     };
   }
+
+  static AppUser fromMap(Map<String, dynamic> map) {
+    return AppUser(
+      uid: map['uid'],
+      email: map['email'],
+      userName: map['userName'],
+      grade: map['grade'],
+      major: map['major'],
+    );
+  }
 }

@@ -123,7 +123,7 @@ class _SignupPageState extends State<SignupPage> {
                             print('회원가입 성공');
                             createUserInFirestore(
                                 email: email,
-                                userName: 'namudongs',
+                                userName: 'man9aji',
                                 grade: 4,
                                 major: '컴퓨터공학과');
 
