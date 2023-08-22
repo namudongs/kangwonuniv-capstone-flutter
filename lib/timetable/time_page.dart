@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
@@ -13,6 +13,28 @@ class TimePage extends StatefulWidget {
 
 class _TimePageState extends State<TimePage> {
   List friends = ["고양이1", "고양이2", "고양이3", "고양이4", "고양이5"];
+
+  int latestEnd = 24;
+  void updateLatestEnd() {
+    int tempLatestEnd = 24;
+    daySubjects.forEach((day, slots) {
+      for (var slot in slots) {
+        if (slot.end > tempLatestEnd) {
+          tempLatestEnd = slot.end;
+        }
+      }
+    });
+    latestEnd = tempLatestEnd;
+  }
+
+  // 각 요일별로 과목 정보를 저장하는 Map
+  Map<String, List<TimeSlot>> daySubjects = {
+    "월": [],
+    "화": [],
+    "수": [],
+    "목": [],
+    "금": [],
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +72,25 @@ class _TimePageState extends State<TimePage> {
             actions: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TimePage()));
+                  print('시간표 추가 버튼 클릭');
+
+                  setState(() {
+                    daySubjects["월"] = [
+                      TimeSlot("운영체제", 0, 9, Colors.red.shade200),
+                      TimeSlot("컴퓨터구조", 9, 18, Colors.blue.shade200),
+                      TimeSlot("모바일프로그래밍", 27, 36, Colors.green.shade200),
+                    ];
+                    daySubjects["목"] = [
+                      TimeSlot("운영체제", 0, 9, Colors.red.shade200),
+                      TimeSlot("컴퓨터구조", 9, 18, Colors.blue.shade200),
+                      TimeSlot("모바일프로그래밍", 27, 36, Colors.green.shade200),
+                    ];
+                    daySubjects["금"] = [
+                      TimeSlot("캡스톤프로젝트2", 0, 24, Colors.brown.shade200),
+                    ];
+
+                    updateLatestEnd(); // 끝나는 시간 계산
+                  });
                 },
                 icon: const Icon(
                   CupertinoIcons.plus_square,
@@ -62,10 +99,13 @@ class _TimePageState extends State<TimePage> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const TimePage()));
+                  setState(() {
+                    daySubjects.forEach((day, slots) {
+                      slots.removeWhere((slot) => slot.subject == "캡스톤프로젝트2");
+                    });
+
+                    updateLatestEnd(); // 끝나는 시간 계산
+                  });
                 },
                 icon: const Icon(
                   CupertinoIcons.gear,
@@ -108,21 +148,11 @@ class _TimePageState extends State<TimePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              myTable("월", [
-                                TimeSlot(0, 9, Colors.red.shade200),
-                                TimeSlot(9, 18, Colors.blue.shade200),
-                                TimeSlot(27, 36, Colors.green.shade200),
-                              ]),
-                              myTable("화", []),
-                              myTable("수", []),
-                              myTable("목", [
-                                TimeSlot(0, 9, Colors.yellow.shade200),
-                                TimeSlot(9, 18, Colors.teal.shade200),
-                                TimeSlot(27, 36, Colors.pink.shade200),
-                              ]),
-                              myTable("금", [
-                                TimeSlot(0, 24, Colors.brown.shade200),
-                              ])
+                              myTable("월", daySubjects["월"] ?? []),
+                              myTable("화", daySubjects["화"] ?? []),
+                              myTable("수", daySubjects["수"] ?? []),
+                              myTable("목", daySubjects["목"] ?? []),
+                              myTable("금", daySubjects["금"] ?? []),
                             ],
                           ),
                         ),
@@ -267,88 +297,90 @@ class _TimePageState extends State<TimePage> {
                       ]),
                 ))));
   }
-}
 
-Widget friendName(String name) {
-  return TextButton(
-      onPressed: () {},
-      style: TextButton.styleFrom(padding: EdgeInsets.zero),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              name,
-              style: const TextStyle(color: Colors.black, fontSize: 17.0),
-            ),
-          ]));
-}
-
-Widget myTable(String week, List<TimeSlot> timeSlots) {
-  return Expanded(
-    child: Table(
-      border: TableBorder(
-          right: BorderSide(
-              color: week == "금" ? Colors.transparent : Colors.grey.shade300)),
-      children: [
-        TableRow(
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+  Widget friendName(String name) {
+    return TextButton(
+        onPressed: () {},
+        style: TextButton.styleFrom(padding: EdgeInsets.zero),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                  height: 30.0,
-                  child: Center(
-                      child: Text(
-                    week,
-                  ))),
-            ]),
-        for (int i = 0; i < 60; i++)
-          TableRow(children: [
-            Stack(
+              Text(
+                name,
+                style: const TextStyle(color: Colors.black, fontSize: 17.0),
+              ),
+            ]));
+  }
+
+  Widget myTable(String week, List<TimeSlot> timeSlots) {
+    return Expanded(
+      child: Table(
+        border: TableBorder(
+            right: BorderSide(
+                color:
+                    week == "금" ? Colors.transparent : Colors.grey.shade300)),
+        children: [
+          TableRow(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    border: Border(
-                      top: BorderSide(
-                          width: 0.50,
-                          color: i % 6 == 0
-                              ? Colors.grey.shade300
-                              : Colors.transparent),
-                      bottom:
-                          const BorderSide(width: 0, color: Colors.transparent),
-                    ),
-                  ),
-                  height: 10.0,
-                ),
-                ...timeSlots.map((slot) {
-                  if (i >= slot.start && i < slot.end) {
-                    return Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Container(
-                          color: slot.color, // 과목 색상
-                          height: 10.0,
-                        ),
+                SizedBox(
+                    height: 30.0,
+                    child: Center(
+                        child: Text(
+                      week,
+                    ))),
+              ]),
+          for (int i = 0; i <= latestEnd; i++)
+            TableRow(children: [
+              Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border(
+                        top: BorderSide(
+                            width: 0.50,
+                            color: i % 6 == 0
+                                ? Colors.grey.shade300
+                                : Colors.transparent),
+                        bottom: const BorderSide(
+                            width: 0, color: Colors.transparent),
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                }).toList(),
-              ],
-            ),
-          ]),
-      ],
-    ),
-  );
+                    ),
+                    height: 10.0,
+                  ),
+                  ...timeSlots.map((slot) {
+                    if (i >= slot.start && i < slot.end) {
+                      return Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            color: slot.color, // 과목 색상
+                            height: 10.0,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  }).toList(),
+                ],
+              ),
+            ]),
+        ],
+      ),
+    );
+  }
 }
 
 class TimeSlot {
+  final String subject;
   final int start;
   final int end;
   final Color color;
 
-  TimeSlot(this.start, this.end, this.color);
+  TimeSlot(this.subject, this.start, this.end, this.color);
 }
