@@ -5,14 +5,22 @@ import 'package:capstone/components/make_input.dart';
 import 'package:capstone/components/bottom_nav_bar.dart';
 import 'package:capstone/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:capstone/authentication/app_user.dart';
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController pwconfirmController = TextEditingController();
-  SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +86,7 @@ class SignupPage extends StatelessWidget {
                   ],
                 ),
                 ColorRoundButton(
-                    tapFunc: () {
+                    tapFunc: () async {
                       String email = emailController.text;
                       String password = passwordController.text;
                       String pwconfirm = pwconfirmController.text;
@@ -106,18 +114,29 @@ class SignupPage extends StatelessWidget {
                         return;
                       } else {
                         print('회원가입 버튼 클릭');
-                        FirebaseAuth.instance
-                            .createUserWithEmailAndPassword(
-                                email: email, password: password)
-                            .then((value) {
-                          print('회원가입 성공');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const BottomNavBar()));
-                        }).catchError((err) {
-                          print(err);
-                        });
+                        // 회원가입 로직 시작
+                        try {
+                          await FirebaseAuth.instance
+                              .createUserWithEmailAndPassword(
+                                  email: email, password: password)
+                              .then((value) {
+                            print('회원가입 성공');
+                            createUserInFirestore(
+                                email: email,
+                                userName: 'namudongs',
+                                grade: 4,
+                                major: '컴퓨터공학과');
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const BottomNavBar()));
+                          });
+                        } catch (e) {
+                          print(e);
+                        }
+                        return;
                       }
                     },
                     title: "회원가입",
@@ -155,5 +174,37 @@ class SignupPage extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> createUserInFirestore({
+  required String email,
+  required String userName,
+  required int grade,
+  required String major,
+}) async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final CollectionReference users =
+      FirebaseFirestore.instance.collection('users');
+
+  final User? currentUser = auth.currentUser;
+
+  if (currentUser != null) {
+    final AppUser appUser = AppUser(
+      uid: currentUser.uid,
+      email: email,
+      userName: userName,
+      grade: grade,
+      major: major,
+    );
+
+    try {
+      await users.doc(currentUser.uid).set(appUser.toMap());
+      print('유저 정보 저장 성공');
+    } catch (e) {
+      print('유저 저장 실패: $e');
+    }
+  } else {
+    print('로그인된 사용자가 없음');
   }
 }

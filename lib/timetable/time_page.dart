@@ -12,7 +12,7 @@ class TimePage extends StatefulWidget {
 }
 
 class _TimePageState extends State<TimePage> {
-  List friends = ["고양이1", "고양이2", "고양이3", "고양이4", "고양이5"];
+  List friends = ["남동현", "김은희", "손민주", "", ""];
 
   int latestEnd = 24;
   void updateLatestEnd() {

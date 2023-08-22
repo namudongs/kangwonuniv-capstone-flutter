@@ -13,8 +13,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(
-    MaterialApp(
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
       ),
@@ -22,13 +29,25 @@ void main() async {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return const BottomNavBar();
-          } else {
-            return const MainPage();
+          // Error handling
+          if (snapshot.hasError) {
+            print('Error in authStateChanges stream: ${snapshot.error}');
+            return const Center(child: Text('에러가 발생했습니다!'));
           }
+
+          // Checking connection state
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              return const BottomNavBar();
+            } else {
+              return const MainPage();
+            }
+          }
+
+          // If connection is still waiting, show a loading spinner
+          return const Center(child: CircularProgressIndicator());
         },
       ),
-    ),
-  );
+    );
+  }
 }
