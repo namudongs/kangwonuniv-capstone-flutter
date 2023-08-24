@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print
 
 import 'package:capstone/main.dart';
+import 'package:capstone/timetable/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:capstone/timetable/time_slot.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});
@@ -13,8 +16,6 @@ class TimePage extends StatefulWidget {
 }
 
 class _TimePageState extends State<TimePage> {
-  List friends = ["남동현", "김은희", "손민주", "", ""];
-
   int latestEnd = 24;
   void updateLatestEnd() {
     int tempLatestEnd = 24;
@@ -78,26 +79,20 @@ class _TimePageState extends State<TimePage> {
             centerTitle: false,
             actions: [
               IconButton(
-                onPressed: () {
-                  print('시간표 추가 버튼 클릭');
+                onPressed: () async {
+                  TimeSlot randomTimeSlot = await loadRandomTimeSlot();
+                  print(randomTimeSlot.lectureName); // 예: 랜덤한 강의의 이름을 출력합니다.
 
-                  setState(() {
-                    daySubjects["월"] = [
-                      TimeSlot("운영체제", 0, 9, Colors.red.shade200),
-                      TimeSlot("컴퓨터구조", 9, 18, Colors.blue.shade200),
-                      TimeSlot("모바일프로그래밍", 27, 36, Colors.green.shade200),
-                    ];
-                    daySubjects["목"] = [
-                      TimeSlot("운영체제", 0, 9, Colors.red.shade200),
-                      TimeSlot("컴퓨터구조", 9, 18, Colors.blue.shade200),
-                      TimeSlot("모바일프로그래밍", 27, 36, Colors.green.shade200),
-                    ];
-                    daySubjects["금"] = [
-                      TimeSlot("캡스톤프로젝트2", 0, 24, Colors.brown.shade200),
-                    ];
+                  // setState(() {
+                  //   daySubjects["월"] = [];
+                  //   daySubjects["화"] = [];
+                  //   daySubjects["수"] = [];
+                  //   daySubjects["목"] = [];
+                  //   daySubjects["금"] = [];
 
-                    updateLatestEnd(); // 끝나는 시간 계산
-                  });
+                  //   saveDaySubjectsToFirestore(appUser?.uid, daySubjects);
+                  //   updateLatestEnd(); // 끝나는 시간 계산
+                  // });
                 },
                 icon: const Icon(
                   CupertinoIcons.plus_square,
@@ -108,7 +103,8 @@ class _TimePageState extends State<TimePage> {
                 onPressed: () {
                   setState(() {
                     daySubjects.forEach((day, slots) {
-                      slots.removeWhere((slot) => slot.subject == "캡스톤프로젝트2");
+                      slots.removeWhere(
+                          (slot) => slot.lectureName == "캡스톤프로젝트2");
                     });
 
                     updateLatestEnd(); // 끝나는 시간 계산
@@ -243,13 +239,4 @@ class _TimePageState extends State<TimePage> {
       ),
     );
   }
-}
-
-class TimeSlot {
-  final String subject;
-  final int start;
-  final int end;
-  final Color color;
-
-  TimeSlot(this.subject, this.start, this.end, this.color);
 }
