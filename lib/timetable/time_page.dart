@@ -16,13 +16,13 @@ class TimePage extends StatefulWidget {
 }
 
 class _TimePageState extends State<TimePage> {
-  int latestEnd = 24;
+  double latestEnd = 24;
   void updateLatestEnd() {
-    int tempLatestEnd = 24;
+    double tempLatestEnd = 24;
     daySubjects.forEach((day, slots) {
       for (var slot in slots) {
-        if (slot.end > tempLatestEnd) {
-          tempLatestEnd = slot.end;
+        if (slot.end.isNotEmpty && slot.end.last > tempLatestEnd) {
+          tempLatestEnd = slot.end.last;
         }
       }
     });
@@ -80,9 +80,6 @@ class _TimePageState extends State<TimePage> {
             actions: [
               IconButton(
                 onPressed: () async {
-                  TimeSlot randomTimeSlot = await loadRandomTimeSlot();
-                  print(randomTimeSlot.lectureName); // 예: 랜덤한 강의의 이름을 출력합니다.
-
                   // setState(() {
                   //   daySubjects["월"] = [];
                   //   daySubjects["화"] = [];
@@ -93,6 +90,37 @@ class _TimePageState extends State<TimePage> {
                   //   saveDaySubjectsToFirestore(appUser?.uid, daySubjects);
                   //   updateLatestEnd(); // 끝나는 시간 계산
                   // });
+
+                  TimeSlot randomTimeSlot = await loadRandomTimeSlot();
+                  print(randomTimeSlot
+                      .category); // e.g., print the random lecture's name
+                  print(randomTimeSlot.department);
+                  print(randomTimeSlot.lname);
+                  print(randomTimeSlot.day);
+
+                  for (int i = 0; i < randomTimeSlot.day.length; i++) {
+                    daySubjects[randomTimeSlot.day[i]]?.add(TimeSlot(
+                      category: randomTimeSlot.category,
+                      code: randomTimeSlot.code,
+                      division: randomTimeSlot.division,
+                      lname: randomTimeSlot.lname,
+                      peoplecount: randomTimeSlot.peoplecount,
+                      college: randomTimeSlot.college,
+                      department: randomTimeSlot.department,
+                      major: randomTimeSlot.major,
+                      procode: randomTimeSlot.procode,
+                      professor: randomTimeSlot.professor,
+                      prowork: randomTimeSlot.prowork,
+                      day: [randomTimeSlot.day[i]],
+                      classroom: [randomTimeSlot.classroom[i]],
+                      start: [randomTimeSlot.start[i]],
+                      end: [randomTimeSlot.end[i]],
+                    ));
+                  }
+
+                  setState(() {
+                    updateLatestEnd(); // Calculate the ending time
+                  });
                 },
                 icon: const Icon(
                   CupertinoIcons.plus_square,
@@ -103,8 +131,7 @@ class _TimePageState extends State<TimePage> {
                 onPressed: () {
                   setState(() {
                     daySubjects.forEach((day, slots) {
-                      slots.removeWhere(
-                          (slot) => slot.lectureName == "캡스톤프로젝트2");
+                      slots.removeWhere((slot) => slot.lname == "캡스톤프로젝트2");
                     });
 
                     updateLatestEnd(); // 끝나는 시간 계산
@@ -163,21 +190,6 @@ class _TimePageState extends State<TimePage> {
                 ))));
   }
 
-  Widget friendName(String name) {
-    return TextButton(
-        onPressed: () {},
-        style: TextButton.styleFrom(padding: EdgeInsets.zero),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                name,
-                style: const TextStyle(color: Colors.black, fontSize: 17.0),
-              ),
-            ]));
-  }
-
   Widget myTable(String week, List<TimeSlot> timeSlots) {
     return Expanded(
       child: Table(
@@ -218,12 +230,12 @@ class _TimePageState extends State<TimePage> {
                     height: 10.0,
                   ),
                   ...timeSlots.map((slot) {
-                    if (i >= slot.start && i < slot.end) {
+                    if (i >= slot.start[0] && i < slot.end[0]) {
                       return Positioned.fill(
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            color: slot.color, // 과목 색상
+                            color: const Color.fromRGBO(0, 0, 0, 100), // 과목 색상
                             height: 10.0,
                           ),
                         ),
