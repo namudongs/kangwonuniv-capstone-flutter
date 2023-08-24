@@ -59,7 +59,7 @@ class MainPage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignupPage()));
+                                  builder: (context) => const SignupPage()));
                         },
                         title: "회원가입",
                         color: Colors.lightBlue,

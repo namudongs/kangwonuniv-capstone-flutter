@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print
 
+import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,6 +36,12 @@ class _TimePageState extends State<TimePage> {
     "목": [],
     "금": [],
   };
+
+  @override
+  void initState() {
+    super.initState();
+    print(appUser?.uid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,144 +163,6 @@ class _TimePageState extends State<TimePage> {
                             ],
                           ),
                         ),
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                            height: 60 + 60.0 * friends.length,
-                            width: 400,
-                            alignment: Alignment.topLeft,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(
-                                    color: Colors.grey.shade300, width: 1)),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text('친구 시간표',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold)),
-                                        Container(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const TimePage()));
-                                            },
-                                            icon: const Icon(
-                                              CupertinoIcons.plus_square,
-                                            ),
-                                            color: Colors.black,
-                                          ),
-                                        )
-                                      ]),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  friendName(friends[0]),
-                                  friendName(friends[1]),
-                                  friendName(friends[2]),
-                                  friendName(friends[3]),
-                                  friendName(friends[4]),
-                                ])),
-                        Container(
-                            margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
-                            height: 150,
-                            width: 400,
-                            alignment: Alignment.topLeft,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                                border: Border.all(
-                                    color: Colors.grey.shade300, width: 1)),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text('학점계산기',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.bold)),
-                                        Container(
-                                          child: IconButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const TimePage()));
-                                            },
-                                            icon: const Icon(
-                                                CupertinoIcons.pencil),
-                                            color: Colors.black,
-                                          ),
-                                        )
-                                      ]),
-                                  TextButton(
-                                      onPressed: () {},
-                                      style: TextButton.styleFrom(
-                                          padding: EdgeInsets.zero),
-                                      child: const Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "평균 학점  ",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            ),
-                                            Text(
-                                              "4.5",
-                                              style: TextStyle(
-                                                  color: Palette.everyRed,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17.0),
-                                            ),
-                                            Text(
-                                              " / 4.5",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0),
-                                            ),
-                                            Text(
-                                              "  취득 학점  ",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 17.0),
-                                            ),
-                                            Text(
-                                              "130",
-                                              style: TextStyle(
-                                                  color: Palette.everyRed,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 17.0),
-                                            ),
-                                            Text(
-                                              " / 130",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontSize: 15.0),
-                                            ),
-                                          ])),
-                                ])),
                       ]),
                 ))));
   }
