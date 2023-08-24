@@ -2,13 +2,12 @@
 
 import 'package:capstone/authentication/main_page.dart';
 import 'package:capstone/home/home_page.dart';
+import 'package:capstone/main.dart';
 import 'package:capstone/mypage/my_page.dart';
 import 'package:capstone/timetable/time_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:capstone/authentication/app_user.dart';
 
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -39,29 +38,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
     const MyPage()
   ];
 
-  Future<void> _fetchUserData() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? currentUser = auth.currentUser;
-
-    if (currentUser != null) {
-      DocumentReference userRef =
-          FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
-      DocumentSnapshot userSnapshot = await userRef.get();
-
-      if (userSnapshot.exists) {
-        var appUser =
-            AppUser.fromMap(userSnapshot.data()! as Map<String, dynamic>);
-        print('User data fetched: ${appUser.userName}');
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
 
-    // Monitor auth state changes
+    _checkState();
+  }
+
+  Future<void> _checkState() async {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
         Navigator.pushReplacement(
@@ -70,6 +54,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
         );
       }
     });
+
+    if (appUser == null) {
+      await fetchUserData();
+    }
+
+    print(appUser?.userName);
   }
 
   @override

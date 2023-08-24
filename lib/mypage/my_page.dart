@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone/authentication/main_page.dart';
 import 'package:capstone/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +19,6 @@ class _MyPageState extends State<MyPage> {
         child: ColorRoundButton(
           tapFunc: () {
             FirebaseAuth.instance.signOut();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const MainPage()));
             print('로그아웃 버튼 클릭');
           },
           title: '로그아웃',

@@ -2,6 +2,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:capstone/components/make_input.dart';
+import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,7 +88,7 @@ class LoginPage extends StatelessWidget {
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: ColorRoundButton(
-                              tapFunc: () {
+                              tapFunc: () async {
                                 String email = emailController.text;
                                 String password = passwordController.text;
 
@@ -107,13 +108,15 @@ class LoginPage extends StatelessWidget {
                                   print('비밀번호에 공백이 포함되어 있습니다.');
                                   return;
                                 } else {
-                                  FirebaseAuth.instance
+                                  await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: email, password: password)
                                       .then((value) {
                                     print(
                                         '로그인 성공\n이메일: $email, 비밀번호: $password');
-                                    Navigator.push(
+                                    fetchUserData();
+
+                                    Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -142,7 +145,8 @@ class LoginPage extends StatelessWidget {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => SignupPage()));
+                                        builder: (context) =>
+                                            const SignupPage()));
                               },
                               child: const Text(
                                 "회원가입",

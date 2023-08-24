@@ -6,6 +6,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:capstone/authentication/app_user.dart';
+
+// 전역 변수 추가
+AppUser? appUser;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +18,25 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  // Firebase에서 사용자 데이터 가져오기
+  await fetchUserData();
+
   runApp(const MyApp());
+}
+
+Future<void> fetchUserData() async {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User? currentUser = auth.currentUser;
+
+  if (currentUser != null) {
+    DocumentReference userRef =
+        FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
+    DocumentSnapshot userSnapshot = await userRef.get();
+
+    if (userSnapshot.exists) {
+      appUser = AppUser.fromMap(userSnapshot.data()! as Map<String, dynamic>);
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -29,13 +52,11 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          // Error handling
           if (snapshot.hasError) {
             print('Error in authStateChanges stream: ${snapshot.error}');
             return const Center(child: Text('에러가 발생했습니다!'));
           }
 
-          // Checking connection state
           if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasData) {
               return const BottomNavBar();
@@ -44,7 +65,6 @@ class MyApp extends StatelessWidget {
             }
           }
 
-          // If connection is still waiting, show a loading spinner
           return const Center(child: CircularProgressIndicator());
         },
       ),
