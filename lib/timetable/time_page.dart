@@ -5,6 +5,7 @@ import 'package:capstone/timetable/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
+// ignore: unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/timetable/time_slot.dart';
 
@@ -92,11 +93,12 @@ class _TimePageState extends State<TimePage> {
                   // });
 
                   TimeSlot randomTimeSlot = await loadRandomTimeSlot();
-                  print(randomTimeSlot
-                      .category); // e.g., print the random lecture's name
-                  print(randomTimeSlot.department);
                   print(randomTimeSlot.lname);
+                  print(randomTimeSlot.professor);
                   print(randomTimeSlot.day);
+                  print(randomTimeSlot.classroom);
+                  print(randomTimeSlot.start);
+                  print(randomTimeSlot.end);
 
                   for (int i = 0; i < randomTimeSlot.day.length; i++) {
                     daySubjects[randomTimeSlot.day[i]]?.add(TimeSlot(
@@ -235,7 +237,8 @@ class _TimePageState extends State<TimePage> {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            color: const Color.fromRGBO(0, 0, 0, 100), // 과목 색상
+                            color: const Color.fromRGBO(
+                                74, 86, 255, 0.637), // 과목 색상
                             height: 10.0,
                           ),
                         ),

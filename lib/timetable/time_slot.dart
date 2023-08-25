@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 class TimeSlot {
   final String category;
   final int code;

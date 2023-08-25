@@ -71,7 +71,7 @@ flutter:
     - assets/lottie/animation_lkiiozif.json
     - assets/lottie/animation_lkij23o3.json
     - assets/lectureDB.json
-    - assets/transformed_lectureDB.json
+    - assets/tuning_lectureDB.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
