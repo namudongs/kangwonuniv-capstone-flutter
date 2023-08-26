@@ -5,8 +5,6 @@ import 'package:capstone/timetable/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
-// ignore: unused_import
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/timetable/time_slot.dart';
 
 class TimePage extends StatefulWidget {
@@ -17,6 +15,7 @@ class TimePage extends StatefulWidget {
 }
 
 class _TimePageState extends State<TimePage> {
+  var lectureName = "";
   double latestEnd = 24;
   void updateLatestEnd() {
     double tempLatestEnd = 24;
@@ -93,6 +92,7 @@ class _TimePageState extends State<TimePage> {
                   // });
 
                   TimeSlot randomTimeSlot = await loadRandomTimeSlot();
+                  lectureName = randomTimeSlot.lname;
                   print(randomTimeSlot.lname);
                   print(randomTimeSlot.professor);
                   print(randomTimeSlot.day);
@@ -133,7 +133,7 @@ class _TimePageState extends State<TimePage> {
                 onPressed: () {
                   setState(() {
                     daySubjects.forEach((day, slots) {
-                      slots.removeWhere((slot) => slot.lname == "캡스톤프로젝트2");
+                      slots.removeWhere((slot) => slot.lname == lectureName);
                     });
 
                     updateLatestEnd(); // 끝나는 시간 계산
