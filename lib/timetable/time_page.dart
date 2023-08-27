@@ -80,16 +80,18 @@ class _TimePageState extends State<TimePage> {
             actions: [
               IconButton(
                 onPressed: () async {
-                  // setState(() {
-                  //   daySubjects["월"] = [];
-                  //   daySubjects["화"] = [];
-                  //   daySubjects["수"] = [];
-                  //   daySubjects["목"] = [];
-                  //   daySubjects["금"] = [];
-
-                  //   saveDaySubjectsToFirestore(appUser?.uid, daySubjects);
-                  //   updateLatestEnd(); // 끝나는 시간 계산
-                  // });
+                  // 시간표 강의 추가 버튼이 할일
+                  // 1. JSON DB를 불러와 강의 정보를 리스트로 시간표 하단에 띄워준다. (카테고리, 강의명, 교수명, 강의실, 시간, 분반, 부서, 전공)
+                  //      (리스트는 10개를 표시하며 스크롤이 가능하고, 맨 밑으로 스크롤하여 마지막 항목이 표시되면 다시 새로운 항목 10개를 불러온다.)
+                  // 2. 강의명을 클릭하면 선택 여부를 표시하고 (선택한 항목의 배경색이 변하고, 항목의 정보를 표시하는 UI 밑에 '강의 추가' 버튼을 표시한다.) 시간표의 강의에 해당하는 시간을 회색으로 표시한다.
+                  // 3. 강의명을 다시 클릭하면 선택 여부를 해제하고 시간표에 표시된 회색을 없애고 원래대로 돌린다.
+                  // 4. 시간표 하단에 있는 강의 추가 버튼을 누르면 시간표에 선택한 강의와 시간이 겹치는 강의가 있는지 확인하고, 겹치는 강의가 없으면 시간표의 강의에 해당하는 시간을 파란색으로 변경하고 시간표에 과목을 추가한다.
+                  // 5. '강의 추가' 버튼을 눌렀을 때에 시간이 겹치는 강의가 있다면 겹치는 강의가 있다는 메시지를 띄운다.
+                  // 6. 사용자는 여러 강의를 추가할 수 있고, 겹치는 강의가 없을 때에만 추가할 수 있다.
+                  // 7. 강의 정보 리스트 우측 상단에 '시간표 저장' 버튼을 누르면 추가한 강의들을 포함한 현재 시간표를 DB에 저장한다.
+                  // 8. '시간표 저장' 버튼을 누르면 강의 정보 리스트를 닫는다.
+                  // 9. 강의 정보 리스트 우측 상단 '시간표 저장' 버튼 옆에 있는 '닫기' 버튼을 누르면 강의 정보 리스트를 닫는다.
+                  // 10. 언제든 시간표에 추가된 강의들을 클릭하면 삭제 여부를 묻는 팝업이 뜨고, '삭제' 버튼을 누르면 시간표에서 해당 강의를 삭제한다.
 
                   TimeSlot randomTimeSlot = await loadRandomTimeSlot();
                   lectureName = randomTimeSlot.lname;
@@ -121,7 +123,7 @@ class _TimePageState extends State<TimePage> {
                   }
 
                   setState(() {
-                    updateLatestEnd(); // Calculate the ending time
+                    updateLatestEnd();
                   });
                 },
                 icon: const Icon(
@@ -136,7 +138,7 @@ class _TimePageState extends State<TimePage> {
                       slots.removeWhere((slot) => slot.lname == lectureName);
                     });
 
-                    updateLatestEnd(); // 끝나는 시간 계산
+                    updateLatestEnd();
                   });
                 },
                 icon: const Icon(
