@@ -4,7 +4,7 @@ import 'package:capstone/authentication/main_page.dart';
 import 'package:capstone/home/home_page.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/mypage/my_page.dart';
-import 'package:capstone/timetable/time_page.dart';
+import 'package:capstone/timetable/time_table_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List _pages = [
     const HomePage(),
-    const TimePage(),
+    const TimeTablePage(),
     const Text(
       "질의응답 페이지 만들어서 연결하기",
       style: TextStyle(fontSize: 15),

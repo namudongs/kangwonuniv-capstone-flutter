@@ -1,4 +1,4 @@
-class TimeSlot {
+class LectureSlot {
   final String category;
   final int code;
   final int division;
@@ -16,7 +16,7 @@ class TimeSlot {
   final List<double> end;
   final int number;
 
-  TimeSlot({
+  LectureSlot({
     required this.category,
     required this.code,
     required this.division,
@@ -35,8 +35,8 @@ class TimeSlot {
     required this.number,
   });
 
-  factory TimeSlot.fromJson(Map<String, dynamic> map) {
-    return TimeSlot(
+  factory LectureSlot.fromJson(Map<String, dynamic> map) {
+    return LectureSlot(
       category: map['category'] ?? '',
       code: map['code'] ?? 0,
       division: map['division'] ?? 0,
@@ -61,3 +61,26 @@ class TimeSlot {
     );
   }
 }
+
+final Map<String, List<double>> convertTimeMap = {
+  'A1': [0, 7.5],
+  'A2': [9, 16.5],
+  'A3': [18, 25.5],
+  'A4': [27, 34.5],
+  'A5': [36, 43.5],
+  'A6': [48, 55.5],
+  '1': [0, 5],
+  '2': [5, 10],
+  '3': [10, 15],
+  '4': [15, 20],
+  '5': [20, 25],
+  '6': [25, 30],
+  '7': [30, 35],
+  '8': [35, 40],
+  '9': [40, 45],
+  '10': [45, 50],
+  '11': [50, 55],
+  '12': [55, 60],
+  '13': [60, 65],
+  '14': [65, 70],
+};
