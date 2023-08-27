@@ -9,6 +9,7 @@ import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/time_slot.dart';
 import 'package:flutter/services.dart';
+import 'package:capstone/components/custom_search_bar.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});
@@ -46,6 +47,8 @@ class _TimePageState extends State<TimePage> {
     });
     latestEnd = tempLatestEnd;
   }
+
+  String _searchTerm = ''; // 검색어 상태 변수 추가
 
   // 각 요일별로 과목 정보를 저장하는 Map
   Map<String, List<TimeSlot>> daySubjects = {
@@ -209,6 +212,17 @@ class _TimePageState extends State<TimePage> {
                             ],
                           ),
                         ),
+                        SizedBox(
+                          height: 30,
+                          child: CustomSearchBar(
+                            onSearchTermChanged: (term) {
+                              // 콜백 함수 추가
+                              setState(() {
+                                _searchTerm = term;
+                              });
+                            },
+                          ),
+                        ),
                         FutureBuilder<List<TimeSlot>>(
                           future: loadAllTimeSlots(),
                           builder: (context, snapshot) {
@@ -220,17 +234,26 @@ class _TimePageState extends State<TimePage> {
 
                               List<TimeSlot> allSubjects = snapshot.data!;
 
+                              // 검색어로 필터링
+                              List<TimeSlot> filteredSubjects = allSubjects
+                                  .where((subject) =>
+                                      subject.lname.contains(_searchTerm))
+                                  .toList();
+
                               return SizedBox(
                                 height: 500,
                                 child: ListView.builder(
-                                  itemCount: allSubjects.length,
+                                  itemCount: filteredSubjects.length,
                                   itemBuilder: (context, index) {
-                                    TimeSlot subject = allSubjects[index];
+                                    TimeSlot subject = filteredSubjects[index];
+                                    List<String> subjectTime =
+                                        convertSubjectTimeToGyosi(
+                                            subject.start, subject.end);
 
                                     return ListTile(
                                       title: Text(subject.lname),
                                       subtitle: Text(
-                                          "${subject.division}분반, ${subject.professor} 교수\n${subject.day.join("요일, ")}요일\n${subject.classroom.join(", ")}"),
+                                          "${subject.division}분반, ${subject.professor} 교수\n${subject.day}요일\n(${subjectTime.join("), (")})\n${subject.classroom.join(", ")}"),
                                       onTap: () {
                                         // 각 리스트타일을 클릭하면 발생하는 이벤트
                                         // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
@@ -352,4 +375,52 @@ class _TimePageState extends State<TimePage> {
       ),
     );
   }
+}
+
+final Map<String, List<double>> timeToGyosiMap = {
+  'A1': [0, 7.5],
+  'A2': [9, 16.5],
+  'A3': [18, 25.5],
+  'A4': [27, 34.5],
+  'A5': [36, 43.5],
+  'A6': [48, 55.5],
+  '1': [0, 5],
+  '2': [5, 10],
+  '3': [10, 15],
+  '4': [15, 20],
+  '5': [20, 25],
+  '6': [25, 30],
+  '7': [30, 35],
+  '8': [35, 40],
+  '9': [40, 45],
+  '10': [45, 50],
+  '11': [50, 55],
+  '12': [55, 60],
+  '13': [60, 65],
+  '14': [65, 70],
+};
+
+List<String> convertSubjectTimeToGyosi(
+    List<double> startTimes, List<double> endTimes) {
+  List<String> result = [];
+
+  for (int i = 0; i < startTimes.length; i++) {
+    double start = startTimes[i];
+    double end = endTimes[i];
+    List<String> gyosiList = [];
+
+    String startGyosi = timeToGyosiMap.entries
+        .firstWhere((entry) => entry.value[0] == start)
+        .key;
+    String endGyosi =
+        timeToGyosiMap.entries.firstWhere((entry) => entry.value[1] == end).key;
+
+    int startIndex = timeToGyosiMap.keys.toList().indexOf(startGyosi);
+    int endIndex = timeToGyosiMap.keys.toList().indexOf(endGyosi);
+    gyosiList = timeToGyosiMap.keys.toList().sublist(startIndex, endIndex + 1);
+
+    result.add(gyosiList.join(', '));
+  }
+
+  return result;
 }
