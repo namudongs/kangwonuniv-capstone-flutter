@@ -409,15 +409,26 @@ List<String> convertSubjectTimeToGyosi(
     double end = endTimes[i];
     List<String> gyosiList = [];
 
-    String startGyosi = timeToGyosiMap.entries
-        .firstWhere((entry) => entry.value[0] == start)
-        .key;
-    String endGyosi =
-        timeToGyosiMap.entries.firstWhere((entry) => entry.value[1] == end).key;
+    Map<String, List<double>> relevantMap;
+    if (end % 1 != 0) {
+      relevantMap = Map.fromEntries(
+          timeToGyosiMap.entries.where((e) => e.key.contains('A')));
+    } else {
+      relevantMap = Map.fromEntries(
+          timeToGyosiMap.entries.where((e) => !e.key.contains('A')));
+    }
 
-    int startIndex = timeToGyosiMap.keys.toList().indexOf(startGyosi);
-    int endIndex = timeToGyosiMap.keys.toList().indexOf(endGyosi);
-    gyosiList = timeToGyosiMap.keys.toList().sublist(startIndex, endIndex + 1);
+    String startGyosi = relevantMap.entries
+        .firstWhere(
+            (entry) => entry.value[0] <= start && start < entry.value[1])
+        .key;
+    String endGyosi = relevantMap.entries
+        .firstWhere((entry) => entry.value[0] < end && end <= entry.value[1])
+        .key;
+
+    int startIndex = relevantMap.keys.toList().indexOf(startGyosi);
+    int endIndex = relevantMap.keys.toList().indexOf(endGyosi);
+    gyosiList = relevantMap.keys.toList().sublist(startIndex, endIndex + 1);
 
     result.add(gyosiList.join(', '));
   }
