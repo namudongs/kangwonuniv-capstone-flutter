@@ -32,7 +32,6 @@ class _SignupPageState extends State<SignupPage> {
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -43,7 +42,6 @@ class _SignupPageState extends State<SignupPage> {
               color: Colors.black,
             ),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: SingleChildScrollView(
           child: Container(

@@ -5,6 +5,7 @@ import 'package:capstone/components/bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'firebase/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/authentication/app_user.dart';
@@ -47,6 +48,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
+          backgroundColor: Colors.white,
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: StreamBuilder(

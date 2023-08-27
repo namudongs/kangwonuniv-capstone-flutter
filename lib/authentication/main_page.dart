@@ -2,6 +2,7 @@ import 'package:capstone/components/color_round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/authentication/login_page.dart';
 import 'package:capstone/authentication/signup_page.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
 class MainPage extends StatelessWidget {

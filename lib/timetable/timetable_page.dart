@@ -48,7 +48,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70.0),
           child: AppBar(
@@ -75,7 +74,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 ],
               ),
             ),
-            backgroundColor: Colors.white,
             elevation: 0.0,
             centerTitle: false,
             actions: [

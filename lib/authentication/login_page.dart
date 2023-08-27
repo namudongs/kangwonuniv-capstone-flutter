@@ -28,7 +28,6 @@ class LoginPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -39,7 +38,6 @@ class LoginPage extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
         body: SingleChildScrollView(
           child: SizedBox(

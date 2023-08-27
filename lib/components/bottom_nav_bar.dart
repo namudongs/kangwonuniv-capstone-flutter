@@ -4,10 +4,11 @@ import 'package:capstone/authentication/main_page.dart';
 import 'package:capstone/home/home_page.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/mypage/my_page.dart';
-import 'package:capstone/timetable/time_table_page.dart';
+import 'package:capstone/timetable/timetable_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
