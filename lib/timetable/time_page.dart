@@ -137,6 +137,7 @@ class _TimePageState extends State<TimePage> {
                       classroom: [randomTimeSlot.classroom[i]],
                       start: [randomTimeSlot.start[i]],
                       end: [randomTimeSlot.end[i]],
+                      number: randomTimeSlot.number,
                     ));
                   }
 
@@ -231,6 +232,9 @@ class _TimePageState extends State<TimePage> {
                                       subtitle: Text(
                                           "${subject.division}분반, ${subject.professor} 교수\n${subject.day.join("요일, ")}요일\n${subject.classroom.join(", ")}"),
                                       onTap: () {
+                                        // 각 리스트타일을 클릭하면 발생하는 이벤트
+                                        // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
+
                                         setState(() {
                                           for (int i = 0;
                                               i < subject.day.length;
@@ -252,6 +256,7 @@ class _TimePageState extends State<TimePage> {
                                               classroom: [subject.classroom[i]],
                                               start: [subject.start[i]],
                                               end: [subject.end[i]],
+                                              number: subject.number,
                                             ));
                                           }
                                           updateLatestEnd();
@@ -312,6 +317,21 @@ class _TimePageState extends State<TimePage> {
                   ...timeSlots.map((slot) {
                     if (i >= slot.start[0] && i < slot.end[0]) {
                       return Positioned.fill(
+                          child: GestureDetector(
+                        onTap: () {
+                          // 과목을 클릭하면 발생하는 이벤트
+                          // 클릭한 과목을 시간표에서 삭제한다.
+
+                          int currentNumber = slot.number;
+
+                          setState(() {
+                            daySubjects.forEach((day, slots) {
+                              slots.removeWhere(
+                                  (slot) => slot.number == currentNumber);
+                            });
+                            updateLatestEnd();
+                          });
+                        },
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: Container(
@@ -320,7 +340,7 @@ class _TimePageState extends State<TimePage> {
                             height: 10.0,
                           ),
                         ),
-                      );
+                      ));
                     } else {
                       return const SizedBox.shrink();
                     }

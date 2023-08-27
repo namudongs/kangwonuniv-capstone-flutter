@@ -14,6 +14,7 @@ class TimeSlot {
   final List<String> classroom;
   final List<double> start;
   final List<double> end;
+  final int number;
 
   TimeSlot({
     required this.category,
@@ -31,6 +32,7 @@ class TimeSlot {
     required this.classroom,
     required this.start,
     required this.end,
+    required this.number,
   });
 
   factory TimeSlot.fromJson(Map<String, dynamic> map) {
@@ -55,6 +57,7 @@ class TimeSlot {
       end: map['end'] != null
           ? List<double>.from(map['end'].map((e) => e.toDouble()))
           : [],
+      number: map['number'] ?? 0,
     );
   }
 }
