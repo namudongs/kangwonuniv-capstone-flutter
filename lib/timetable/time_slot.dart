@@ -35,21 +35,26 @@ class TimeSlot {
 
   factory TimeSlot.fromJson(Map<String, dynamic> map) {
     return TimeSlot(
-      category: map['category'],
-      code: map['code'],
-      division: map['division'],
-      lname: map['lname'],
-      peoplecount: map['peoplecount'],
-      college: map['college'],
-      department: map['department'],
-      major: map['major'],
-      procode: map['procode'],
-      professor: map['professor'],
-      prowork: map['prowork'],
-      day: List<String>.from(map['day']),
-      classroom: List<String>.from(map['classroom']),
-      start: List<double>.from(map['start'].map((e) => e.toDouble())),
-      end: List<double>.from(map['end'].map((e) => e.toDouble())),
+      category: map['category'] ?? '',
+      code: map['code'] ?? 0,
+      division: map['division'] ?? 0,
+      lname: map['lname'] ?? '',
+      peoplecount: map['peoplecount'] ?? 0,
+      college: map['college'] ?? '',
+      department: map['department'] ?? '',
+      major: map['major'] ?? '',
+      procode: map['procode'] ?? 0,
+      professor: map['professor'] ?? '',
+      prowork: map['prowork'] ?? '',
+      day: map['day'] != null ? List<String>.from(map['day']) : [],
+      classroom:
+          map['classroom'] != null ? List<String>.from(map['classroom']) : [],
+      start: map['start'] != null
+          ? List<double>.from(map['start'].map((e) => e.toDouble()))
+          : [],
+      end: map['end'] != null
+          ? List<double>.from(map['end'].map((e) => e.toDouble()))
+          : [],
     );
   }
 }

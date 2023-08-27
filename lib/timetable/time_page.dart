@@ -1,17 +1,35 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print
 
+import 'dart:convert';
+
 import 'package:capstone/main.dart';
 import 'package:capstone/timetable/time_table.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/time_slot.dart';
+import 'package:flutter/services.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});
 
   @override
   State<TimePage> createState() => _TimePageState();
+}
+
+Future<List<TimeSlot>> loadAllTimeSlots() async {
+  // Load the data from the file
+  String jsonString =
+      await rootBundle.loadString('assets/tuning_lectureDB.json');
+
+  // Decode the JSON string into a list of Dart maps
+  List<dynamic> lecturesList = jsonDecode(jsonString);
+
+  // Convert all data into a list of TimeSlot objects
+  List<TimeSlot> allTimeSlots =
+      lecturesList.map((lecture) => TimeSlot.fromJson(lecture)).toList();
+
+  return allTimeSlots;
 }
 
 class _TimePageState extends State<TimePage> {
@@ -189,6 +207,64 @@ class _TimePageState extends State<TimePage> {
                               myTable("금", daySubjects["금"] ?? []),
                             ],
                           ),
+                        ),
+                        FutureBuilder<List<TimeSlot>>(
+                          future: loadAllTimeSlots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Text("Error: ${snapshot.error}");
+                              }
+
+                              List<TimeSlot> allSubjects = snapshot.data!;
+
+                              return SizedBox(
+                                height: 500,
+                                child: ListView.builder(
+                                  itemCount: allSubjects.length,
+                                  itemBuilder: (context, index) {
+                                    TimeSlot subject = allSubjects[index];
+
+                                    return ListTile(
+                                      title: Text(subject.lname),
+                                      subtitle: Text(
+                                          "${subject.division}분반, ${subject.professor} 교수\n${subject.day.join("요일, ")}요일\n${subject.classroom.join(", ")}"),
+                                      onTap: () {
+                                        setState(() {
+                                          for (int i = 0;
+                                              i < subject.day.length;
+                                              i++) {
+                                            daySubjects[subject.day[i]]
+                                                ?.add(TimeSlot(
+                                              category: subject.category,
+                                              code: subject.code,
+                                              division: subject.division,
+                                              lname: subject.lname,
+                                              peoplecount: subject.peoplecount,
+                                              college: subject.college,
+                                              department: subject.department,
+                                              major: subject.major,
+                                              procode: subject.procode,
+                                              professor: subject.professor,
+                                              prowork: subject.prowork,
+                                              day: [subject.day[i]],
+                                              classroom: [subject.classroom[i]],
+                                              start: [subject.start[i]],
+                                              end: [subject.end[i]],
+                                            ));
+                                          }
+                                          updateLatestEnd();
+                                        });
+                                      },
+                                    );
+                                  },
+                                ),
+                              );
+                            } else {
+                              return const CircularProgressIndicator(); // Show a loading indicator while waiting
+                            }
+                          },
                         ),
                       ]),
                 ))));
