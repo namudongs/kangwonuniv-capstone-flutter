@@ -9,7 +9,7 @@ class CustomSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       decoration: const InputDecoration(
-        hintText: 'Search by lname',
+        hintText: '과목명',
         prefixIcon: Icon(Icons.search),
       ),
       onChanged: onSearchTermChanged,
