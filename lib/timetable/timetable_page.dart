@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/lecture_slot.dart';
-import 'package:capstone/components/custom_search_bar.dart';
 
 class TimeTablePage extends StatefulWidget {
   const TimeTablePage({super.key});
@@ -32,7 +31,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
     latestEnd = tempLatestEnd;
   }
 
-  String _searchTerm = ''; // 검색어 상태 변수 추가
   bool isAddWidgetVisible = false;
 
   Map<String, List<LectureSlot>> weekLists = {
@@ -85,6 +83,46 @@ class _TimeTablePageState extends State<TimeTablePage> {
     });
   }
 
+  // ListTile을 빌드하는 별도의 메서드
+  Widget _buildLectureTile(LectureSlot subject) {
+    List<String> subjectTime = convertSubjectTime(subject.start, subject.end);
+    return ListTile(
+      title: Text(subject.lname),
+      subtitle: Text(
+          "${subject.division}분반, ${subject.professor} 교수\n${subject.day}요일\n(${subjectTime.join("), (")})\n${subject.classroom.join(", ")}"),
+      onTap: () {
+        // 각 리스트타일을 클릭하면 발생하는 이벤트
+        // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
+        setState(() {
+          setState(() {
+            for (int i = 0; i < subject.day.length; i++) {
+              weekLists[subject.day[i]]?.add(LectureSlot(
+                category: subject.category,
+                code: subject.code,
+                division: subject.division,
+                lname: subject.lname,
+                peoplecount: subject.peoplecount,
+                college: subject.college,
+                department: subject.department,
+                major: subject.major,
+                procode: subject.procode,
+                professor: subject.professor,
+                prowork: subject.prowork,
+                day: [subject.day[i]],
+                classroom: [subject.classroom[i]],
+                start: [subject.start[i]],
+                end: [subject.end[i]],
+                number: subject.number,
+              ));
+            }
+            updateTimeTableEnd();
+            _saveWeekLists();
+          });
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,9 +158,77 @@ class _TimeTablePageState extends State<TimeTablePage> {
               IconButton(
                 onPressed: () {
                   // AppBar의 + 버튼을 누르면 발생하는 이벤트
-                  setState(() {
-                    isAddWidgetVisible = !isAddWidgetVisible;
-                  });
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      ValueNotifier<String> searchTermNotifier =
+                          ValueNotifier<String>("");
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextField(
+                                      onChanged: (value) =>
+                                          searchTermNotifier.value = value,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Search',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: FutureBuilder<List<LectureSlot>>(
+                                future: loadAllTimeSlots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text("Error: ${snapshot.error}");
+                                    }
+
+                                    List<LectureSlot> allSubjects =
+                                        snapshot.data!;
+
+                                    return ValueListenableBuilder<String>(
+                                      valueListenable: searchTermNotifier,
+                                      builder: (context, value, child) {
+                                        List<LectureSlot> filteredSubjects =
+                                            allSubjects
+                                                .where((subject) => subject
+                                                    .lname
+                                                    .contains(value))
+                                                .toList();
+
+                                        return ListView.builder(
+                                          itemCount: filteredSubjects.length,
+                                          itemBuilder: (context, index) {
+                                            return _buildLectureTile(
+                                                filteredSubjects[index]);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    return const Center(
+                                        child:
+                                            CircularProgressIndicator()); // 로딩 인디케이터 표시
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
                 icon: const Icon(
                   CupertinoIcons.plus_square,
@@ -176,100 +282,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
                               weekTable("수", weekLists["수"] ?? []),
                               weekTable("목", weekLists["목"] ?? []),
                               weekTable("금", weekLists["금"] ?? []),
-                            ],
-                          ),
-                        ),
-                        Visibility(
-                          visible: isAddWidgetVisible,
-                          child: Column(
-                            children: [
-                              CustomSearchBar(
-                                onSearchTermChanged: (term) {
-                                  setState(() {
-                                    _searchTerm = term;
-                                  });
-                                },
-                              ),
-                              FutureBuilder<List<LectureSlot>>(
-                                future: loadAllTimeSlots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    if (snapshot.hasError) {
-                                      return Text("Error: ${snapshot.error}");
-                                    }
-
-                                    List<LectureSlot> allSubjects =
-                                        snapshot.data!;
-
-                                    // 검색어로 필터링
-                                    List<LectureSlot> filteredSubjects =
-                                        allSubjects
-                                            .where((subject) => subject.lname
-                                                .contains(_searchTerm))
-                                            .toList();
-
-                                    return SizedBox(
-                                      height: 500,
-                                      child: ListView.builder(
-                                        itemCount: filteredSubjects.length,
-                                        itemBuilder: (context, index) {
-                                          LectureSlot subject =
-                                              filteredSubjects[index];
-                                          List<String> subjectTime =
-                                              convertSubjectTime(
-                                                  subject.start, subject.end);
-
-                                          return ListTile(
-                                            title: Text(subject.lname),
-                                            subtitle: Text(
-                                                "${subject.division}분반, ${subject.professor} 교수\n${subject.day}요일\n(${subjectTime.join("), (")})\n${subject.classroom.join(", ")}"),
-                                            onTap: () {
-                                              // 각 리스트타일을 클릭하면 발생하는 이벤트
-                                              // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
-
-                                              setState(() {
-                                                for (int i = 0;
-                                                    i < subject.day.length;
-                                                    i++) {
-                                                  weekLists[subject.day[i]]
-                                                      ?.add(LectureSlot(
-                                                    category: subject.category,
-                                                    code: subject.code,
-                                                    division: subject.division,
-                                                    lname: subject.lname,
-                                                    peoplecount:
-                                                        subject.peoplecount,
-                                                    college: subject.college,
-                                                    department:
-                                                        subject.department,
-                                                    major: subject.major,
-                                                    procode: subject.procode,
-                                                    professor:
-                                                        subject.professor,
-                                                    prowork: subject.prowork,
-                                                    day: [subject.day[i]],
-                                                    classroom: [
-                                                      subject.classroom[i]
-                                                    ],
-                                                    start: [subject.start[i]],
-                                                    end: [subject.end[i]],
-                                                    number: subject.number,
-                                                  ));
-                                                }
-                                                updateTimeTableEnd();
-                                                _saveWeekLists();
-                                              });
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  } else {
-                                    return const CircularProgressIndicator(); // Show a loading indicator while waiting
-                                  }
-                                },
-                              ),
                             ],
                           ),
                         ),
