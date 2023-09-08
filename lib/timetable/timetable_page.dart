@@ -126,138 +126,115 @@ class _TimeTablePageState extends State<TimeTablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(70.0),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            flexibleSpace: Container(),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(height: 10),
-                  const Text(
-                    '2023년 2학기',
-                    style: TextStyle(color: Palette.everyRed, fontSize: 13),
-                  ),
-                  const Text(
-                    '시간표 🍒',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 23),
-                  ),
-                ],
-              ),
-            ),
-            elevation: 0.0,
-            centerTitle: false,
-            actions: [
-              IconButton(
-                onPressed: () {
-                  // AppBar의 + 버튼을 누르면 발생하는 이벤트
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      ValueNotifier<String> searchTermNotifier =
-                          ValueNotifier<String>("");
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        child: Column(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            // 과목 추가 버튼 클릭
+
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                ValueNotifier<String> searchTermNotifier =
+                    ValueNotifier<String>("");
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      onChanged: (value) =>
-                                          searchTermNotifier.value = value,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Search',
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
                             Expanded(
-                              child: FutureBuilder<List<LectureSlot>>(
-                                future: loadAllTimeSlots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.done) {
-                                    if (snapshot.hasError) {
-                                      return Text("Error: ${snapshot.error}");
-                                    }
-
-                                    List<LectureSlot> allSubjects =
-                                        snapshot.data!;
-
-                                    return ValueListenableBuilder<String>(
-                                      valueListenable: searchTermNotifier,
-                                      builder: (context, value, child) {
-                                        List<LectureSlot> filteredSubjects =
-                                            allSubjects
-                                                .where((subject) => subject
-                                                    .lname
-                                                    .contains(value))
-                                                .toList();
-
-                                        return ListView.builder(
-                                          itemCount: filteredSubjects.length,
-                                          itemBuilder: (context, index) {
-                                            return _buildLectureTile(
-                                                filteredSubjects[index]);
-                                          },
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    return const Center(
-                                        child:
-                                            CircularProgressIndicator()); // 로딩 인디케이터 표시
-                                  }
-                                },
+                              child: TextField(
+                                onChanged: (value) =>
+                                    searchTermNotifier.value = value,
+                                decoration: const InputDecoration(
+                                  labelText: 'Search',
+                                  border: OutlineInputBorder(),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      );
-                    },
-                  );
-                },
-                icon: const Icon(
-                  CupertinoIcons.plus_square,
-                ),
-                color: Colors.black,
-              ),
-              IconButton(
-                onPressed: () {
-                  // AppBar의 ⚙️ 버튼을 누르면 발생하는 이벤트
-                },
-                icon: const Icon(
-                  CupertinoIcons.gear,
-                ),
-                color: Colors.black,
-              ),
-              Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: IconButton(
-                    onPressed: () {
-                      // AppBar의 - 버튼을 누르면 발생하는 이벤트
-                    },
-                    icon: const Icon(
-                      CupertinoIcons.list_bullet,
-                    ),
-                    color: Colors.black,
-                  ))
-            ],
-          ),
+                      ),
+                      Expanded(
+                        child: FutureBuilder<List<LectureSlot>>(
+                          future: loadAllTimeSlots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return Text("Error: ${snapshot.error}");
+                              }
+
+                              List<LectureSlot> allSubjects = snapshot.data!;
+
+                              return ValueListenableBuilder<String>(
+                                valueListenable: searchTermNotifier,
+                                builder: (context, value, child) {
+                                  List<LectureSlot> filteredSubjects =
+                                      allSubjects
+                                          .where((subject) =>
+                                              subject.lname.contains(value))
+                                          .toList();
+
+                                  return ListView.builder(
+                                    itemCount: filteredSubjects.length,
+                                    itemBuilder: (context, index) {
+                                      return _buildLectureTile(
+                                          filteredSubjects[index]);
+                                    },
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                  child:
+                                      CircularProgressIndicator()); // 로딩 인디케이터 표시
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+          label: const Text('ADD LECTURE'),
+          icon: const Icon(Icons.add),
+          backgroundColor: Colors.lightBlueAccent,
         ),
+
+        // appBar: PreferredSize(
+        //   preferredSize: const Size.fromHeight(70.0),
+        //   child: AppBar(
+        //     automaticallyImplyLeading: false,
+        //     flexibleSpace: Container(),
+        //     title: Padding(
+        //       padding: const EdgeInsets.only(left: 10.0),
+        //       child: Column(
+        //         mainAxisAlignment: MainAxisAlignment.center,
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           Container(height: 10),
+        //           const Text(
+        //             '2023년 2학기',
+        //             style: TextStyle(color: Palette.everyRed, fontSize: 13),
+        //           ),
+        //           const Text(
+        //             '시간표 🍒',
+        //             style: TextStyle(
+        //                 color: Colors.black,
+        //                 fontWeight: FontWeight.bold,
+        //                 fontSize: 23),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //     elevation: 0.0,
+        //     centerTitle: false,
+        //   ),
+        // ),
         body: SafeArea(
             child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -347,13 +324,15 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             _saveWeekLists();
                           });
                         },
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            color: const Color.fromRGBO(
-                                74, 86, 255, 0.637), // 과목 색상
-                            height: 10.0,
-                          ),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                color: Colors.blueAccent,
+                              ),
+                            ),
+                          ],
                         ),
                       ));
                     } else {
