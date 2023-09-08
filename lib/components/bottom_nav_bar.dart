@@ -8,7 +8,6 @@ import 'package:capstone/timetable/timetable_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -49,7 +48,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Future<void> _checkState() async {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
-        Navigator.pushReplacement(
+        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+        Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const MainPage()),
         );
@@ -65,40 +65,43 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _pages[_currentIndex], // 페이지와 연결
-      ),
-      bottomNavigationBar: SalomonBottomBar(
-        currentIndex: _currentIndex,
-        margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          SalomonBottomBarItem(
-              icon: const Icon(Icons.home),
-              title: const Text("홈"),
-              selectedColor: Colors.purple),
-          SalomonBottomBarItem(
-              icon: const Icon(Icons.calendar_today_rounded),
-              title: const Text("시간표"),
-              selectedColor: Colors.pink),
-          SalomonBottomBarItem(
-              icon: const Icon(Icons.question_answer_rounded),
-              title: const Text("질의응답"),
-              selectedColor: Colors.orange),
-          SalomonBottomBarItem(
-              icon: const Icon(Icons.group),
-              title: const Text("스터디그룹"),
-              selectedColor: Colors.teal),
-          SalomonBottomBarItem(
-              icon: const Icon(Icons.person),
-              title: const Text("마이페이지"),
-              selectedColor: Colors.blueGrey)
-        ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: Center(
+          child: _pages[_currentIndex], // 페이지와 연결
+        ),
+        bottomNavigationBar: SalomonBottomBar(
+          currentIndex: _currentIndex,
+          margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: [
+            SalomonBottomBarItem(
+                icon: const Icon(Icons.home),
+                title: const Text("홈"),
+                selectedColor: Colors.purple),
+            SalomonBottomBarItem(
+                icon: const Icon(Icons.calendar_today_rounded),
+                title: const Text("시간표"),
+                selectedColor: Colors.pink),
+            SalomonBottomBarItem(
+                icon: const Icon(Icons.question_answer_rounded),
+                title: const Text("질의응답"),
+                selectedColor: Colors.orange),
+            SalomonBottomBarItem(
+                icon: const Icon(Icons.group),
+                title: const Text("스터디그룹"),
+                selectedColor: Colors.teal),
+            SalomonBottomBarItem(
+                icon: const Icon(Icons.person),
+                title: const Text("마이페이지"),
+                selectedColor: Colors.blueGrey)
+          ],
+        ),
       ),
     );
   }

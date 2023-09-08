@@ -5,7 +5,6 @@ import 'package:capstone/components/make_input.dart';
 import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:capstone/authentication/signup_page.dart';
@@ -114,11 +113,14 @@ class LoginPage extends StatelessWidget {
                                         '로그인 성공\n이메일: $email, 비밀번호: $password');
                                     fetchUserData();
 
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BottomNavBar()));
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/', (_) => false);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const BottomNavBar()),
+                                    );
                                   }).catchError((e) {
                                     print(
                                         '로그인 실패\n이메일: $email, 비밀번호: $password');

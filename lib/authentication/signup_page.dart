@@ -7,7 +7,6 @@ import 'package:capstone/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:capstone/authentication/app_user.dart';
 
 class SignupPage extends StatefulWidget {
@@ -125,11 +124,13 @@ class _SignupPageState extends State<SignupPage> {
                                 grade: 4,
                                 major: '컴퓨터공학과');
 
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/', (_) => false);
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const BottomNavBar()));
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const BottomNavBar()),
+                            );
                           });
                         } catch (e) {
                           print(e);
