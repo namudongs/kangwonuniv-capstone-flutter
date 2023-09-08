@@ -1,15 +1,13 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print
 
-import 'dart:convert';
-
 import 'package:capstone/main.dart';
 import 'package:capstone/timetable/lecture_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/lecture_slot.dart';
 import 'package:capstone/components/custom_search_bar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TimeTablePage extends StatefulWidget {
   const TimeTablePage({super.key});
@@ -19,6 +17,8 @@ class TimeTablePage extends StatefulWidget {
 }
 
 class _TimeTablePageState extends State<TimeTablePage> {
+  final String userId = appUser?.uid ?? '';
+
   double latestEnd = 24;
   void updateTimeTableEnd() {
     double tempLatestEnd = 24;
@@ -50,33 +50,39 @@ class _TimeTablePageState extends State<TimeTablePage> {
     _loadWeekLists();
   }
 
-  _saveWeekLists() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        'weekLists',
-        jsonEncode(weekLists.map((k, v) =>
-            MapEntry(k, v.map((x) => jsonEncode(x.toJson())).toList()))));
-    prefs.setDouble('latestEnd', latestEnd); // latestEnd 변수를 저장
+  void _loadWeekLists() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('timetable')
+        .doc('data')
+        .get()
+        .then((doc) {
+      if (doc.exists) {
+        setState(() {
+          weekLists = Map<String, List<LectureSlot>>.from(doc
+              .data()?['weekLists']
+              .map((k, v) => MapEntry(
+                  k,
+                  List<LectureSlot>.from(
+                      v.map((x) => LectureSlot.fromJson(x))))));
+          latestEnd = doc.data()?['latestEnd'];
+        });
+      }
+    });
   }
 
-  _loadWeekLists() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? savedWeekLists = prefs.getString('weekLists');
-    final double? savedLatestEnd =
-        prefs.getDouble('latestEnd'); // latestEnd 변수를 불러옴
-
-    if (savedWeekLists != null) {
-      setState(() {
-        weekLists = Map<String, List<LectureSlot>>.from(
-            jsonDecode(savedWeekLists).map((k, v) => MapEntry(
-                k,
-                List<LectureSlot>.from(
-                    v.map((x) => LectureSlot.fromJson(jsonDecode(x)))))));
-        if (savedLatestEnd != null) {
-          latestEnd = savedLatestEnd; // latestEnd 변수를 상태에 설정
-        }
-      });
-    }
+  void _saveWeekLists() {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('timetable')
+        .doc('data')
+        .set({
+      'weekLists': weekLists
+          .map((k, v) => MapEntry(k, v.map((x) => x.toJson()).toList())),
+      'latestEnd': latestEnd,
+    });
   }
 
   @override

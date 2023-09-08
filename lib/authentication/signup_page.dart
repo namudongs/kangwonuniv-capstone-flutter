@@ -4,6 +4,7 @@ import 'package:capstone/authentication/login_page.dart';
 import 'package:capstone/components/make_input.dart';
 import 'package:capstone/components/bottom_nav_bar.dart';
 import 'package:capstone/components/color_round_button.dart';
+import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -123,6 +124,7 @@ class _SignupPageState extends State<SignupPage> {
                                 userName: 'man9aji',
                                 grade: 4,
                                 major: '컴퓨터공학과');
+                            fetchUserData();
 
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/', (_) => false);
