@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print
 
+import 'dart:convert';
+
 import 'package:capstone/main.dart';
 import 'package:capstone/timetable/lecture_helper.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:capstone/components/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/lecture_slot.dart';
 import 'package:capstone/components/custom_search_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimeTablePage extends StatefulWidget {
   const TimeTablePage({super.key});
@@ -30,6 +33,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
   }
 
   String _searchTerm = ''; // 검색어 상태 변수 추가
+  bool isAddWidgetVisible = false;
 
   Map<String, List<LectureSlot>> weekLists = {
     "월": [],
@@ -43,6 +47,36 @@ class _TimeTablePageState extends State<TimeTablePage> {
   void initState() {
     super.initState();
     print(appUser?.uid);
+    _loadWeekLists();
+  }
+
+  _saveWeekLists() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        'weekLists',
+        jsonEncode(weekLists.map((k, v) =>
+            MapEntry(k, v.map((x) => jsonEncode(x.toJson())).toList()))));
+    prefs.setDouble('latestEnd', latestEnd); // latestEnd 변수를 저장
+  }
+
+  _loadWeekLists() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedWeekLists = prefs.getString('weekLists');
+    final double? savedLatestEnd =
+        prefs.getDouble('latestEnd'); // latestEnd 변수를 불러옴
+
+    if (savedWeekLists != null) {
+      setState(() {
+        weekLists = Map<String, List<LectureSlot>>.from(
+            jsonDecode(savedWeekLists).map((k, v) => MapEntry(
+                k,
+                List<LectureSlot>.from(
+                    v.map((x) => LectureSlot.fromJson(jsonDecode(x)))))));
+        if (savedLatestEnd != null) {
+          latestEnd = savedLatestEnd; // latestEnd 변수를 상태에 설정
+        }
+      });
+    }
   }
 
   @override
@@ -80,6 +114,9 @@ class _TimeTablePageState extends State<TimeTablePage> {
               IconButton(
                 onPressed: () {
                   // AppBar의 + 버튼을 누르면 발생하는 이벤트
+                  setState(() {
+                    isAddWidgetVisible = !isAddWidgetVisible;
+                  });
                 },
                 icon: const Icon(
                   CupertinoIcons.plus_square,
@@ -136,87 +173,99 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 30,
-                          child: CustomSearchBar(
-                            onSearchTermChanged: (term) {
-                              setState(() {
-                                _searchTerm = term;
-                              });
-                            },
-                          ),
-                        ),
-                        FutureBuilder<List<LectureSlot>>(
-                          future: loadAllTimeSlots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              if (snapshot.hasError) {
-                                return Text("Error: ${snapshot.error}");
-                              }
+                        Visibility(
+                          visible: isAddWidgetVisible,
+                          child: Column(
+                            children: [
+                              CustomSearchBar(
+                                onSearchTermChanged: (term) {
+                                  setState(() {
+                                    _searchTerm = term;
+                                  });
+                                },
+                              ),
+                              FutureBuilder<List<LectureSlot>>(
+                                future: loadAllTimeSlots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.done) {
+                                    if (snapshot.hasError) {
+                                      return Text("Error: ${snapshot.error}");
+                                    }
 
-                              List<LectureSlot> allSubjects = snapshot.data!;
+                                    List<LectureSlot> allSubjects =
+                                        snapshot.data!;
 
-                              // 검색어로 필터링
-                              List<LectureSlot> filteredSubjects = allSubjects
-                                  .where((subject) =>
-                                      subject.lname.contains(_searchTerm))
-                                  .toList();
+                                    // 검색어로 필터링
+                                    List<LectureSlot> filteredSubjects =
+                                        allSubjects
+                                            .where((subject) => subject.lname
+                                                .contains(_searchTerm))
+                                            .toList();
 
-                              return SizedBox(
-                                height: 500,
-                                child: ListView.builder(
-                                  itemCount: filteredSubjects.length,
-                                  itemBuilder: (context, index) {
-                                    LectureSlot subject =
-                                        filteredSubjects[index];
-                                    List<String> subjectTime =
-                                        convertSubjectTime(
-                                            subject.start, subject.end);
+                                    return SizedBox(
+                                      height: 500,
+                                      child: ListView.builder(
+                                        itemCount: filteredSubjects.length,
+                                        itemBuilder: (context, index) {
+                                          LectureSlot subject =
+                                              filteredSubjects[index];
+                                          List<String> subjectTime =
+                                              convertSubjectTime(
+                                                  subject.start, subject.end);
 
-                                    return ListTile(
-                                      title: Text(subject.lname),
-                                      subtitle: Text(
-                                          "${subject.division}분반, ${subject.professor} 교수\n${subject.day}요일\n(${subjectTime.join("), (")})\n${subject.classroom.join(", ")}"),
-                                      onTap: () {
-                                        // 각 리스트타일을 클릭하면 발생하는 이벤트
-                                        // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
+                                          return ListTile(
+                                            title: Text(subject.lname),
+                                            subtitle: Text(
+                                                "${subject.division}분반, ${subject.professor} 교수\n${subject.day}요일\n(${subjectTime.join("), (")})\n${subject.classroom.join(", ")}"),
+                                            onTap: () {
+                                              // 각 리스트타일을 클릭하면 발생하는 이벤트
+                                              // 클릭한 리스트타일의 과목 정보를 시간표에 추가한다.
 
-                                        setState(() {
-                                          for (int i = 0;
-                                              i < subject.day.length;
-                                              i++) {
-                                            weekLists[subject.day[i]]
-                                                ?.add(LectureSlot(
-                                              category: subject.category,
-                                              code: subject.code,
-                                              division: subject.division,
-                                              lname: subject.lname,
-                                              peoplecount: subject.peoplecount,
-                                              college: subject.college,
-                                              department: subject.department,
-                                              major: subject.major,
-                                              procode: subject.procode,
-                                              professor: subject.professor,
-                                              prowork: subject.prowork,
-                                              day: [subject.day[i]],
-                                              classroom: [subject.classroom[i]],
-                                              start: [subject.start[i]],
-                                              end: [subject.end[i]],
-                                              number: subject.number,
-                                            ));
-                                          }
-                                          updateTimeTableEnd();
-                                        });
-                                      },
+                                              setState(() {
+                                                for (int i = 0;
+                                                    i < subject.day.length;
+                                                    i++) {
+                                                  weekLists[subject.day[i]]
+                                                      ?.add(LectureSlot(
+                                                    category: subject.category,
+                                                    code: subject.code,
+                                                    division: subject.division,
+                                                    lname: subject.lname,
+                                                    peoplecount:
+                                                        subject.peoplecount,
+                                                    college: subject.college,
+                                                    department:
+                                                        subject.department,
+                                                    major: subject.major,
+                                                    procode: subject.procode,
+                                                    professor:
+                                                        subject.professor,
+                                                    prowork: subject.prowork,
+                                                    day: [subject.day[i]],
+                                                    classroom: [
+                                                      subject.classroom[i]
+                                                    ],
+                                                    start: [subject.start[i]],
+                                                    end: [subject.end[i]],
+                                                    number: subject.number,
+                                                  ));
+                                                }
+                                                updateTimeTableEnd();
+                                                _saveWeekLists();
+                                              });
+                                            },
+                                          );
+                                        },
+                                      ),
                                     );
-                                  },
-                                ),
-                              );
-                            } else {
-                              return const CircularProgressIndicator(); // Show a loading indicator while waiting
-                            }
-                          },
+                                  } else {
+                                    return const CircularProgressIndicator(); // Show a loading indicator while waiting
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ]),
                 ))));
@@ -277,6 +326,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                                   (slot) => slot.number == currentNumber);
                             });
                             updateTimeTableEnd();
+                            _saveWeekLists();
                           });
                         },
                         child: Align(

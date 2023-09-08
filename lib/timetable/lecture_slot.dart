@@ -60,6 +60,27 @@ class LectureSlot {
       number: map['number'] ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'category': category,
+      'code': code,
+      'division': division,
+      'lname': lname,
+      'peoplecount': peoplecount,
+      'college': college,
+      'department': department,
+      'major': major,
+      'procode': procode,
+      'professor': professor,
+      'prowork': prowork,
+      'day': day,
+      'classroom': classroom,
+      'start': start,
+      'end': end,
+      'number': number,
+    };
+  }
 }
 
 final Map<String, List<double>> convertTimeMap = {
