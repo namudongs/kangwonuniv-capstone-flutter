@@ -4,8 +4,6 @@ import 'package:capstone/main.dart';
 import 'package:capstone/timetable/lecture_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/components/color.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:capstone/timetable/lecture_slot.dart';
 
 class TimeTablePage extends StatefulWidget {
@@ -204,37 +202,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
           icon: const Icon(Icons.add),
           backgroundColor: Colors.lightBlueAccent,
         ),
-
-        // appBar: PreferredSize(
-        //   preferredSize: const Size.fromHeight(70.0),
-        //   child: AppBar(
-        //     automaticallyImplyLeading: false,
-        //     flexibleSpace: Container(),
-        //     title: Padding(
-        //       padding: const EdgeInsets.only(left: 10.0),
-        //       child: Column(
-        //         mainAxisAlignment: MainAxisAlignment.center,
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         children: [
-        //           Container(height: 10),
-        //           const Text(
-        //             '2023년 2학기',
-        //             style: TextStyle(color: Palette.everyRed, fontSize: 13),
-        //           ),
-        //           const Text(
-        //             '시간표 🍒',
-        //             style: TextStyle(
-        //                 color: Colors.black,
-        //                 fontWeight: FontWeight.bold,
-        //                 fontSize: 23),
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //     elevation: 0.0,
-        //     centerTitle: false,
-        //   ),
-        // ),
         body: SafeArea(
             child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -250,15 +217,19 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: Stack(
                             children: [
-                              weekTable("월", weekLists["월"] ?? []),
-                              weekTable("화", weekLists["화"] ?? []),
-                              weekTable("수", weekLists["수"] ?? []),
-                              weekTable("목", weekLists["목"] ?? []),
-                              weekTable("금", weekLists["금"] ?? []),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  weekTable("월", weekLists["월"] ?? []),
+                                  weekTable("화", weekLists["화"] ?? []),
+                                  weekTable("수", weekLists["수"] ?? []),
+                                  weekTable("목", weekLists["목"] ?? []),
+                                  weekTable("금", weekLists["금"] ?? []),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -270,78 +241,90 @@ class _TimeTablePageState extends State<TimeTablePage> {
     return Expanded(
       child: Table(
         border: TableBorder(
-            right: BorderSide(
-                color:
-                    week == "금" ? Colors.transparent : Colors.grey.shade300)),
+          right: BorderSide(
+            color: week == "금" ? Colors.transparent : Colors.grey.shade300,
+          ),
+        ),
         children: [
           TableRow(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              children: [
-                SizedBox(
-                    height: 30.0,
-                    child: Center(
-                        child: Text(
-                      week,
-                    ))),
-              ]),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            children: [
+              SizedBox(
+                height: 30.0,
+                child: Center(
+                  child: Text(
+                    week,
+                  ),
+                ),
+              ),
+            ],
+          ),
           for (int i = 0; i <= latestEnd; i++)
-            TableRow(children: [
-              Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border(
-                        top: BorderSide(
+            TableRow(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border(
+                          top: BorderSide(
                             width: 0.50,
                             color: i % 6 == 0
                                 ? Colors.grey.shade300
-                                : Colors.transparent),
-                        bottom: const BorderSide(
-                            width: 0, color: Colors.transparent),
-                      ),
-                    ),
-                    height: 10.0,
-                  ),
-                  ...lectureSlots.map((slot) {
-                    if (i >= slot.start[0] && i < slot.end[0]) {
-                      return Positioned.fill(
-                          child: GestureDetector(
-                        onTap: () {
-                          // 과목을 클릭하면 발생하는 이벤트
-                          // 클릭한 과목을 시간표에서 삭제한다.
-
-                          int currentNumber = slot.number;
-
-                          setState(() {
-                            weekLists.forEach((day, slots) {
-                              slots.removeWhere(
-                                  (slot) => slot.number == currentNumber);
-                            });
-                            updateTimeTableEnd();
-                            _saveWeekLists();
-                          });
-                        },
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Container(
-                                color: Colors.blueAccent,
-                              ),
-                            ),
-                          ],
+                                : Colors.transparent,
+                          ),
+                          bottom: const BorderSide(
+                            width: 0,
+                            color: Colors.transparent,
+                          ),
                         ),
-                      ));
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  }).toList(),
-                ],
-              ),
-            ]),
+                      ),
+                      height: 10.0,
+                    ),
+                    ...lectureSlots.map((slot) {
+                      if (i >= slot.start[0] && i < slot.end[0]) {
+                        return Positioned.fill(
+                          child: GestureDetector(
+                            onTap: () {
+                              // 강의를 클릭하면 발생하는 이벤트
+                              // 클릭한 강의를 시간표에서 삭제한다.
+                              int currentNumber = slot.number;
+
+                              setState(() {
+                                weekLists.forEach((day, slots) {
+                                  slots.removeWhere(
+                                      (slot) => slot.number == currentNumber);
+                                });
+                                updateTimeTableEnd();
+                                _saveWeekLists();
+                              });
+                            },
+                            child: Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    color: Colors.blueAccent,
+                                  ),
+                                ),
+                                if (i == slot.start[0]) Text(slot.lname)
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    }).toList(),
+                  ],
+                ),
+              ],
+            ),
         ],
       ),
     );
