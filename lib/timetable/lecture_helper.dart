@@ -6,7 +6,7 @@ import 'package:capstone/timetable/lecture_slot.dart';
 
 Future<List<LectureSlot>> loadAllTimeSlots() async {
   String jsonString =
-      await rootBundle.loadString('assets/tuning_lectureDB.json');
+      await rootBundle.loadString('assets/tuning_lectureDB_updated.json');
 
   List<dynamic> lecturesList = jsonDecode(jsonString);
 

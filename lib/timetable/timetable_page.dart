@@ -217,19 +217,15 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             border: Border.all(color: Colors.grey.shade300),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          child: Stack(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  weekTable("월", weekLists["월"] ?? []),
-                                  weekTable("화", weekLists["화"] ?? []),
-                                  weekTable("수", weekLists["수"] ?? []),
-                                  weekTable("목", weekLists["목"] ?? []),
-                                  weekTable("금", weekLists["금"] ?? []),
-                                ],
-                              ),
+                              weekTable("월", weekLists["월"] ?? []),
+                              weekTable("화", weekLists["화"] ?? []),
+                              weekTable("수", weekLists["수"] ?? []),
+                              weekTable("목", weekLists["목"] ?? []),
+                              weekTable("금", weekLists["금"] ?? []),
                             ],
                           ),
                         ),
@@ -239,7 +235,8 @@ class _TimeTablePageState extends State<TimeTablePage> {
 
   Widget weekTable(String week, List<LectureSlot> lectureSlots) {
     return Expanded(
-      child: Table(
+        child: Stack(children: [
+      Table(
         border: TableBorder(
           right: BorderSide(
             color: week == "금" ? Colors.transparent : Colors.grey.shade300,
@@ -304,15 +301,56 @@ class _TimeTablePageState extends State<TimeTablePage> {
                               });
                             },
                             child: Stack(
-                              fit: StackFit.expand,
                               children: [
                                 Align(
                                   alignment: Alignment.topLeft,
                                   child: Container(
-                                    color: Colors.blueAccent,
+                                    color: Colors.blue,
                                   ),
                                 ),
-                                if (i == slot.start[0]) Text(slot.lname)
+                                if (slot.start[0] == i)
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      color: Colors.blue,
+                                      child: Text(
+                                        slot.lname,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if (slot.start[0] + 1 == i)
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      color: Colors.blue,
+                                      child: Text(
+                                        slot.classroom[0],
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 9,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                if (slot.start[0] + 2 == i)
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      color: Colors.blue,
+                                      child: Text(
+                                        slot.professor,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 9,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
@@ -327,6 +365,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
             ),
         ],
       ),
-    );
+    ]));
   }
 }
