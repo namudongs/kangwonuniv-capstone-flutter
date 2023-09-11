@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
+import '../board/board_page.dart';
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -26,11 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List _pages = [
     const HomePage(),
     const TimeTablePage(),
-    const Text(
-      "질의응답 페이지 만들어서 연결하기",
-      style: TextStyle(fontSize: 15),
-      textAlign: TextAlign.center,
-    ),
+    const BoardPage(),
     const Text(
       "그룹페이지 만들어서 연결하기",
       style: TextStyle(fontSize: 15),
