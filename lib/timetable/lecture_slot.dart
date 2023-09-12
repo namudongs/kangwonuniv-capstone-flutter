@@ -61,11 +61,6 @@ class LectureSlot {
     );
   }
 
-  @override
-  String toString() {
-    return '\n선택된 강의 : $lname, $day, $start, $end, $classroom';
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'category': category,
