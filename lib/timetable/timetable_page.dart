@@ -2,17 +2,19 @@
 
 import 'dart:convert';
 
+import 'package:capstone/main.dart';
 import 'package:capstone/timetable/lecture_slot.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 List week = ['월', '화', '수', '목', '금', '토'];
-List<LectureSlot> selectedLectures = [];
+List<LectureSlot> _selectedLectures = [];
 
-double kColumnLength = 16;
-double kFirstColumnHeight = 20;
-double kBoxSize = 55;
+double _kColumnLength = 16;
+double _kFirstColumnHeight = 20;
+double _kBoxSize = 55;
 
 class TimeTablePage extends StatefulWidget {
   const TimeTablePage({super.key});
@@ -22,15 +24,30 @@ class TimeTablePage extends StatefulWidget {
 }
 
 class _TimeTablePageState extends State<TimeTablePage> {
-  void addLectureToTimetable(LectureSlot lecture) {
+  void _saveTimetable() {
+    appUser!.timetable = _selectedLectures.map((e) => e.toJson()).toList();
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(appUser!.uid)
+        .update(appUser!.toMap());
+  }
+
+  void _fetchTimetable() {
+    if (appUser!.timetable != null) {
+      _selectedLectures =
+          appUser!.timetable!.map((e) => LectureSlot.fromJson(e)).toList();
+    }
+  }
+
+  void _addLectureToTimetable(LectureSlot lecture) {
     setState(() {
-      selectedLectures.add(lecture);
-      print(selectedLectures);
-      setTimetableLength();
+      _selectedLectures.add(lecture);
+      _saveTimetable();
+      _setTimetableLength();
     });
   }
 
-  Future<List<LectureSlot>> loadAllTimeSlots() async {
+  Future<List<LectureSlot>> _loadAllTimeSlots() async {
     String jsonString =
         await rootBundle.loadString('assets/tuning_lectureDB_updated.json');
 
@@ -42,11 +59,11 @@ class _TimeTablePageState extends State<TimeTablePage> {
     return allTimeSlots;
   }
 
-  void setTimetableLength() {
+  void _setTimetableLength() {
     setState(() {
       double latestEndTime = 0;
 
-      for (var lecture in selectedLectures) {
+      for (var lecture in _selectedLectures) {
         for (int i = 0; i < lecture.day.length; i++) {
           if (lecture.end[i] > latestEndTime) {
             latestEndTime = lecture.end[i];
@@ -54,17 +71,17 @@ class _TimeTablePageState extends State<TimeTablePage> {
         }
       }
       if (latestEndTime <= 480) {
-        kColumnLength = 16;
+        _kColumnLength = 16;
       } else {
-        kColumnLength = (latestEndTime / 60) * 2;
-        if (kColumnLength % 2 != 0) {
-          kColumnLength += 1;
+        _kColumnLength = (latestEndTime / 60) * 2;
+        if (_kColumnLength % 2 != 0) {
+          _kColumnLength += 1;
         }
       }
     });
   }
 
-  void tappedPlus() {
+  void _tappedPlus() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -91,7 +108,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               ),
               Expanded(
                 child: FutureBuilder<List<LectureSlot>>(
-                  future: loadAllTimeSlots(),
+                  future: _loadAllTimeSlots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasError) {
@@ -110,7 +127,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                           return ListView.builder(
                             itemCount: filteredSubjects.length,
                             itemBuilder: (context, index) {
-                              return buildLectureWidget(
+                              return _buildLectureWidget(
                                   filteredSubjects[index], context);
                             },
                           );
@@ -132,7 +149,8 @@ class _TimeTablePageState extends State<TimeTablePage> {
   @override
   void initState() {
     super.initState();
-    setTimetableLength();
+    _setTimetableLength();
+    _fetchTimetable();
   }
 
   @override
@@ -168,7 +186,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
           actions: [
             IconButton(
               onPressed: () {
-                tappedPlus();
+                _tappedPlus();
               },
               icon: const Icon(CupertinoIcons.plus_square),
               color: Colors.black,
@@ -186,16 +204,17 @@ class _TimeTablePageState extends State<TimeTablePage> {
                       border: Border.all(width: 0.5, color: Colors.grey),
                       borderRadius: const BorderRadius.all(Radius.circular(0))),
                   width: MediaQuery.of(context).size.width - 20,
-                  height:
-                      (kColumnLength / 2 * kBoxSize) + kFirstColumnHeight + 1,
+                  height: (_kColumnLength / 2 * _kBoxSize) +
+                      _kFirstColumnHeight +
+                      1,
                   child: Row(
                     children: [
-                      buildTimeColumn(),
-                      ...buildDayColumn(0),
-                      ...buildDayColumn(1),
-                      ...buildDayColumn(2),
-                      ...buildDayColumn(3),
-                      ...buildDayColumn(4),
+                      _buildTimeColumn(),
+                      ..._buildDayColumn(0),
+                      ..._buildDayColumn(1),
+                      ..._buildDayColumn(2),
+                      ..._buildDayColumn(3),
+                      ..._buildDayColumn(4),
                     ],
                   ),
                 ),
@@ -207,15 +226,15 @@ class _TimeTablePageState extends State<TimeTablePage> {
     );
   }
 
-  Expanded buildTimeColumn() {
+  Expanded _buildTimeColumn() {
     return Expanded(
       child: Column(
         children: [
           SizedBox(
-            height: kFirstColumnHeight,
+            height: _kFirstColumnHeight,
           ),
           ...List.generate(
-            kColumnLength.toInt(),
+            _kColumnLength.toInt(),
             (index) {
               if (index % 2 == 0) {
                 return const Divider(
@@ -224,7 +243,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 );
               }
               return SizedBox(
-                height: kBoxSize,
+                height: _kBoxSize,
                 child: Center(child: Text('${index ~/ 2 + 9}')),
               );
             },
@@ -234,14 +253,16 @@ class _TimeTablePageState extends State<TimeTablePage> {
     );
   }
 
-  List<Widget> buildDayColumn(int index) {
+  List<Widget> _buildDayColumn(int index) {
     String currentDay = week[index];
     List<Widget> lecturesForTheDay = [];
 
-    for (var lecture in selectedLectures) {
+    for (var lecture in _selectedLectures) {
       for (int i = 0; i < lecture.day.length; i++) {
-        double top = kFirstColumnHeight + (lecture.start[i] / 60.0) * kBoxSize;
-        double height = ((lecture.end[i] - lecture.start[i]) / 60.0) * kBoxSize;
+        double top =
+            _kFirstColumnHeight + (lecture.start[i] / 60.0) * _kBoxSize;
+        double height =
+            ((lecture.end[i] - lecture.start[i]) / 60.0) * _kBoxSize;
 
         if (lecture.day[i] == currentDay) {
           var classroom = lecture.classroom[i];
@@ -257,8 +278,9 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedLectures.remove(lecture);
-                      setTimetableLength();
+                      _selectedLectures.remove(lecture);
+                      _saveTimetable();
+                      _setTimetableLength();
                     });
                   },
                   child: Container(
@@ -321,7 +343,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   ),
                 ),
                 ...List.generate(
-                  kColumnLength.toInt(),
+                  _kColumnLength.toInt(),
                   (index) {
                     if (index % 2 == 0) {
                       return const Divider(
@@ -330,7 +352,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                       );
                     }
                     return SizedBox(
-                      height: kBoxSize,
+                      height: _kBoxSize,
                       child: Container(),
                     );
                   },
@@ -344,7 +366,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
     ];
   }
 
-  Widget buildLectureWidget(LectureSlot lecture, BuildContext context) {
+  Widget _buildLectureWidget(LectureSlot lecture, BuildContext context) {
     return ListTile(
       title: Text(lecture.lname),
       subtitle: Column(
@@ -367,7 +389,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
         ],
       ),
       onTap: () {
-        addLectureToTimetable(lecture);
+        _addLectureToTimetable(lecture);
       },
     );
   }

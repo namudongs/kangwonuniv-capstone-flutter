@@ -4,6 +4,7 @@ class AppUser {
   final String userName;
   final int grade;
   final String major;
+  List<Map<String, dynamic>>? timetable;
 
   AppUser({
     required this.uid,
@@ -11,6 +12,7 @@ class AppUser {
     required this.userName,
     required this.grade,
     required this.major,
+    this.timetable,
   });
 
   // JSON 형식으로 변환
@@ -21,9 +23,11 @@ class AppUser {
       'userName': userName,
       'grade': grade,
       'major': major,
+      'timetable': timetable,
     };
   }
 
+  // Map에서 AppUser를 생성
   static AppUser fromMap(Map<String, dynamic> map) {
     return AppUser(
       uid: map['uid'],
@@ -31,6 +35,7 @@ class AppUser {
       userName: map['userName'],
       grade: map['grade'],
       major: map['major'],
+      timetable: List<Map<String, dynamic>>.from(map['timetable'] ?? []),
     );
   }
 }
