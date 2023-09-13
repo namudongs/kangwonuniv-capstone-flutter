@@ -39,7 +39,76 @@ class _TimeTablePageState extends State<TimeTablePage> {
     }
   }
 
-  void _addLectureToTimetable(LectureSlot lecture) {
+  List<LectureSlot> _findConflictingLectures(LectureSlot lecture) {
+    List<LectureSlot> conflictingLectures = [];
+
+    for (var selectedLecture in _selectedLectures) {
+      for (int i = 0; i < selectedLecture.day.length; i++) {
+        for (int j = 0; j < lecture.day.length; j++) {
+          // 같은 요일에 시간이 겹치는 경우 확인
+          if (selectedLecture.day[i] == lecture.day[j] &&
+              ((lecture.start[j] < selectedLecture.end[i] &&
+                      lecture.end[j] > selectedLecture.start[i]) ||
+                  (lecture.end[j] > selectedLecture.start[i] &&
+                      lecture.start[j] < selectedLecture.end[i]))) {
+            if (!conflictingLectures.contains(selectedLecture)) {
+              conflictingLectures.add(selectedLecture);
+            }
+          }
+        }
+      }
+    }
+
+    return conflictingLectures;
+  }
+
+  void _removeConflictingLectures(List<LectureSlot> conflictingLectures) {
+    setState(() {
+      _selectedLectures
+          .removeWhere((element) => conflictingLectures.contains(element));
+    });
+  }
+
+  void _addLectureToTimetable(LectureSlot lecture) async {
+    List<LectureSlot> conflictingLectures = _findConflictingLectures(lecture);
+
+    if (conflictingLectures.isNotEmpty) {
+      String conflictingLectureDetails = conflictingLectures.map((e) {
+        return '${e.lname}, ${e.professor}';
+      }).join("\n");
+
+      bool shouldProceed = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('강의 시간 겹침'),
+            content: Text(
+                '다음 강의와 시간이 겹칩니다:\n$conflictingLectureDetails\n그래도 계속하시겠습니까?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text('아니요'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('예'),
+              ),
+            ],
+          );
+        },
+      );
+
+      if (shouldProceed == true) {
+        _removeConflictingLectures(conflictingLectures);
+      } else {
+        return;
+      }
+    }
+
     setState(() {
       _selectedLectures.add(lecture);
       _saveTimetable();
