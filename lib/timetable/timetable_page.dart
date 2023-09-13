@@ -264,11 +264,14 @@ class _TimeTablePageState extends State<TimeTablePage> {
         double height =
             ((lecture.end[i] - lecture.start[i]) / 60.0) * _kBoxSize;
 
+        // 강의실 없는 경우 대응
+        if (lecture.classroom.isEmpty || lecture.classroom[i].isEmpty) {
+          lecture.classroom.add('이러닝');
+          print(lecture.classroom);
+        }
+
         if (lecture.day[i] == currentDay) {
           var classroom = lecture.classroom[i];
-          if (classroom.isEmpty) {
-            classroom = '';
-          }
 
           lecturesForTheDay.add(
             Positioned(
