@@ -52,7 +52,12 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   (lecture.end[j] > selectedLecture.start[i] &&
                       lecture.start[j] < selectedLecture.end[i]))) {
             if (!conflictingLectures.contains(selectedLecture)) {
-              conflictingLectures.add(selectedLecture);
+              if (lecture.lname == selectedLecture.lname) {
+                print('이미 추가된 강의입니다.');
+                break;
+              } else {
+                conflictingLectures.add(selectedLecture);
+              }
             }
           }
         }
