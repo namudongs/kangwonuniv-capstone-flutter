@@ -48,11 +48,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Future<void> _checkState() async {
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user == null) {
-        Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const MainPage()),
-        );
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, '/', (_) => false);
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const MainPage()),
+          );
+        }
       }
     });
 
