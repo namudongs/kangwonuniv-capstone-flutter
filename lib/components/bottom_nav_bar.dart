@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:capstone/authentication/main_page.dart';
+import 'package:capstone/board/board_page.dart';
 import 'package:capstone/home/home_page.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/mypage/my_page.dart';
@@ -25,11 +26,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List _pages = [
     const HomePage(),
     const TimeTablePage(),
-    const Text(
-      "질의응답 페이지 만들어서 연결하기",
-      style: TextStyle(fontSize: 15),
-      textAlign: TextAlign.center,
-    ),
+    const BoardPage(),
     const Text(
       "그룹페이지 만들어서 연결하기",
       style: TextStyle(fontSize: 15),
