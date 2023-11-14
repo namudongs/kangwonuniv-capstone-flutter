@@ -19,13 +19,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               // color: Colors.grey[300],
-              height: 200,
+              height: 150,
               child: Swiper(
                 itemBuilder: (BuildContext context, int index) {
                   return ClipRRect(
@@ -37,19 +36,48 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
                 itemCount: 3,
-                itemHeight: 200,
-                viewportFraction: 0.5,
-                scale: 0.6,
+                itemHeight: 150,
+                viewportFraction: 0.7,
+                scale: 0.7,
                 fade: 0.5,
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 50),
-              color: Colors.grey[300],
-              child: const Text(
-                "capstone_0828",
-                style: TextStyle(fontSize: 15),
-                textAlign: TextAlign.center,
+              height: 200,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              alignment: Alignment.topLeft,
+              margin: const EdgeInsets.all(15),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.topLeft,
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text(
+                      "🔥최근 게시글",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 155,
+                    padding: const EdgeInsets.all(9),
+                    child: ListView.separated(
+                      itemCount: 10,
+                      itemBuilder: (BuildContext ctx, int idx) {
+                        return Text('$idx번째 게시글입니다. 반갑습니다. 안녕하세요.');
+                      },
+                      separatorBuilder: (BuildContext ctx, int idx) {
+                        return const Divider();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
