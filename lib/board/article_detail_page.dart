@@ -37,14 +37,28 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: Colors.black),
-        title: const Text(
-          '질의응답 게시판',
-          style: TextStyle(
-            color: Colors.black,
-          ),
+        title: const Column(
+          children: [
+            Text(
+              '강원대학교',
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 98, 0),
+                fontSize: 10,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '질문과 답변',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         centerTitle: true,
         actions: [

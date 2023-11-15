@@ -19,7 +19,41 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+        flexibleSpace: Container(),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 10),
+              const Text(
+                '202011221 남동현',
+                style: TextStyle(color: Colors.blue, fontSize: 13),
+              ),
+              const Text(
+                '🎓강원대학교',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+        actions: const [
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: const Icon(CupertinoIcons.ellipsis),
+          //   color: Colors.black,
+          // ),
+        ],
+      ),
       body: SafeArea(
+        minimum: const EdgeInsets.only(top: 15),
         child: Column(
           children: [
             SizedBox(

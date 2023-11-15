@@ -25,13 +25,31 @@ class _BoardPageState extends State<BoardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.grey[300],
+        elevation: 0.0,
         automaticallyImplyLeading: false,
-        title: const Text('질의응답 게시판',
-            style: TextStyle(
-              color: Colors.black,
-            )),
+        flexibleSpace: Container(),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(height: 10),
+              const Text(
+                '강원대학교',
+                style: TextStyle(
+                    color: Color.fromARGB(255, 255, 98, 0), fontSize: 13),
+              ),
+              const Text(
+                '🧐질문과 답변',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+            ],
+          ),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -56,6 +74,10 @@ class _BoardPageState extends State<BoardPage> {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
                   return Card(
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.grey[100],
                     margin: const EdgeInsets.only(
                         left: 16, right: 16, top: 8, bottom: 8),
                     child: ListTile(

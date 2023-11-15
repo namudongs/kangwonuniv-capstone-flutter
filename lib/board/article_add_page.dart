@@ -33,16 +33,30 @@ class _ArticleAddPageState extends State<ArticleAddPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.grey[300],
+        backgroundColor: Colors.transparent,
         automaticallyImplyLeading: true,
         iconTheme: const IconThemeData(color: Colors.black),
-        centerTitle: true,
-        title: const Text(
-          '글 작성',
-          style: TextStyle(
-            color: Colors.black,
-          ),
+        title: const Column(
+          children: [
+            Text(
+              '강원대학교',
+              style: TextStyle(
+                color: Color.fromARGB(255, 255, 98, 0),
+                fontSize: 10,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '질문하기',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: saveForm,

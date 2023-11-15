@@ -48,13 +48,22 @@ class _ArticleEditPageState extends State<ArticleEditPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.grey[300],
+          backgroundColor: Colors.transparent,
           automaticallyImplyLeading: true,
           iconTheme: const IconThemeData(color: Colors.black),
-          title: const Text(
-            '글 수정',
-            style: TextStyle(color: Colors.black),
+          title: const Column(
+            children: [
+              Text(
+                '질문 수정하기',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
+          centerTitle: true,
           actions: [
             IconButton(
                 onPressed: saveForm,
@@ -76,12 +85,12 @@ class _ArticleEditPageState extends State<ArticleEditPage> {
                             TextFormField(
                               controller: titleController,
                               decoration:
-                                  const InputDecoration(labelText: 'Title'),
+                                  const InputDecoration(labelText: '제목'),
                             ),
                             TextField(
                               controller: contentController,
                               decoration:
-                                  const InputDecoration(labelText: 'Content'),
+                                  const InputDecoration(labelText: '내용'),
                             ),
                           ],
                         ),

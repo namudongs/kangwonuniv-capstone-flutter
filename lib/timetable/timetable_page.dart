@@ -45,7 +45,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
     for (var selectedLecture in _selectedLectures) {
       for (int i = 0; i < selectedLecture.day.length; i++) {
         for (int j = 0; j < lecture.day.length; j++) {
-          // 같은 요일에 시간이 겹치는 경우 확인
+          // 같은 요일에 시간이 겹치는 경우
           if (selectedLecture.day[i] == lecture.day[j] &&
               ((lecture.start[j] < selectedLecture.end[i] &&
                       lecture.end[j] > selectedLecture.start[i]) ||
@@ -248,11 +248,11 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   style: TextStyle(color: Colors.blue, fontSize: 13),
                 ),
                 const Text(
-                  '시간표',
+                  '⏰시간표',
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 23),
+                      fontSize: 20),
                 ),
               ],
             ),
