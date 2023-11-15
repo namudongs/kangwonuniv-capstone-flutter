@@ -318,7 +318,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               }
               return SizedBox(
                 height: _kBoxSize,
-                child: Center(child: Text('${index ~/ 2 + 9}')),
+                child: Text('${index ~/ 2 + 9}'),
               );
             },
           ),
