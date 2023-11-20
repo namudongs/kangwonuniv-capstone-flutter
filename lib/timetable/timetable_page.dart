@@ -276,7 +276,8 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 child: Container(
                   decoration: BoxDecoration(
                       border: Border.all(width: 0.5, color: Colors.grey),
-                      borderRadius: const BorderRadius.all(Radius.circular(0))),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(20))),
                   width: MediaQuery.of(context).size.width - 20,
                   height: (_kColumnLength / 2 * _kBoxSize) +
                       _kFirstColumnHeight +

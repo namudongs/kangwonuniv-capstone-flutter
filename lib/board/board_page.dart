@@ -63,38 +63,61 @@ class _BoardPageState extends State<BoardPage> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: articles.orderBy('created_at', descending: true).snapshots(),
-        builder: (BuildContext context,
-            AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-          if (streamSnapshot.hasData) {
-            return ListView.builder(
-                itemCount: streamSnapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  final DocumentSnapshot documentSnapshot =
-                      streamSnapshot.data!.docs[index];
-                  return Card(
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color: Colors.grey[100],
-                    margin: const EdgeInsets.only(
-                        left: 16, right: 16, top: 8, bottom: 8),
-                    child: ListTile(
-                      title: Text(documentSnapshot['title']),
-                      subtitle: Text(documentSnapshot['content']),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: StreamBuilder(
+          stream: articles.orderBy('created_at', descending: true).snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    final DocumentSnapshot documentSnapshot =
+                        streamSnapshot.data!.docs[index];
+                    return GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => ArticleDetailPage(
                                   articleId: documentSnapshot.id,
                                 )));
                       },
-                    ),
-                  );
-                });
-          }
-          return const Center(child: CircularProgressIndicator());
-        },
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.03),
+                          // border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(documentSnapshot['title'],
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                              Text(documentSnapshot['content'],
+                                  style: const TextStyle(fontSize: 13)),
+                              Container(
+                                alignment: Alignment.bottomRight,
+                                child: const Text(
+                                  '답변 ${'0'}개',
+                                  style: TextStyle(fontSize: 11),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+            }
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
       ),
     );
   }

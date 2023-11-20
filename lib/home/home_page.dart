@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 
@@ -30,9 +31,9 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(height: 10),
-              const Text(
-                '202011221 남동현',
-                style: TextStyle(color: Colors.blue, fontSize: 13),
+              Text(
+                appUser!.userName,
+                style: const TextStyle(color: Colors.blue, fontSize: 13),
               ),
               const Text(
                 '🎓강원대학교',
@@ -53,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(top: 15),
+        minimum: const EdgeInsets.only(top: 10),
         child: Column(
           children: [
             SizedBox(
@@ -77,10 +78,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
+              decoration: const BoxDecoration(
+                  // color: Colors.grey[300],
+                  // border: Border.all(color: Colors.grey),
+                  // borderRadius: BorderRadius.circular(20),
+                  ),
               alignment: Alignment.topLeft,
               margin: const EdgeInsets.all(15),
               child: Column(
