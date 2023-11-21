@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/authentication/app_user.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -18,6 +19,12 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final List<String> _univList = [
+    '강원대학교',
+    '다른 대학생',
+  ];
+  String _selectedUniv = '강원대학교';
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController pwconfirmController = TextEditingController();
@@ -62,8 +69,8 @@ class _SignupPageState extends State<SignupPage> {
                       height: 5,
                     ),
                     Text(
-                      "재학중인 학교의 이메일로 회원가입할 수 있습니다.",
-                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                      "재학중인 학교와 학과를 입력해 회원가입을 완료해주세요.",
+                      style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                     ),
                   ],
                 ),
@@ -81,6 +88,19 @@ class _SignupPageState extends State<SignupPage> {
                         label: "비밀번호 확인",
                         obscureText: true,
                         controller: pwconfirmController),
+                    CustomDropdown<String>(
+                      closedBorder:
+                          Border.all(color: Colors.grey.withAlpha(400)),
+                      closedBorderRadius: BorderRadius.circular(10),
+                      hintText: '학교를 선택해주세요.',
+                      items: _univList,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedUniv = value;
+                        });
+                        print(_selectedUniv);
+                      },
+                    ),
                   ],
                 ),
                 ColorRoundButton(
@@ -96,9 +116,6 @@ class _SignupPageState extends State<SignupPage> {
                         return;
                       } else if (!email.contains('@')) {
                         print('이메일 형식이 올바르지 않습니다.');
-                        return;
-                      } else if (!email.contains('.ac.kr')) {
-                        print('재학중인 학교의 이메일을 입력해 주세요.');
                         return;
                       } else if (password.length < 6) {
                         print('비밀번호는 6자리 이상이어야 합니다.');
@@ -123,7 +140,7 @@ class _SignupPageState extends State<SignupPage> {
                                 email: email,
                                 userName: 'man9aji',
                                 grade: 4,
-                                major: '컴퓨터공학과');
+                                major: _selectedUniv);
                             fetchUserData();
 
                             Navigator.pushNamedAndRemoveUntil(

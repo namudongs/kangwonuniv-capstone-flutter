@@ -36,9 +36,11 @@ class MakeInput extends StatelessWidget {
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(400)),
+                borderRadius: BorderRadius.circular(10)),
             border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.withAlpha(400))),
+                borderSide: BorderSide(color: Colors.grey.withAlpha(400)),
+                borderRadius: BorderRadius.circular(10)),
           ),
         ),
         const SizedBox(

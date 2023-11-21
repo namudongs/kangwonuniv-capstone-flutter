@@ -313,7 +313,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
             (index) {
               if (index % 2 == 0) {
                 return const Divider(
-                  color: Colors.grey,
+                  color: Colors.black12,
                   height: 0,
                 );
               }
@@ -405,7 +405,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
 
     return [
       const VerticalDivider(
-        color: Colors.grey,
+        color: Colors.black12,
         width: 0,
       ),
       Expanded(
@@ -425,7 +425,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   (index) {
                     if (index % 2 == 0) {
                       return const Divider(
-                        color: Colors.grey,
+                        color: Colors.black12,
                         height: 0,
                       );
                     }
