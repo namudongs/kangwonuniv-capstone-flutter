@@ -15,21 +15,54 @@ class ArticleDetailPage extends StatefulWidget {
 }
 
 class _ArticleDetailPageState extends State<ArticleDetailPage> {
+  bool isCommentAccepted = false; // 채택된 댓글이 있는지 상태 관리
+  final TextEditingController _commentController = TextEditingController();
   CollectionReference articles =
-      FirebaseFirestore.instance.collection('articles');
+  FirebaseFirestore.instance.collection('articles');
 
-  getArticle() async {
+  Future<Map<String, dynamic>?> getArticle() async {
     var result = await FirebaseFirestore.instance
         .collection('articles')
         .doc(widget.articleId)
         .get();
-
-    return result.data();
+    return result.data() as Map<String, dynamic>?;
   }
 
+  // delete 함수 추가
   Future<void> delete() async {
     await articles.doc(widget.articleId).delete();
     Navigator.of(context).pop();
+  }
+
+  Future<void> addComment() async {
+    if (_commentController.text.isNotEmpty) {
+      await articles
+          .doc(widget.articleId)
+          .collection('comments')
+          .add({
+        'content': _commentController.text,
+        'author_id': 'user123', // 예시 사용자 ID, 실제로는 인증된 사용자 ID를 사용
+        'created_at': Timestamp.now(),
+        'is_accepted': false,
+      });
+      _commentController.clear();
+    }
+  }
+
+  Future<void> acceptComment(String commentId) async {
+    if (!isCommentAccepted) {
+      await articles
+          .doc(widget.articleId)
+          .collection('comments')
+          .doc(commentId)
+          .update({'is_accepted': true});
+
+      setState(() {
+        isCommentAccepted = true; // 채택 상태 업데이트
+      });
+
+      // 마일리지 부여 로직 (추가 구현 필요)
+    }
   }
 
   @override
@@ -66,8 +99,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ArticleEditPage(
-                        articleId: widget.articleId,
-                      )));
+                    articleId: widget.articleId,
+                  )));
             },
             icon: const Icon(
               Icons.edit,
@@ -81,62 +114,122 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           ),
         ],
       ),
-      body: FutureBuilder(
-          future: getArticle(),
-          builder: (context, snapshot) {
-            return snapshot.hasData
-                ? ListView(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            FutureBuilder<Map<String, dynamic>?>(
+              future: getArticle(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasData) {
+                  return Column(
                     children: [
-                      Column(
-                        children: [
-                          ListTile(
-                            leading: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                backgroundColor: Color(0xffE6E6E6),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Color(0xffCCCCCC),
-                                ),
-                              ),
-                            ),
-                            title: const Text('익명이'),
-                            subtitle: Text((snapshot.data as Map)['created_at']
-                                .toDate()
-                                .toString()),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
-                            width: double.infinity,
-                            child: Text(
-                              (snapshot.data as Map)['title'],
-                              //article['title'].toString(),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                              textScaleFactor: 1.4,
-                              textAlign: TextAlign.start,
+                      ListTile(
+                        leading: const CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            backgroundColor: Color(0xffE6E6E6),
+                            child: Icon(
+                              Icons.person,
+                              color: Color(0xffCCCCCC),
                             ),
                           ),
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
-                              child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    (snapshot.data as Map)['content'],
-                                  ) //article['content'].toString()),
-                                  )),
-                          const SizedBox(
-                            height: 1,
-                          ),
-                          const Divider(
-                            thickness: 1,
-                          ),
-                        ],
+                        ),
+                        title: const Text('익명이'),
+                        subtitle: Text(
+                          (snapshot.data as Map)['created_at']
+                              .toDate()
+                              .toString(),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
+                        width: double.infinity,
+                        child: Text(
+                          (snapshot.data as Map)['title'],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          textScaleFactor: 1.4,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text((snapshot.data as Map)['content']),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 1,
+                      ),
+                      const Divider(
+                        thickness: 1,
                       ),
                     ],
-                  )
-                : const Center(child: CircularProgressIndicator());
-          }),
+                  );
+                }
+
+                return const Text('게시글을 불러오는 데 문제가 발생했습니다.');
+              },
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: articles
+                  .doc(widget.articleId)
+                  .collection('comments')
+                  .orderBy('created_at', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+
+                // 채택된 댓글이 있는지 확인
+                isCommentAccepted = snapshot.data!.docs.any((doc) => doc['is_accepted']);
+
+                return ListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: snapshot.data!.docs.map((DocumentSnapshot document) {
+                    Map<String, dynamic> comment = document.data()! as Map<String, dynamic>;
+                    return ListTile(
+                      title: Text(comment['content']),
+                      subtitle: Text(comment['author_id']),
+                      trailing: comment['is_accepted']
+                          ? Icon(Icons.check, color: Colors.green)
+                          : (!isCommentAccepted)
+                          ? ElevatedButton(
+                        child: Text('채택'),
+                        onPressed: () => acceptComment(document.id),
+                      )
+                          : SizedBox.shrink(), // 이미 채택된 댓글이 있으면 다른 채택 버튼 숨김
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _commentController,
+                      decoration: InputDecoration(labelText: '댓글 추가'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    onPressed: addComment,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
