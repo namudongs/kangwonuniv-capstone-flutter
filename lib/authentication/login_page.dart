@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:capstone/components/make_input.dart';
 import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +14,7 @@ import 'package:capstone/components/bottom_nav_bar.dart';
 import 'package:capstone/components/color_round_button.dart';
 
 class LoginPage extends StatelessWidget {
+  bool _isButtonDisabled = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -86,6 +89,10 @@ class LoginPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: ColorRoundButton(
                               tapFunc: () async {
+                                if (_isButtonDisabled) {
+                                  return;
+                                }
+
                                 String email = emailController.text;
                                 String password = passwordController.text;
 
@@ -104,6 +111,7 @@ class LoginPage extends StatelessWidget {
                                   print('비밀번호에 공백이 포함되어 있습니다.');
                                   return;
                                 } else {
+                                  _isButtonDisabled = true;
                                   await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: email, password: password)
@@ -122,6 +130,8 @@ class LoginPage extends StatelessWidget {
                                     print(
                                         '로그인 실패\n이메일: $email, 비밀번호: $password');
                                     print(e);
+                                    sleep(Durations.medium1);
+                                    _isButtonDisabled = false;
                                   });
                                 }
                               },

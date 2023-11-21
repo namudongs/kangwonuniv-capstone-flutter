@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'dart:io';
+
 import 'package:capstone/authentication/login_page.dart';
 import 'package:capstone/components/make_input.dart';
 import 'package:capstone/components/bottom_nav_bar.dart';
@@ -19,6 +21,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  bool _isButtonDisabled = false;
   final List<String> _univList = [
     '강원대학교',
     '다른 대학생',
@@ -267,6 +270,7 @@ class _SignupPageState extends State<SignupPage> {
                       } else
                         print('회원가입 버튼 클릭');
                       // 회원가입 로직 시작
+                      _isButtonDisabled = true;
                       try {
                         await FirebaseAuth.instance
                             .createUserWithEmailAndPassword(
@@ -299,6 +303,8 @@ class _SignupPageState extends State<SignupPage> {
                         });
                       } catch (e) {
                         print(e);
+                        sleep(Durations.medium1);
+                        _isButtonDisabled = false;
                       }
                       return;
                     },
