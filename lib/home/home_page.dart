@@ -32,12 +32,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(height: 10),
               Text(
-                appUser!.userName,
+                appUser?.userName ?? '사용자 정보 로딩 중',
                 style: const TextStyle(color: Colors.blue, fontSize: 13),
               ),
-              const Text(
-                '🎓강원대학교',
-                style: TextStyle(
+              Text(
+                '🎓${appUser?.university ?? '사용자 정보 로딩 중'}',
+                style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 20),

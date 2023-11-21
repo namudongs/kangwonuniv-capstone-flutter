@@ -89,14 +89,13 @@ class LoginPage extends StatelessWidget {
                                 String email = emailController.text;
                                 String password = passwordController.text;
 
+                                final navigator = Navigator.of(context);
+
                                 if (email.isEmpty || password.isEmpty) {
                                   print('이메일 또는 비밀번호를 입력해주세요.');
                                   return;
                                 } else if (!email.contains('@')) {
                                   print('이메일 형식이 올바르지 않습니다.');
-                                  return;
-                                } else if (!email.contains('.ac.kr')) {
-                                  print('재학중인 학교의 이메일을 입력해 주세요.');
                                   return;
                                 } else if (password.length < 6) {
                                   print('비밀번호는 6자리 이상이어야 합니다.');
@@ -108,18 +107,16 @@ class LoginPage extends StatelessWidget {
                                   await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: email, password: password)
-                                      .then((value) {
+                                      .then((value) async {
                                     print(
                                         '로그인 성공\n이메일: $email, 비밀번호: $password');
-                                    fetchUserData();
+                                    await fetchUserData();
 
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, '/', (_) => false);
-                                    Navigator.push(
-                                      context,
+                                    navigator.pushNamedAndRemoveUntil(
+                                        '/', (_) => false);
+                                    navigator.push(
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              const BottomNavBar()),
+                                          builder: (_) => const BottomNavBar()),
                                     );
                                   }).catchError((e) {
                                     print(
