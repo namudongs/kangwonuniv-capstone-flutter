@@ -3,7 +3,8 @@
 import 'package:capstone/components/color_round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'store_page.dart'; // 상점 페이지 import
+import 'store_page.dart';
+import 'profile_edit_page.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({super.key});
@@ -23,7 +24,10 @@ class _MyPageState extends State<MyPage> {
             // 프로필 수정 버튼
             ColorRoundButton(
               tapFunc: () {
-                // 프로필 수정 로직 구현
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfileEditPage()),
+                );
               },
               title: '프로필 수정',
               color: Colors.blueAccent,
