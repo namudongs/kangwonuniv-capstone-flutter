@@ -24,7 +24,7 @@ class _SignupPageState extends State<SignupPage> {
   bool _isButtonDisabled = false;
   final List<String> _univList = [
     '강원대학교',
-    '다른 대학생',
+    '다른 대학교',
   ];
   final List<String> _gradeList = [
     '1학년',
@@ -176,7 +176,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                     Visibility(
-                      visible: _selectedUniv == '다른 대학생' ? true : false,
+                      visible: _selectedUniv == '다른 대학교' ? true : false,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -197,7 +197,7 @@ class _SignupPageState extends State<SignupPage> {
                                   borderSide: BorderSide(
                                       color: Colors.grey.withAlpha(400)),
                                   borderRadius: BorderRadius.circular(10)),
-                              hintText: '다른 대학생은 전공을 입력해주세요.',
+                              hintText: '다른 대학교 학생은 전공을 입력해주세요.',
                             ),
                           ),
                           const SizedBox(
@@ -260,11 +260,11 @@ class _SignupPageState extends State<SignupPage> {
                           _selectedMajor == null) {
                         print('전공을 선택해주세요.');
                         return;
-                      } else if (_selectedUniv == '다른 대학생' &&
+                      } else if (_selectedUniv == '다른 대학교' &&
                           majorController.text.isEmpty) {
                         print('전공을 입력해주세요.');
                         return;
-                      } else if (_selectedUniv == '다른 대학생' &&
+                      } else if (_selectedUniv == '다른 대학교' &&
                           majorController.text.isNotEmpty) {
                         _selectedMajor = majorController.text;
                       } else
