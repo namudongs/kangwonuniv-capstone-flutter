@@ -14,12 +14,19 @@ class _ArticleAddPageState extends State<ArticleAddPage> {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
+  final TextEditingController mileageController = TextEditingController();
 
   Future<void> saveForm() async {
     final String title = titleController.text;
     final String content = contentController.text;
-    await articles.add(
-        {'title': title, 'content': content, 'created_at': Timestamp.now()});
+    final int mileage = int.tryParse(mileageController.text) ?? 100; // 마일리지 입력 처리
+
+    await articles.add({
+      'title': title,
+      'content': content,
+      'created_at': Timestamp.now(),
+      'mileage': mileage, // 마일리지 추가
+    });
 
     titleController.text = "";
     contentController.text = "";
@@ -80,6 +87,12 @@ class _ArticleAddPageState extends State<ArticleAddPage> {
                 TextField(
                   controller: contentController,
                   decoration: const InputDecoration(labelText: '내용을 입력하세요.'),
+                ),
+                // 마일리지 입력 필드 추가
+                TextFormField(
+                  controller: mileageController,
+                  decoration: const InputDecoration(labelText: '마일리지 (최소 100, 10단위)'),
+                  keyboardType: TextInputType.number,
                 ),
               ],
             ),
