@@ -7,6 +7,7 @@ import 'package:capstone/main.dart';
 import 'package:capstone/mypage/my_page.dart';
 import 'package:capstone/timetable/timetable_page.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/groups/group_page.dart'; // 스터디 그룹
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,15 +24,11 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   int _currentIndex = 0;
 
-  final List _pages = [
+  final List<Widget> _pages = [
     const HomePage(),
     const TimeTablePage(),
     const BoardPage(),
-    const Text(
-      "그룹페이지 만들어서 연결하기",
-      style: TextStyle(fontSize: 15),
-      textAlign: TextAlign.center,
-    ),
+    GroupPage(), // 스터디 그룹 페이지 연결
     const MyPage()
   ];
 
