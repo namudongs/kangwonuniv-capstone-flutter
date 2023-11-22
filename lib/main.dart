@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone/authentication/main_page.dart';
-import 'package:capstone/components/bottom_nav_bar.dart';
+import 'package:capstone/authentication/mainPage.dart';
+import 'package:capstone/components/bottomBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'firebase/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:capstone/authentication/app_user.dart';
+import 'package:capstone/authentication/appUser.dart';
 
 // 전역 변수 추가
 AppUser? appUser;
