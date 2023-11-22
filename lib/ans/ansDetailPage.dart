@@ -1,20 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:capstone/board/articleEditPage.dart';
+import 'package:capstone/ans/ansEditPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ArticleDetailPage extends StatefulWidget {
-  const ArticleDetailPage({required this.articleId, Key? key})
-      : super(key: key);
+class AnsDetailPage extends StatefulWidget {
+  const AnsDetailPage({required this.articleId, Key? key}) : super(key: key);
 
   final String articleId;
 
   @override
-  State<ArticleDetailPage> createState() => _ArticleDetailPageState();
+  State<AnsDetailPage> createState() => _AnsDetailPageState();
 }
 
-class _ArticleDetailPageState extends State<ArticleDetailPage> {
+class _AnsDetailPageState extends State<AnsDetailPage> {
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 
@@ -48,7 +47,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ArticleEditPage(
+                  builder: (context) => AnsEditPage(
                         articleId: widget.articleId,
                       )));
             },

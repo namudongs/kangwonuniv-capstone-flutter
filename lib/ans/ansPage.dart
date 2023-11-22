@@ -1,27 +1,22 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone/board/articleAddPage.dart';
-import 'package:capstone/board/articleDetailPage.dart';
+import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class BoardPage extends StatefulWidget {
-  const BoardPage({Key? key}) : super(key: key);
+class AnsPage extends StatefulWidget {
+  const AnsPage({Key? key}) : super(key: key);
 
   @override
-  State<BoardPage> createState() => _BoardPageState();
+  State<AnsPage> createState() => _AnsPageState();
 }
 
-class _BoardPageState extends State<BoardPage> {
+class _AnsPageState extends State<AnsPage> {
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
-
-  Future<void> _delete(String productId) async {
-    await articles.doc(productId).delete();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,18 +43,6 @@ class _BoardPageState extends State<BoardPage> {
             ],
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ArticleAddPage()));
-            },
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
-            ),
-          )
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[200]),
@@ -79,7 +62,7 @@ class _BoardPageState extends State<BoardPage> {
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ArticleDetailPage(
+                              builder: (context) => AnsDetailPage(
                                     articleId: documentSnapshot.id,
                                   )));
                         },

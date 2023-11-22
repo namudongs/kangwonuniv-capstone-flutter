@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
-import 'package:capstone/board/boardPage.dart';
+import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/mypage/myPage.dart';
-import 'package:capstone/timetable/timeTablePage.dart';
+import 'package:capstone/qu/quAddPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -21,14 +21,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
   var selected = 0;
 
   @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
   }
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -38,8 +38,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
         controller: controller,
         children: const [
           HomePage(),
-          TimeTablePage(),
-          BoardPage(),
+          AnsPage(),
+          AnsPage(),
           MyPage(),
         ],
       ),
@@ -50,10 +50,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         currentIndex: selected,
         onTap: (index) {
-          setState(() {
-            selected = index;
-            controller.jumpToPage(index);
-          });
+          if (index == 1) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                fullscreenDialog: true,
+                builder: (context) => const QuAddPage(),
+              ),
+            );
+          } else {
+            setState(() {
+              selected = index;
+              controller.jumpToPage(index);
+            });
+          }
         },
         items: [
           BottomBarItem(

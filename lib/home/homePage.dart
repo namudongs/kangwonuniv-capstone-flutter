@@ -21,9 +21,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 104, 0, 123).withOpacity(1),
         elevation: 0.0,
         automaticallyImplyLeading: false,
-        flexibleSpace: Container(),
         title: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           child: Column(
@@ -31,27 +31,16 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(height: 10),
-              Text(
-                appUser?.userName ?? '사용자 정보 로딩 중',
-                style: const TextStyle(color: Colors.blue, fontSize: 13),
-              ),
-              Text(
-                '🎓${appUser?.university ?? '사용자 정보 로딩 중'}',
-                style: const TextStyle(
-                    color: Colors.black,
+              const Text(
+                '홈',
+                style: TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 20),
               ),
             ],
           ),
         ),
-        actions: const [
-          // IconButton(
-          //   onPressed: () {},
-          //   icon: const Icon(CupertinoIcons.ellipsis),
-          //   color: Colors.black,
-          // ),
-        ],
       ),
       body: SafeArea(
         minimum: const EdgeInsets.only(top: 10),
@@ -63,12 +52,24 @@ class _HomePageState extends State<HomePage> {
               child: Swiper(
                 itemBuilder: (BuildContext context, int index) {
                   return ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      "https://picsum.photos/400/200?random=$index",
-                      fit: BoxFit.fill,
-                    ),
-                  );
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        color: const Color.fromARGB(255, 104, 0, 123)
+                            .withOpacity(0.3),
+                        child: Center(
+                          child: Text(
+                            '${appUser?.university ?? '사용자 정보 로딩 중'}\n${appUser?.email ?? '사용자 정보 로딩 중'} \n${appUser?.userName}\n$index',
+                            style: const TextStyle(
+                              fontSize: 15,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        // Image.network(
+                        //   "https://picsum.photos/400/200?random=$index",
+                        //   fit: BoxFit.fill,
+                        // ),
+                      ));
                 },
                 itemCount: 3,
                 itemHeight: 150,
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.topLeft,
                     padding: const EdgeInsets.all(8.0),
                     child: const Text(
-                      "🔥최근 게시글",
+                      "🔥인기있는 질문",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,

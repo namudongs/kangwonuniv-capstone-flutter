@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ArticleAddPage extends StatefulWidget {
-  const ArticleAddPage({Key? key}) : super(key: key);
+class ansAddPage extends StatefulWidget {
+  const ansAddPage({Key? key}) : super(key: key);
 
   @override
-  State<ArticleAddPage> createState() => _ArticleAddPageState();
+  State<ansAddPage> createState() => _ansAddPageState();
 }
 
-class _ArticleAddPageState extends State<ArticleAddPage> {
+class _ansAddPageState extends State<ansAddPage> {
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 

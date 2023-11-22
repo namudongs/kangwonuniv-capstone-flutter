@@ -14,7 +14,6 @@ import 'package:capstone/components/bottomBar.dart';
 import 'package:capstone/components/colorRoundButton.dart';
 
 class LoginPage extends StatelessWidget {
-  bool _isButtonDisabled = false;
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -89,10 +88,6 @@ class LoginPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 40),
                           child: ColorRoundButton(
                               tapFunc: () async {
-                                if (_isButtonDisabled) {
-                                  return;
-                                }
-
                                 String email = emailController.text;
                                 String password = passwordController.text;
 
@@ -111,7 +106,6 @@ class LoginPage extends StatelessWidget {
                                   print('비밀번호에 공백이 포함되어 있습니다.');
                                   return;
                                 } else {
-                                  _isButtonDisabled = true;
                                   await FirebaseAuth.instance
                                       .signInWithEmailAndPassword(
                                           email: email, password: password)
@@ -131,7 +125,6 @@ class LoginPage extends StatelessWidget {
                                         '로그인 실패\n이메일: $email, 비밀번호: $password');
                                     print(e);
                                     sleep(Durations.medium1);
-                                    _isButtonDisabled = false;
                                   });
                                 }
                               },
