@@ -45,6 +45,8 @@ dependencies:
   cloud_firestore: ^4.8.5
   shared_preferences: ^2.2.1
   animated_custom_dropdown: ^2.0.0
+  stylish_bottom_bar: ^1.0.3
+
   
 dev_dependencies:
   flutter_test:

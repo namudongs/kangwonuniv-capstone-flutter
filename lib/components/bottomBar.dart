@@ -1,0 +1,89 @@
+// ignore_for_file: avoid_print
+import 'package:capstone/board/boardPage.dart';
+import 'package:capstone/home/homePage.dart';
+import 'package:capstone/mypage/myPage.dart';
+import 'package:capstone/timetable/timeTablePage.dart';
+import 'package:flutter/material.dart';
+
+import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+import 'package:stylish_bottom_bar/model/bar_items.dart';
+
+class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  PageController controller = PageController(initialPage: 0);
+  var selected = 0;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: PageView(
+        controller: controller,
+        children: const [
+          HomePage(),
+          TimeTablePage(),
+          BoardPage(),
+          MyPage(),
+        ],
+      ),
+      bottomNavigationBar: StylishBottomBar(
+        option: AnimatedBarOptions(
+          iconSize: 20,
+          iconStyle: IconStyle.simple,
+        ),
+        currentIndex: selected,
+        onTap: (index) {
+          setState(() {
+            selected = index;
+            controller.jumpToPage(index);
+          });
+        },
+        items: [
+          BottomBarItem(
+            icon: const Icon(Icons.home_rounded),
+            title: const Text('홈'),
+            selectedColor:
+                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.question_mark),
+            title: const Text('질문하기'),
+            selectedColor:
+                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.article_outlined),
+            selectedIcon: const Icon(Icons.article_rounded),
+            title: const Text('답변하기'),
+            selectedColor:
+                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+          ),
+          BottomBarItem(
+            icon: const Icon(Icons.notifications_none),
+            selectedIcon: const Icon(Icons.notifications_rounded),
+            title: const Text('알림'),
+            selectedColor:
+                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+          ),
+        ],
+      ),
+    );
+  }
+}
