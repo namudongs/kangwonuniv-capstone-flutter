@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,8 +24,18 @@ class _QuAddPageState extends State<QuAddPage> {
   Future<void> saveForm() async {
     final String title = _titleController.text;
     final String content = _contentController.text;
-    await articles.add(
-        {'title': title, 'content': content, 'created_at': Timestamp.now()});
+    await articles.add({
+      'title': title,
+      'content': content,
+      'created_at': Timestamp.now(),
+      'user': {
+        'uid': appUser!.uid,
+        'name': appUser!.userName,
+        'university': appUser!.university,
+        'major': appUser!.major,
+        'grade': appUser!.grade,
+      },
+    });
 
     _titleController.text = "";
     _contentController.text = "";
@@ -55,8 +66,6 @@ class _QuAddPageState extends State<QuAddPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 104, 0, 123).withOpacity(1),
-        elevation: 0.0,
         automaticallyImplyLeading: false,
         title: const Text(
           '질문하기',

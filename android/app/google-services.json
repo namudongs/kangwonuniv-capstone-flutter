@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:421023492131:android:9c3cf12d333d4ba133e996",
         "android_client_info": {
-          "package_name": "com.knu.capstone"
+          "package_name": "dev.namudongs.capstone"
         }
       },
       "oauth_client": [
@@ -34,7 +34,7 @@
               "client_id": "421023492131-nmjca5fti2rba4ut8dl3qcnemn8ruhsh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.capstone"
+                "bundle_id": "dev.namudongs.capstone"
               }
             }
           ]
@@ -45,7 +45,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:421023492131:android:db4c96aa7e2248ab33e996",
         "android_client_info": {
-          "package_name": "com.example.capstone_"
+          "package_name": "dev.namudongs.capstone"
         }
       },
       "oauth_client": [
@@ -70,7 +70,7 @@
               "client_id": "421023492131-nmjca5fti2rba4ut8dl3qcnemn8ruhsh.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.capstone"
+                "bundle_id": "dev.namudongs.capstone"
               }
             }
           ]

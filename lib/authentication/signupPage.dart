@@ -70,11 +70,11 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
+        body: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 40),
+          height: MediaQuery.of(context).size.height,
+          width: double.infinity,
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
@@ -227,7 +227,7 @@ class _SignupPageState extends State<SignupPage> {
                       String password = passwordController.text;
                       String pwconfirm = pwconfirmController.text;
                       final navigator = Navigator.of(context);
-
+            
                       if (userName.isEmpty ||
                           email.isEmpty ||
                           password.isEmpty ||
@@ -292,7 +292,7 @@ class _SignupPageState extends State<SignupPage> {
                             timetable: [],
                           );
                           await fetchUserData();
-
+            
                           navigator.pushNamedAndRemoveUntil('/', (_) => false);
                           navigator.push(
                             MaterialPageRoute(

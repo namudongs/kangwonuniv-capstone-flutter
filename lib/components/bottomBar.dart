@@ -68,28 +68,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
           BottomBarItem(
             icon: const Icon(Icons.home_rounded),
             title: const Text('홈'),
-            selectedColor:
-                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+            selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.question_mark),
             title: const Text('질문하기'),
-            selectedColor:
-                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+            selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.article_outlined),
             selectedIcon: const Icon(Icons.article_rounded),
             title: const Text('답변하기'),
-            selectedColor:
-                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+            selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.notifications_none),
             selectedIcon: const Icon(Icons.notifications_rounded),
             title: const Text('알림'),
-            selectedColor:
-                const Color.fromARGB(255, 104, 0, 123).withOpacity(0.8),
+            selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
         ],
       ),

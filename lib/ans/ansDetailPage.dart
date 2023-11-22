@@ -35,10 +35,6 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: const Color.fromARGB(255, 104, 0, 123).withOpacity(1),
-        automaticallyImplyLeading: true,
-        iconTheme: const IconThemeData(color: Colors.white),
         title: const Column(
           children: [],
         ),

@@ -47,13 +47,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
+        brightness: Brightness.light,
+        primaryColor: const Color(0x00F4DFC8),
+        scaffoldBackgroundColor: Colors.grey[100],
         appBarTheme: const AppBarTheme(
+          elevation: 0,
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.light,
             statusBarBrightness: Brightness.light,
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 106, 0, 0),
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+          iconTheme: IconThemeData(color: Colors.white),
+          actionsIconTheme: IconThemeData(color: Colors.black),
         ),
       ),
       debugShowCheckedModeBanner: false,

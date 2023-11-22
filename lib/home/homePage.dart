@@ -21,8 +21,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 104, 0, 123).withOpacity(1),
-        elevation: 0.0,
         automaticallyImplyLeading: false,
         title: Padding(
           padding: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -34,16 +32,16 @@ class _HomePageState extends State<HomePage> {
               const Text(
                 '홈',
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
               ),
             ],
           ),
         ),
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(top: 10),
+        minimum: const EdgeInsets.only(top: 15),
         child: Column(
           children: [
             SizedBox(
@@ -54,8 +52,7 @@ class _HomePageState extends State<HomePage> {
                   return ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        color: const Color.fromARGB(255, 104, 0, 123)
-                            .withOpacity(0.3),
+                        color: Colors.white,
                         child: Center(
                           child: Text(
                             '${appUser?.university ?? '사용자 정보 로딩 중'}\n${appUser?.email ?? '사용자 정보 로딩 중'} \n${appUser?.userName}\n$index',
@@ -80,12 +77,12 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               decoration: const BoxDecoration(
-                  // color: Colors.grey[300],
-                  // border: Border.all(color: Colors.grey),
-                  // borderRadius: BorderRadius.circular(20),
-                  ),
+                color: Colors.white,
+                // border: Border.all(color: Colors.grey.withOpacity(0.5)),
+                // borderRadius: BorderRadius.circular(20),
+              ),
               alignment: Alignment.topLeft,
-              margin: const EdgeInsets.all(15),
+              margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
               child: Column(
                 children: [
                   Container(

@@ -47,10 +47,7 @@ class _AnsEditPageState extends State<AnsEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
           automaticallyImplyLeading: true,
-          iconTheme: const IconThemeData(color: Colors.black),
           title: const Column(
             children: [
               Text(

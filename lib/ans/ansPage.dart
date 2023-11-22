@@ -22,8 +22,6 @@ class _AnsPageState extends State<AnsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 104, 0, 123).withOpacity(1),
-        elevation: 0.0,
         automaticallyImplyLeading: false,
         flexibleSpace: Container(),
         title: Padding(
@@ -45,7 +43,7 @@ class _AnsPageState extends State<AnsPage> {
         ),
       ),
       body: Container(
-        decoration: BoxDecoration(color: Colors.grey[200]),
+        decoration: BoxDecoration(color: Colors.grey[100]),
         child: Padding(
           padding: const EdgeInsets.only(top: 5),
           child: StreamBuilder(
@@ -88,9 +86,9 @@ class _AnsPageState extends State<AnsPage> {
                                     color: Colors.black54,
                                   ),
                                 ),
-                                const Row(
+                                Row(
                                   children: [
-                                    Text(
+                                    const Text(
                                       '답변 ${0}',
                                       style: TextStyle(
                                         fontSize: 11,
@@ -99,13 +97,13 @@ class _AnsPageState extends State<AnsPage> {
                                       ),
                                     ),
                                     Text(
-                                      '﹒컴퓨터공학과',
-                                      style: TextStyle(
+                                      '﹒${documentSnapshot['user']['major']}',
+                                      style: const TextStyle(
                                           fontSize: 11, color: Colors.black54),
                                     ),
                                     Text(
-                                      '﹒11분 전',
-                                      style: TextStyle(
+                                      '﹒${formatTimestamp(documentSnapshot['created_at'])}',
+                                      style: const TextStyle(
                                           fontSize: 11, color: Colors.black54),
                                     ),
                                   ],
@@ -127,12 +125,11 @@ class _AnsPageState extends State<AnsPage> {
                                               BorderRadius.circular(5),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey
-                                                  .withOpacity(0.3), // 그림자의 색상
-                                              spreadRadius: 0.1, // 그림자의 범위
-                                              blurRadius: 3, // 그림자의 흐림 정도
-                                              offset: const Offset(
-                                                  0, 0), // 그림자의 위치 조정
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                              spreadRadius: 0.1,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 0),
                                             ),
                                           ],
                                         ),
@@ -172,12 +169,11 @@ class _AnsPageState extends State<AnsPage> {
                                               BorderRadius.circular(5),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: Colors.grey
-                                                  .withOpacity(0.3), // 그림자의 색상
-                                              spreadRadius: 0.1, // 그림자의 범위
-                                              blurRadius: 3, // 그림자의 흐림 정도
-                                              offset: const Offset(
-                                                  0, 0), // 그림자의 위치 조정
+                                              color:
+                                                  Colors.grey.withOpacity(0.3),
+                                              spreadRadius: 0.1,
+                                              blurRadius: 3,
+                                              offset: const Offset(0, 0),
                                             ),
                                           ],
                                         ),
@@ -217,5 +213,27 @@ class _AnsPageState extends State<AnsPage> {
         ),
       ),
     );
+  }
+
+  String formatTimestamp(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    DateTime now = DateTime.now();
+    Duration diff = now.difference(dateTime);
+
+    if (diff.inDays > 365) {
+      return '${(diff.inDays / 365).floor()}년 전';
+    } else if (diff.inDays > 30) {
+      return '${(diff.inDays / 30).floor()}개월 전';
+    } else if (diff.inDays > 7) {
+      return '${(diff.inDays / 7).floor()}주 전';
+    } else if (diff.inDays > 0) {
+      return '${diff.inDays}일 전';
+    } else if (diff.inHours > 0) {
+      return '${diff.inHours}시간 전';
+    } else if (diff.inMinutes > 0) {
+      return '${diff.inMinutes}분 전';
+    } else {
+      return '${diff.inSeconds}초 전';
+    }
   }
 }
