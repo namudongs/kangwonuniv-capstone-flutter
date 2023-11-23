@@ -163,15 +163,25 @@ class _QuAddPageState extends State<QuAddPage> {
                     color: Colors.black,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        onPressed: _pickImage,
-                        icon: const Icon(Icons.image),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: _pickImage,
+                            icon: const Icon(Icons.image),
+                          ),
+                          IconButton(
+                            onPressed: _pickVideo,
+                            icon: const Icon(Icons.video_call),
+                          ),
+                        ],
                       ),
                       IconButton(
-                        onPressed: _pickVideo,
-                        icon: const Icon(Icons.video_call),
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                        },
+                        icon: const Icon(Icons.keyboard_arrow_down),
                       ),
                     ],
                   ),
