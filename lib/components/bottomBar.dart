@@ -46,7 +46,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       bottomNavigationBar: StylishBottomBar(
         option: AnimatedBarOptions(
           iconSize: 20,
-          iconStyle: IconStyle.simple,
+          iconStyle: IconStyle.Default,
         ),
         currentIndex: selected,
         onTap: (index) {
@@ -67,24 +67,37 @@ class _BottomNavBarState extends State<BottomNavBar> {
         items: [
           BottomBarItem(
             icon: const Icon(Icons.home_rounded),
-            title: const Text('홈'),
+            title: const Text(
+              '홈',
+              style: TextStyle(fontSize: 10),
+            ),
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.question_mark),
-            title: const Text('질문하기'),
+            title: const Text(
+              '질문하기',
+              style: TextStyle(fontSize: 10),
+            ),
+            unSelectedColor: Colors.redAccent,
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.article_outlined),
             selectedIcon: const Icon(Icons.article_rounded),
-            title: const Text('답변하기'),
+            title: const Text(
+              '답변하기',
+              style: TextStyle(fontSize: 10),
+            ),
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.notifications_none),
             selectedIcon: const Icon(Icons.notifications_rounded),
-            title: const Text('알림'),
+            title: const Text(
+              '알림',
+              style: TextStyle(fontSize: 10),
+            ),
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
         ],
