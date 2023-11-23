@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
           //   child: Text(''),
           // ),
         ),
+        automaticallyImplyLeading: false,
         centerTitle: true,
       ),
       body: SafeArea(

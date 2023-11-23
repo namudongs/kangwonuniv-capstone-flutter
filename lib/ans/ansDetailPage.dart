@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,8 +47,60 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              blurRadius: 10,
+              spreadRadius: 5,
+              offset: Offset.zero,
+            ),
+          ],
+          image: const DecorationImage(
+            image: AssetImage('assets/images/background_1.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        width: MediaQuery.of(context).size.width / 3,
+        height: 50,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => AnsAddPage(
+                      articleId: widget.articleId,
+                    )));
+          },
+          label: const Row(
+            children: [
+              Icon(Icons.add, color: Colors.white),
+              SizedBox(width: 4),
+              Text(
+                '답변하기',
+                style: TextStyle(
+                    fontSize: 17,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+      ),
+
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.endFloat, // 위치 중앙 하단 설정
       appBar: AppBar(
         title: const Text('상세보기'),
         centerTitle: true,
@@ -151,56 +204,59 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                   ),
                   const SizedBox(height: 20),
                   for (var answer in answersData)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            offset: Offset.zero,
-                          ),
-                        ],
-                      ),
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    backgroundColor: Color(0xffE6E6E6),
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Color(0xffCCCCCC),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                              offset: Offset.zero,
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    child: CircleAvatar(
+                                      backgroundColor: Color(0xffE6E6E6),
+                                      child: Icon(
+                                        Icons.person,
+                                        color: Color(0xffCCCCCC),
+                                      ),
                                     ),
                                   ),
+                                  const Padding(
+                                      padding: EdgeInsets.only(left: 10)),
+                                  Text(answer['user']['name']), // 답변 작성자 이름
+                                ],
+                              ),
+                              const Padding(padding: EdgeInsets.only(top: 15)),
+                              Text(
+                                answer['title'], // 답변 제목
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                const Padding(
-                                    padding: EdgeInsets.only(left: 10)),
-                                Text(answer['user']['name']), // 답변 작성자 이름
-                              ],
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 15)),
-                            Text(
-                              answer['title'], // 답변 제목
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
                               ),
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 5)),
-                            Text(
-                              answer['content'], // 답변 내용
-                              style: const TextStyle(
-                                fontSize: 16,
+                              const Padding(padding: EdgeInsets.only(top: 5)),
+                              Text(
+                                answer['content'], // 답변 내용
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          ]),
+                            ]),
+                      ),
                     ),
                 ],
               ),
