@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_print
+import 'dart:io';
+
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
@@ -79,8 +81,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
               '질문하기',
               style: TextStyle(fontSize: 10),
             ),
-            unSelectedColor: Colors.redAccent,
-            selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
             icon: const Icon(Icons.article_outlined),

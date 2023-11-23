@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/lottie/animation_lkiiozif.json
     - assets/lottie/animation_lkij23o3.json
+    - assets/images/box_deco_1.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

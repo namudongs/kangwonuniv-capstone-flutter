@@ -25,78 +25,59 @@ class _HomePageState extends State<HomePage> {
         centerTitle: false,
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(top: 15),
+        minimum: const EdgeInsets.all(15),
         child: Column(
           children: [
-            SizedBox(
-              // color: Colors.grey[300],
-              height: 150,
-              child: Swiper(
-                itemBuilder: (BuildContext context, int index) {
-                  return ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        color: Colors.white,
-                        child: Center(
-                          child: Text(
-                            '${appUser?.university ?? '사용자 정보 로딩 중'}\n${appUser?.email ?? '사용자 정보 로딩 중'} \n${appUser?.userName}\n$index',
-                            style: const TextStyle(
-                              fontSize: 15,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        // Image.network(
-                        //   "https://picsum.photos/400/200?random=$index",
-                        //   fit: BoxFit.fill,
-                        // ),
-                      ));
-                },
-                itemCount: 3,
-                itemHeight: 150,
-                viewportFraction: 0.7,
-                scale: 0.7,
-                fade: 0.5,
-              ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                // border: Border.all(color: Colors.grey.withOpacity(0.5)),
-                // borderRadius: BorderRadius.circular(20),
-              ),
-              alignment: Alignment.topLeft,
-              margin: const EdgeInsets.fromLTRB(0, 15, 0, 15),
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.topLeft,
-                    padding: const EdgeInsets.all(8.0),
-                    child: const Text(
-                      "🔥인기있는 질문",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 2 - 20,
+                  height: MediaQuery.of(context).size.height / 4 - 20,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.3),
+                    ),
+                    image: const DecorationImage(
+                      image: AssetImage('assets/images/box_deco_1.png'),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 0.5,
+                        offset: Offset.zero,
                       ),
-                    ),
+                    ],
                   ),
-                  Container(
-                    width: double.infinity,
-                    height: 155,
-                    padding: const EdgeInsets.all(9),
-                    child: ListView.separated(
-                      itemCount: 10,
-                      itemBuilder: (BuildContext ctx, int idx) {
-                        return Text('$idx번째 게시글입니다. 반갑습니다. 안녕하세요.');
-                      },
-                      separatorBuilder: (BuildContext ctx, int idx) {
-                        return const Divider();
-                      },
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 2 - 20,
+                  height: MediaQuery.of(context).size.height / 4 - 20,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.3),
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 0.5,
+                        offset: Offset.zero,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+            Divider(
+              height: 30,
+              thickness: 1,
+              color: Colors.grey.withOpacity(0.3),
             ),
           ],
         ),
