@@ -3,6 +3,7 @@ import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
 import 'package:capstone/qu/quAddPage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
@@ -39,8 +40,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
         children: const [
           HomePage(),
           AnsPage(),
-          AnsPage(),
+          QuAddPage(),
           NotifyPage(),
+          NotifyPage()
         ],
       ),
       bottomNavigationBar: StylishBottomBar(
@@ -50,7 +52,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
         currentIndex: selected,
         onTap: (index) {
-          if (index == 1) {
+          if (index == 2) {
             Navigator.of(context).push(
               MaterialPageRoute(
                 fullscreenDialog: true,
@@ -74,17 +76,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
           ),
           BottomBarItem(
+              icon: const Icon(Icons.article_outlined),
+              selectedIcon: const Icon(Icons.article_rounded),
+              title: const Text(
+                '답변하기',
+                style: TextStyle(fontSize: 10),
+              ),
+              selectedColor: const Color.fromARGB(255, 106, 0, 0)),
+          BottomBarItem(
             icon: const Icon(Icons.question_mark),
             title: const Text(
               '질문하기',
-              style: TextStyle(fontSize: 10),
-            ),
-          ),
-          BottomBarItem(
-            icon: const Icon(Icons.article_outlined),
-            selectedIcon: const Icon(Icons.article_rounded),
-            title: const Text(
-              '답변하기',
               style: TextStyle(fontSize: 10),
             ),
             selectedColor: const Color.fromARGB(255, 106, 0, 0),
@@ -94,6 +96,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
             selectedIcon: const Icon(Icons.notifications_rounded),
             title: const Text(
               '알림',
+              style: TextStyle(fontSize: 10),
+            ),
+            selectedColor: const Color.fromARGB(255, 106, 0, 0),
+          ),
+          BottomBarItem(
+            icon: const Icon(CupertinoIcons.person),
+            selectedIcon: const Icon(CupertinoIcons.person_fill),
+            title: const Text(
+              '프로필',
               style: TextStyle(fontSize: 10),
             ),
             selectedColor: const Color.fromARGB(255, 106, 0, 0),

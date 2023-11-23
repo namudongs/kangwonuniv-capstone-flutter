@@ -26,6 +26,20 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
     return result.data();
   }
 
+  Future<Map<String, dynamic>> getArticleAndAnswers() async {
+    var articleSnapshot = await articles.doc(widget.articleId).get();
+    var articleData = articleSnapshot.data() as Map<String, dynamic>;
+
+    var answersSnapshot = await articles
+        .doc(widget.articleId)
+        .collection('answer')
+        .orderBy('created_at', descending: false)
+        .get();
+    var answersData = answersSnapshot.docs.map((doc) => doc.data()).toList();
+
+    return {'article': articleData, 'answers': answersData};
+  }
+
   Future<void> delete() async {
     await articles.doc(widget.articleId).delete();
     Navigator.of(context).pop();
@@ -35,9 +49,7 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
-          children: [],
-        ),
+        title: const Text('상세보기'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -47,72 +59,152 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                         articleId: widget.articleId,
                       )));
             },
-            icon: const Icon(
-              Icons.edit,
-            ),
+            icon: const Icon(Icons.edit),
           ),
           IconButton(
             onPressed: delete,
-            icon: const Icon(
-              Icons.delete,
-            ),
+            icon: const Icon(Icons.delete),
           ),
         ],
       ),
-      body: FutureBuilder(
-          future: getArticle(),
+      body: FutureBuilder<Map<String, dynamic>>(
+          future: getArticleAndAnswers(),
           builder: (context, snapshot) {
-            return snapshot.hasData
-                ? ListView(
-                    children: [
-                      Column(
-                        children: [
-                          ListTile(
-                            leading: const CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                backgroundColor: Color(0xffE6E6E6),
-                                child: Icon(
-                                  Icons.person,
-                                  color: Color(0xffCCCCCC),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('에러: ${snapshot.error}'));
+            }
+
+            if (!snapshot.hasData) {
+              return const Center(child: Text('데이터가 유효하지 않습니다.'));
+            }
+
+            var articleData = snapshot.data!['article'];
+            var answersData = snapshot.data!['answers'] as List;
+
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                          offset: Offset.zero,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    backgroundColor: Color(0xffE6E6E6),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Color(0xffCCCCCC),
+                                    ),
+                                  ),
                                 ),
+                                const Padding(
+                                    padding: EdgeInsets.only(left: 10)),
+                                Text(articleData['user']['name']),
+                              ],
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 15)),
+                            Text(
+                              articleData['title'],
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            title: const Text('익명이'),
-                            subtitle: Text((snapshot.data as Map)['created_at']
-                                .toDate()
-                                .toString()),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
-                            width: double.infinity,
-                            child: Text(
-                              (snapshot.data as Map)['title'],
-                              //article['title'].toString(),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start,
+                            const Padding(padding: EdgeInsets.only(top: 5)),
+                            Text(
+                              articleData['content'],
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 5, 8, 3),
-                              child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    (snapshot.data as Map)['content'],
-                                  ) //article['content'].toString()),
-                                  )),
-                          const SizedBox(
-                            height: 1,
-                          ),
-                          const Divider(
-                            thickness: 1,
+                          ]),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    '답변',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  for (var answer in answersData)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                            offset: Offset.zero,
                           ),
                         ],
                       ),
-                    ],
-                  )
-                : const Center(child: CircularProgressIndicator());
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    backgroundColor: Color(0xffE6E6E6),
+                                    child: Icon(
+                                      Icons.person,
+                                      color: Color(0xffCCCCCC),
+                                    ),
+                                  ),
+                                ),
+                                const Padding(
+                                    padding: EdgeInsets.only(left: 10)),
+                                Text(answer['user']['name']), // 답변 작성자 이름
+                              ],
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 15)),
+                            Text(
+                              answer['title'], // 답변 제목
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 5)),
+                            Text(
+                              answer['content'], // 답변 내용
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ]),
+                    ),
+                ],
+              ),
+            );
           }),
     );
   }

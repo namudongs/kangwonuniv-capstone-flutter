@@ -153,11 +153,7 @@ class _QuAddPageState extends State<QuAddPage> {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 1,
-                    color: Colors.black,
-                  ),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

@@ -68,14 +68,14 @@ class _AnsPageState extends State<AnsPage> {
                               children: [
                                 Text(documentSnapshot['title'],
                                     style: const TextStyle(
-                                        fontSize: 14, color: Colors.black
+                                        fontSize: 16, color: Colors.black
                                         // fontWeight: FontWeight.bold,
                                         )),
                                 Text(
                                   documentSnapshot['content']
                                       .replaceAll('\n', ' '),
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 14,
                                     color: Colors.black54,
                                   ),
                                   maxLines: 2,
@@ -86,7 +86,7 @@ class _AnsPageState extends State<AnsPage> {
                                     const Text(
                                       '답변 ${0}',
                                       style: TextStyle(
-                                        fontSize: 11,
+                                        fontSize: 12,
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -94,12 +94,12 @@ class _AnsPageState extends State<AnsPage> {
                                     Text(
                                       '﹒${documentSnapshot['user']['major']}',
                                       style: const TextStyle(
-                                          fontSize: 11, color: Colors.black54),
+                                          fontSize: 12, color: Colors.black54),
                                     ),
                                     Text(
                                       '﹒${formatTimestamp(documentSnapshot['created_at'])}',
                                       style: const TextStyle(
-                                          fontSize: 11, color: Colors.black54),
+                                          fontSize: 12, color: Colors.black54),
                                     ),
                                   ],
                                 ),
@@ -120,8 +120,8 @@ class _AnsPageState extends State<AnsPage> {
                                                     )));
                                       },
                                       child: Container(
-                                        width: 70,
-                                        height: 20,
+                                        width: 80,
+                                        height: 30,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[200],
                                           borderRadius:
@@ -144,13 +144,13 @@ class _AnsPageState extends State<AnsPage> {
                                           children: [
                                             Icon(
                                               Icons.edit_document,
-                                              size: 9,
+                                              size: 11,
                                               color: Colors.black87,
                                             ),
                                             Text(
                                               ' 답변하기',
                                               style: TextStyle(
-                                                  fontSize: 10,
+                                                  fontSize: 12,
                                                   color: Colors.black87),
                                             )
                                           ],
@@ -164,8 +164,8 @@ class _AnsPageState extends State<AnsPage> {
                                         print('공유하기 버튼 클릭');
                                       },
                                       child: Container(
-                                        width: 70,
-                                        height: 20,
+                                        width: 80,
+                                        height: 30,
                                         decoration: BoxDecoration(
                                           color: Colors.grey[200],
                                           borderRadius:
@@ -188,13 +188,13 @@ class _AnsPageState extends State<AnsPage> {
                                           children: [
                                             Icon(
                                               Icons.share_rounded,
-                                              size: 9,
+                                              size: 11,
                                               color: Colors.black87,
                                             ),
                                             Text(
                                               ' 공유하기',
                                               style: TextStyle(
-                                                  fontSize: 10,
+                                                  fontSize: 12,
                                                   color: Colors.black87),
                                             )
                                           ],

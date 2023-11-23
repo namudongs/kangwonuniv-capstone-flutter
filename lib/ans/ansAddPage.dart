@@ -50,6 +50,14 @@ class _AnsAddPageState extends State<AnsAddPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _contentFocusNode.requestFocus();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -57,14 +65,11 @@ class _AnsAddPageState extends State<AnsAddPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           '답변하기',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.close,
-            color: Colors.white,
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -74,7 +79,6 @@ class _AnsAddPageState extends State<AnsAddPage> {
           IconButton(
             icon: const Icon(
               Icons.check,
-              color: Colors.white,
             ),
             onPressed: () {
               print('체크 버튼 클릭됨');
@@ -150,11 +154,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
-                  Container(
-                    width: double.infinity,
-                    height: 1,
-                    color: Colors.black,
-                  ),
+                  const Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
