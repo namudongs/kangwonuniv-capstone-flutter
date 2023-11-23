@@ -1,6 +1,4 @@
 // ignore_for_file: avoid_print
-import 'dart:io';
-
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';

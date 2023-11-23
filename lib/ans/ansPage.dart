@@ -24,7 +24,6 @@ class _AnsPageState extends State<AnsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('답변하기'),
-        centerTitle: false,
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
@@ -53,6 +52,14 @@ class _AnsPageState extends State<AnsPage> {
                           margin: const EdgeInsets.fromLTRB(0, 3, 0, 3),
                           decoration: const BoxDecoration(
                             color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey,
+                                blurRadius: 0.5,
+                                spreadRadius: 0.1,
+                                offset: Offset.zero,
+                              ),
+                            ],
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),

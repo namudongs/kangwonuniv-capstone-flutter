@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print, file_names
 
-import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
-import 'package:card_swiper/card_swiper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,8 +19,18 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('홈'),
-        centerTitle: false,
+        title: Center(
+          child: Image.asset(
+            'assets/icons/qu_icon.png',
+            width: 40,
+            fit: BoxFit.cover,
+          ),
+          // const Padding(
+          //   padding: EdgeInsets.only(left: 8),
+          //   child: Text(''),
+          // ),
+        ),
+        centerTitle: true,
       ),
       body: SafeArea(
         minimum: const EdgeInsets.all(15),
@@ -41,13 +49,13 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.grey.withOpacity(0.3),
                     ),
                     image: const DecorationImage(
-                      image: AssetImage('assets/images/box_deco_1.png'),
-                    ),
+                        image: AssetImage('assets/images/background_1.png'),
+                        fit: BoxFit.cover),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.withOpacity(1),
                         blurRadius: 10,
-                        spreadRadius: 0.5,
+                        spreadRadius: 1,
                         offset: Offset.zero,
                       ),
                     ],
@@ -62,11 +70,14 @@ class _HomePageState extends State<HomePage> {
                     border: Border.all(
                       color: Colors.grey.withOpacity(0.3),
                     ),
+                    image: const DecorationImage(
+                        image: AssetImage('assets/images/background_2.png'),
+                        fit: BoxFit.cover),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
+                        color: Colors.grey.withOpacity(1),
                         blurRadius: 10,
-                        spreadRadius: 0.5,
+                        spreadRadius: 1,
                         offset: Offset.zero,
                       ),
                     ],

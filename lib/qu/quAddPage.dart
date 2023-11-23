@@ -69,14 +69,11 @@ class _QuAddPageState extends State<QuAddPage> {
         automaticallyImplyLeading: false,
         title: const Text(
           '질문하기',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(
             Icons.close,
-            color: Colors.white,
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -86,7 +83,6 @@ class _QuAddPageState extends State<QuAddPage> {
           IconButton(
             icon: const Icon(
               Icons.check,
-              color: Colors.white,
             ),
             onPressed: () {
               print('체크 버튼 클릭됨');

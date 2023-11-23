@@ -32,7 +32,6 @@ class _NotifyPageState extends State<NotifyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('알림'),
-        centerTitle: false,
       ),
       body: Center(
         child: ColorRoundButton(
