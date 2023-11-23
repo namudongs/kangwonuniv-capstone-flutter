@@ -76,9 +76,6 @@ flutter:
   assets:
     - assets/lottie/animation_lkiiozif.json
     - assets/lottie/animation_lkij23o3.json
-    - assets/lectureDB.json
-    - assets/tuning_lectureDB.json
-    - assets/tuning_lectureDB_updated.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -91,12 +88,17 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: NanumGothic
+      fonts:
+        - asset: assets/fonts/NanumGothicLight.ttf
+          weight: 300
+        - asset: assets/fonts/NanumGothic.ttf
+          weight: 400
+        - asset: assets/fonts/NanumGothicBold.ttf
+          weight: 500
+        - asset: assets/fonts/NanumGothicExtraBold.ttf
+          weight: 600
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

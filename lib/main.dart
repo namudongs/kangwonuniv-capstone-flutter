@@ -47,8 +47,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        fontFamily: 'NanumGothic',
         brightness: Brightness.light,
-        primaryColor: const Color(0x00F4DFC8),
         scaffoldBackgroundColor: Colors.grey[100],
         appBarTheme: const AppBarTheme(
           elevation: 0,
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           iconTheme: IconThemeData(color: Colors.white),
-          actionsIconTheme: IconThemeData(color: Colors.black),
+          actionsIconTheme: IconThemeData(color: Colors.white),
         ),
       ),
       debugShowCheckedModeBanner: false,

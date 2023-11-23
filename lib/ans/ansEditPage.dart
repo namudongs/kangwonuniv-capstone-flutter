@@ -47,16 +47,10 @@ class _AnsEditPageState extends State<AnsEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: true,
           title: const Column(
             children: [
               Text(
                 '질문 수정하기',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-                textAlign: TextAlign.center,
               ),
             ],
           ),

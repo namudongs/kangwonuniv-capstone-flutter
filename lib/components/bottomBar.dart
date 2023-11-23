@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
-import 'package:capstone/mypage/myPage.dart';
+import 'package:capstone/notfiy/notifyPage.dart';
 import 'package:capstone/qu/quAddPage.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +40,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           HomePage(),
           AnsPage(),
           AnsPage(),
-          MyPage(),
+          NotifyPage(),
         ],
       ),
       bottomNavigationBar: StylishBottomBar(

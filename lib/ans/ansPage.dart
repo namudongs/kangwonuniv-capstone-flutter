@@ -22,25 +22,8 @@ class _AnsPageState extends State<AnsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        flexibleSpace: Container(),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(height: 10),
-              const Text(
-                '답변하기',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20),
-              ),
-            ],
-          ),
-        ),
+        title: const Text('답변하기'),
+        centerTitle: false,
       ),
       body: Container(
         decoration: BoxDecoration(color: Colors.grey[100]),
