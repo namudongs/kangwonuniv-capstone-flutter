@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,7 @@ class _AnsPageState extends State<AnsPage> {
                     itemBuilder: (context, index) {
                       final DocumentSnapshot documentSnapshot =
                           streamSnapshot.data!.docs[index];
+
                       return GestureDetector(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -63,11 +65,14 @@ class _AnsPageState extends State<AnsPage> {
                                         // fontWeight: FontWeight.bold,
                                         )),
                                 Text(
-                                  documentSnapshot['content'],
+                                  documentSnapshot['content']
+                                      .replaceAll('\n', ' '),
                                   style: const TextStyle(
                                     fontSize: 11,
                                     color: Colors.black54,
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 Row(
                                   children: [
@@ -98,6 +103,14 @@ class _AnsPageState extends State<AnsPage> {
                                     GestureDetector(
                                       onTap: () {
                                         print('답변하기 버튼 클릭');
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                fullscreenDialog: true,
+                                                builder: (context) =>
+                                                    AnsAddPage(
+                                                      articleId:
+                                                          documentSnapshot.id,
+                                                    )));
                                       },
                                       child: Container(
                                         width: 70,

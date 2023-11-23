@@ -1,87 +1,201 @@
+import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ansAddPage extends StatefulWidget {
-  const ansAddPage({Key? key}) : super(key: key);
+class AnsAddPage extends StatefulWidget {
+  const AnsAddPage({required this.articleId, Key? key}) : super(key: key);
 
+  final String articleId;
   @override
-  State<ansAddPage> createState() => _ansAddPageState();
+  State<AnsAddPage> createState() => _AnsAddPageState();
 }
 
-class _ansAddPageState extends State<ansAddPage> {
+class _AnsAddPageState extends State<AnsAddPage> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final FocusNode _contentFocusNode = FocusNode();
+
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  getArticle() async {
+    var result = await FirebaseFirestore.instance
+        .collection('articles')
+        .doc(widget.articleId)
+        .get();
+
+    return result.data();
+  }
 
   Future<void> saveForm() async {
-    final String title = titleController.text;
-    final String content = contentController.text;
-    await articles.add(
-        {'title': title, 'content': content, 'created_at': Timestamp.now()});
+    final String title = _titleController.text;
+    final String content = _contentController.text;
+    await articles.doc(widget.articleId).collection('answer').add({
+      'title': title,
+      'content': content,
+      'created_at': Timestamp.now(),
+      'user': {
+        'uid': appUser!.uid,
+        'name': appUser!.userName,
+        'university': appUser!.university,
+        'major': appUser!.major,
+        'grade': appUser!.grade,
+      },
+    });
 
-    titleController.text = "";
-    contentController.text = "";
-
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+    _titleController.text = "";
+    _contentController.text = "";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Column(
-          children: [
-            Text(
-              '강원대학교',
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 98, 0),
-                fontSize: 10,
-              ),
-              textAlign: TextAlign.center,
+        automaticallyImplyLeading: false,
+        title: const Text(
+          '답변하기',
+          style: TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.check,
+              color: Colors.white,
             ),
-            Text(
-              '질문하기',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16),
-              textAlign: TextAlign.center,
+            onPressed: () {
+              print('체크 버튼 클릭됨');
+              saveForm();
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AnsDetailPage(
+                        articleId: widget.articleId,
+                      )));
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      child: TextField(
+                        controller: _titleController,
+                        cursorColor: const Color.fromARGB(255, 104, 0, 123),
+                        cursorWidth: 1,
+                        cursorHeight: 19,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          isCollapsed: true,
+                          hintText: '제목',
+                        ),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                        maxLines: null,
+                        keyboardType: TextInputType.multiline,
+                      ),
+                    ),
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: TextField(
+                          controller: _contentController,
+                          focusNode: _contentFocusNode,
+                          cursorColor: const Color.fromARGB(255, 104, 0, 123),
+                          cursorHeight: 16,
+                          cursorWidth: 1,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.zero,
+                            isCollapsed: true,
+                            hintText: '궁금한 내용을 질문해보세요!',
+                          ),
+                          style: const TextStyle(
+                            fontSize: 13,
+                          ),
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: Column(
+                children: [
+                  Container(
+                    width: double.infinity,
+                    height: 1,
+                    color: Colors.black,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: _pickImage,
+                            icon: const Icon(Icons.image),
+                          ),
+                          IconButton(
+                            onPressed: _pickVideo,
+                            icon: const Icon(Icons.video_call),
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                        },
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: saveForm,
-            icon: const Icon(
-              Icons.check,
-              color: Colors.black,
-            ),
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: titleController,
-                  decoration: const InputDecoration(labelText: '제목을 입력하세요.'),
-                ),
-                TextField(
-                  controller: contentController,
-                  decoration: const InputDecoration(labelText: '내용을 입력하세요.'),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {}
+  }
+
+  Future<void> _pickVideo() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
+    if (video != null) {}
   }
 }
