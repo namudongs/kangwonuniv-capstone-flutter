@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:capstone/main.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,12 +18,15 @@ class QuAddController extends GetxController {
   }
 
   Future<void> saveForm() async {
-    // Firestore에 데이터 저장하는 로직
+    if (content.value.isEmpty) {
+      Get.snackbar('오류', '질문 내용을 입력해주세요', snackPosition: SnackPosition.BOTTOM);
+      return;
+    }
     try {
       await articles.add({
         'title': title.value,
         'content': content.value,
-        'tag': tag.value, // 필요한 경우
+        'tag': tag.value,
         'created_at': Timestamp.now(),
         'answers_count': 0,
         'category': category.value,
@@ -33,11 +38,11 @@ class QuAddController extends GetxController {
           'grade': appUser!.grade,
         },
       });
-      // 성공적으로 저장되었을 때의 로직, 예를 들어 알림 표시
-      print('성공적으로 저장되었습니다.');
+
       Get.back();
+      Get.snackbar('성공', '질문이 등록되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      print('에러가 발생했습니다.');
+      Get.snackbar('실패', '오류가 발생했습니다. $e', snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

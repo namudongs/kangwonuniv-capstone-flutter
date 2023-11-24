@@ -2,8 +2,6 @@
 import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/components/bottomNavBar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -20,21 +18,6 @@ void main() async {
   );
 
   runApp(const MyApp());
-}
-
-Future<void> fetchUserData() async {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final User? currentUser = auth.currentUser;
-
-  if (currentUser != null) {
-    DocumentReference userRef =
-        FirebaseFirestore.instance.collection('users').doc(currentUser.uid);
-    DocumentSnapshot userSnapshot = await userRef.get();
-
-    if (userSnapshot.exists) {
-      appUser = AppUser.fromMap(userSnapshot.data()! as Map<String, dynamic>);
-    }
-  }
 }
 
 class MyApp extends StatelessWidget {

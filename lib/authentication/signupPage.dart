@@ -2,16 +2,17 @@
 
 import 'dart:io';
 
+import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/loginPage.dart';
 import 'package:capstone/components/makeInput.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/colorRoundButton.dart';
-import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/authentication/appUser.dart';
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'package:get/get.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -21,6 +22,8 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final AuthController authController = Get.put(AuthController());
+
   final List<String> _univList = [
     '강원대학교',
     '다른 대학교',
@@ -291,7 +294,7 @@ class _SignupPageState extends State<SignupPage> {
                             major: _selectedMajor!,
                             timetable: [],
                           );
-                          await fetchUserData();
+                          await authController.fetchUserData();
 
                           navigator.pushNamedAndRemoveUntil('/', (_) => false);
                           navigator.push(

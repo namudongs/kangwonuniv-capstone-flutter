@@ -59,9 +59,10 @@ class AnsDetailController extends GetxController {
           .update({'answers_count': FieldValue.increment(-1)});
 
       answersData.removeWhere((answer) => answer['id'] == answerId);
-      Get.snackbar('성공', '답변이 삭제되었습니다.');
+      Get.snackbar('성공', '답변이 삭제되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      Get.snackbar('오류', '답변 삭제 중 오류 발생: $e');
+      Get.snackbar('오류', '답변 삭제 중 오류 발생: $e',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

@@ -13,7 +13,9 @@ class AnsAddPage extends StatefulWidget {
 }
 
 class _AnsAddPageState extends State<AnsAddPage> {
-  late AnsAddController controller;
+  late AnsAddController controller =
+      Get.put(AnsAddController(widget.articleId));
+  late FocusNode contentFocusNode;
 
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
@@ -21,7 +23,16 @@ class _AnsAddPageState extends State<AnsAddPage> {
   @override
   void initState() {
     super.initState();
-    controller = Get.put(AnsAddController(widget.articleId));
+    contentFocusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      contentFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    contentFocusNode.dispose(); // FocusNode 해제
+    super.dispose();
   }
 
   @override
@@ -67,6 +78,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.9,
                         child: TextField(
+                          focusNode: contentFocusNode,
                           onChanged: (val) => controller.content.value = val,
                           cursorColor: const Color.fromARGB(255, 104, 0, 123),
                           cursorHeight: 16,

@@ -3,10 +3,11 @@
 
 import 'dart:io';
 
+import 'package:capstone/authController.dart';
 import 'package:capstone/components/makeInput.dart';
-import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:capstone/authentication/signupPage.dart';
@@ -14,6 +15,7 @@ import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/colorRoundButton.dart';
 
 class LoginPage extends StatelessWidget {
+  final AuthController authController = Get.put(AuthController());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -112,7 +114,7 @@ class LoginPage extends StatelessWidget {
                                       .then((value) async {
                                     print(
                                         '로그인 성공\n이메일: $email, 비밀번호: $password');
-                                    await fetchUserData();
+                                    await authController.fetchUserData();
 
                                     navigator.pushNamedAndRemoveUntil(
                                         '/', (_) => false);

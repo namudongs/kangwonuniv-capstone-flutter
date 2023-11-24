@@ -12,7 +12,7 @@ class AnsAddController extends GetxController {
 
   Future<void> saveForm(String articleId) async {
     if (content.value.isEmpty) {
-      Get.snackbar('오류', '답변 내용을 입력해주세요');
+      Get.snackbar('오류', '답변 내용을 입력해주세요', snackPosition: SnackPosition.BOTTOM);
       return;
     }
 
@@ -37,10 +37,11 @@ class AnsAddController extends GetxController {
         'answers_count': FieldValue.increment(1),
       });
       Get.back();
-      Get.snackbar('성공', '답변이 추가되었습니다.');
+      Get.snackbar('성공', '답변이 추가되었습니다.', snackPosition: SnackPosition.BOTTOM);
       content.value = '';
     } catch (e) {
-      Get.snackbar('오류', '답변 추가 중 오류가 발생했습니다: $e');
+      Get.snackbar('오류', '답변 추가 중 오류가 발생했습니다: $e',
+          snackPosition: SnackPosition.BOTTOM);
     }
   }
 }

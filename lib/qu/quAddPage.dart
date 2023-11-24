@@ -15,12 +15,28 @@ class QuAddPage extends StatefulWidget {
 
 class _QuAddPageState extends State<QuAddPage> {
   final CategoryController categoryController = Get.put(CategoryController());
+  late FocusNode contentFocusNode;
 
   Future<void> selectCategory() async {
     final selectedCategory = await Get.to(() => const SelectCategoryPage());
     if (selectedCategory != null) {
       categoryController.updateCategory(selectedCategory);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    contentFocusNode = FocusNode();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      contentFocusNode.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    contentFocusNode.dispose(); // FocusNode 해제
+    super.dispose();
   }
 
   final QuAddController controller = Get.put(QuAddController());
@@ -119,6 +135,7 @@ class _QuAddPageState extends State<QuAddPage> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.6,
                         child: TextField(
+                          focusNode: contentFocusNode,
                           onChanged: (value) =>
                               controller.content.value = value,
                           cursorColor: const Color.fromARGB(255, 104, 0, 123),
