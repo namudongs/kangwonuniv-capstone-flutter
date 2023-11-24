@@ -248,11 +248,18 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                                   ),
                                 ],
                               ),
-                              const Padding(padding: EdgeInsets.only(top: 15)),
+                              const Padding(padding: EdgeInsets.only(top: 8)),
+                              Text(
+                                articleData['title'],
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               Text(
                                 articleData['content'],
                                 style: const TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                               if (articleData['user']['uid'] == appUser?.uid)

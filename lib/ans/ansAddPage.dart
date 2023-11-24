@@ -105,7 +105,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Divider(),
+                    Divider(color: Colors.grey.withOpacity(0.5)),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: SizedBox(
@@ -120,7 +120,8 @@ class _AnsAddPageState extends State<AnsAddPage> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
-                            hintText: '답변 내용을 입력하세요.',
+                            hintText:
+                                '답변 내용을 입력해주세요!\n\n이용 약관에 위반되거나 부적절한 답변은 삭제될 수 있습니다.\n질문과 무관한 답변 작성 시 이용이 제한될 수 있습니다.\n답변이 채택되지 않은 경우 삭제될 수 있습니다.',
                           ),
                           style: const TextStyle(
                             fontSize: 13,
@@ -139,7 +140,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
-                  const Divider(),
+                  Divider(color: Colors.grey.withOpacity(0.5)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

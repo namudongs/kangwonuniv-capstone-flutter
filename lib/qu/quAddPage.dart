@@ -111,7 +111,7 @@ class _QuAddPageState extends State<QuAddPage> {
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
                           isCollapsed: true,
-                          hintText: '제목',
+                          hintText: '제목(선택사항)',
                         ),
                         style: const TextStyle(
                           fontSize: 16,
@@ -120,7 +120,7 @@ class _QuAddPageState extends State<QuAddPage> {
                         keyboardType: TextInputType.multiline,
                       ),
                     ),
-                    const Divider(),
+                    Divider(color: Colors.grey.withOpacity(0.5)),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: SizedBox(
@@ -135,7 +135,8 @@ class _QuAddPageState extends State<QuAddPage> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
-                            hintText: '궁금한 내용을 질문해보세요!',
+                            hintText:
+                                '궁금한 내용을 질문해보세요!\n\n이용 약관에 위반되거나 부적절한 질문은 삭제될 수 있습니다.\n채택된 답변이 있는 경우 질문을 수정 또는 삭제할 수 없습니다.',
                           ),
                           style: const TextStyle(
                             fontSize: 13,
@@ -154,7 +155,7 @@ class _QuAddPageState extends State<QuAddPage> {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
-                  const Divider(),
+                  Divider(color: Colors.grey.withOpacity(0.5)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

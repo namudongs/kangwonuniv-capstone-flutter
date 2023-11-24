@@ -65,20 +65,34 @@ class _AnsPageState extends State<AnsPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(documentSnapshot['title'],
+                                if (documentSnapshot['title'].isNotEmpty)
+                                  Text(documentSnapshot['title'],
+                                      style: const TextStyle(
+                                          fontSize: 16, color: Colors.black
+                                          // fontWeight: FontWeight.bold,
+                                          )),
+                                Visibility(
+                                  visible: documentSnapshot['title'].isNotEmpty,
+                                  replacement: Text(
+                                    documentSnapshot['content']
+                                        .replaceAll('\n', ' '),
                                     style: const TextStyle(
-                                        fontSize: 16, color: Colors.black
-                                        // fontWeight: FontWeight.bold,
-                                        )),
-                                Text(
-                                  documentSnapshot['content']
-                                      .replaceAll('\n', ' '),
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.black54,
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                  child: Text(
+                                    documentSnapshot['content']
+                                        .replaceAll('\n', ' '),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 Row(
                                   children: [
@@ -142,7 +156,7 @@ class _AnsPageState extends State<AnsPage> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '관심질문',
+                                              '보관하기',
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.black87,
@@ -154,7 +168,7 @@ class _AnsPageState extends State<AnsPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        print('공유하기 버튼 클릭');
+                                        print('보관하기 버튼 클릭');
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
