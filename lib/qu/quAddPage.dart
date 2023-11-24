@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_print
-
-import 'package:capstone/main.dart';
+import 'package:capstone/qu/categoryController.dart';
+import 'package:capstone/qu/quAddController.dart';
+import 'package:capstone/qu/selectCategoryPage.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 class QuAddPage extends StatefulWidget {
   const QuAddPage({super.key});
@@ -13,54 +14,16 @@ class QuAddPage extends StatefulWidget {
 }
 
 class _QuAddPageState extends State<QuAddPage> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
-  final TextEditingController _tagController = TextEditingController();
-  final FocusNode _contentFocusNode = FocusNode();
+  final CategoryController categoryController = Get.put(CategoryController());
 
-  CollectionReference articles =
-      FirebaseFirestore.instance.collection('articles');
-
-  Future<void> saveForm() async {
-    final String title = _titleController.text;
-    final String content = _contentController.text;
-    await articles.add({
-      'title': title,
-      'content': content,
-      'created_at': Timestamp.now(),
-      'answers_count': 0,
-      'user': {
-        'uid': appUser!.uid,
-        'name': appUser!.userName,
-        'university': appUser!.university,
-        'major': appUser!.major,
-        'grade': appUser!.grade,
-      },
-    });
-
-    _titleController.text = "";
-    _contentController.text = "";
-
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+  Future<void> selectCategory() async {
+    final selectedCategory = await Get.to(() => const SelectCategoryPage());
+    if (selectedCategory != null) {
+      categoryController.updateCategory(selectedCategory);
+    }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _contentFocusNode.requestFocus();
-    });
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _contentController.dispose();
-    _tagController.dispose();
-    _contentFocusNode.dispose();
-    super.dispose();
-  }
+  final QuAddController controller = Get.put(QuAddController());
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +40,7 @@ class _QuAddPageState extends State<QuAddPage> {
             Icons.close,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: <Widget>[
@@ -86,8 +49,7 @@ class _QuAddPageState extends State<QuAddPage> {
               Icons.check,
             ),
             onPressed: () {
-              print('체크 버튼 클릭됨');
-              saveForm();
+              controller.saveForm();
             },
           ),
         ],
@@ -99,11 +61,42 @@ class _QuAddPageState extends State<QuAddPage> {
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        selectCategory();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Icon(Icons.arrow_forward_ios_rounded,
+                                size: 14, color: Theme.of(context).hintColor),
+                            const SizedBox(width: 4),
+                            Obx(
+                              () => Text(
+                                categoryController.selectedCategory.value,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: categoryController
+                                              .selectedCategory.value !=
+                                          '카테고리'
+                                      ? Colors.black
+                                      : Theme.of(context).hintColor,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(color: Colors.grey.withOpacity(0.5)),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: TextField(
-                        controller: _titleController,
+                        onChanged: (value) => controller.title.value = value,
                         cursorColor: const Color.fromARGB(255, 104, 0, 123),
                         cursorWidth: 1,
                         cursorHeight: 19,
@@ -126,8 +119,8 @@ class _QuAddPageState extends State<QuAddPage> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.6,
                         child: TextField(
-                          controller: _contentController,
-                          focusNode: _contentFocusNode,
+                          onChanged: (value) =>
+                              controller.content.value = value,
                           cursorColor: const Color.fromARGB(255, 104, 0, 123),
                           cursorHeight: 16,
                           cursorWidth: 1,

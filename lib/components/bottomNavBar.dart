@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_const, prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
@@ -39,7 +39,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
-        children: const [
+        children: [
           HomePage(),
           AnsPage(),
           QuAddPage(),

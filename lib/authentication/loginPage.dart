@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, prefer_const_constructors
 // ignore_for_file: avoid_print
 
 import 'dart:io';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:capstone/authentication/signupPage.dart';
-import 'package:capstone/components/bottomBar.dart';
+import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/colorRoundButton.dart';
 
 class LoginPage extends StatelessWidget {
@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
                                         '/', (_) => false);
                                     navigator.push(
                                       MaterialPageRoute(
-                                          builder: (_) => const BottomNavBar()),
+                                          builder: (_) => BottomNavBar()),
                                     );
                                   }).catchError((e) {
                                     print(

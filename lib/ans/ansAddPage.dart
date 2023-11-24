@@ -1,7 +1,7 @@
-import 'package:capstone/ans/ansDetailPage.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/ans/ansAddController.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AnsAddPage extends StatefulWidget {
@@ -13,52 +13,15 @@ class AnsAddPage extends StatefulWidget {
 }
 
 class _AnsAddPageState extends State<AnsAddPage> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _contentController = TextEditingController();
-  final FocusNode _contentFocusNode = FocusNode();
+  late AnsAddController controller;
 
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 
-  getArticle() async {
-    var result = await FirebaseFirestore.instance
-        .collection('articles')
-        .doc(widget.articleId)
-        .get();
-
-    return result.data();
-  }
-
-  Future<void> answerCountUpdate() async {
-    await articles.doc(widget.articleId).update({
-      'answers_count': FieldValue.increment(1),
-    });
-  }
-
-  Future<void> saveForm() async {
-    final String content = _contentController.text;
-    await articles.doc(widget.articleId).collection('answer').add({
-      'content': content,
-      'created_at': Timestamp.now(),
-      'user': {
-        'uid': appUser!.uid,
-        'name': appUser!.userName,
-        'university': appUser!.university,
-        'major': appUser!.major,
-        'grade': appUser!.grade,
-      },
-    });
-
-    _titleController.text = "";
-    _contentController.text = "";
-  }
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _contentFocusNode.requestFocus();
-    });
+    controller = Get.put(AnsAddController(widget.articleId));
   }
 
   @override
@@ -85,14 +48,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
               Icons.check,
             ),
             onPressed: () {
-              print('체크 버튼 클릭됨');
-              saveForm();
-              answerCountUpdate();
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AnsDetailPage(
-                        articleId: widget.articleId,
-                      )));
+              controller.saveForm(widget.articleId);
             },
           ),
         ],
@@ -111,8 +67,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.9,
                         child: TextField(
-                          controller: _contentController,
-                          focusNode: _contentFocusNode,
+                          onChanged: (val) => controller.content.value = val,
                           cursorColor: const Color.fromARGB(255, 104, 0, 123),
                           cursorHeight: 16,
                           cursorWidth: 1,

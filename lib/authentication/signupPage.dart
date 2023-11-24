@@ -1,10 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_constructors
 
 import 'dart:io';
 
 import 'package:capstone/authentication/loginPage.dart';
 import 'package:capstone/components/makeInput.dart';
-import 'package:capstone/components/bottomBar.dart';
+import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/colorRoundButton.dart';
 import 'package:capstone/main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -227,7 +227,7 @@ class _SignupPageState extends State<SignupPage> {
                       String password = passwordController.text;
                       String pwconfirm = pwconfirmController.text;
                       final navigator = Navigator.of(context);
-            
+
                       if (userName.isEmpty ||
                           email.isEmpty ||
                           password.isEmpty ||
@@ -292,11 +292,10 @@ class _SignupPageState extends State<SignupPage> {
                             timetable: [],
                           );
                           await fetchUserData();
-            
+
                           navigator.pushNamedAndRemoveUntil('/', (_) => false);
                           navigator.push(
-                            MaterialPageRoute(
-                                builder: (_) => const BottomNavBar()),
+                            MaterialPageRoute(builder: (_) => BottomNavBar()),
                           );
                         });
                       } catch (e) {

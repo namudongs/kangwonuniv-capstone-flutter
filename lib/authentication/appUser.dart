@@ -19,7 +19,6 @@ class AppUser {
     this.timetable,
   });
 
-  // JSON 형식으로 변환
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
@@ -32,7 +31,6 @@ class AppUser {
     };
   }
 
-  // Map에서 AppUser를 생성
   static AppUser fromMap(Map<String, dynamic> map) {
     return AppUser(
       uid: map['uid'],

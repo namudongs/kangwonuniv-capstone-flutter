@@ -1,12 +1,14 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_const_constructors
+import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/mainPage.dart';
-import 'package:capstone/components/bottomBar.dart';
+import 'package:capstone/components/bottomNavBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'firebase/firebase_options.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/authentication/appUser.dart';
 
 AppUser? appUser;
@@ -16,8 +18,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  await fetchUserData();
 
   runApp(const MyApp());
 }
@@ -42,7 +42,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final authController = Get.put(AuthController());
+    return GetMaterialApp(
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
           primary: Color.fromARGB(255, 106, 0, 0),
@@ -69,23 +70,9 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print('Error in authStateChanges stream: ${snapshot.error}');
-            return const Center(child: Text('에러가 발생했습니다!'));
-          }
-
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              return const BottomNavBar();
-            } else {
-              return const MainPage();
-            }
-          }
-
-          return const Center(child: CircularProgressIndicator());
+      home: Obx(
+        () {
+          return authController.isUserLoggedIn ? BottomNavBar() : MainPage();
         },
       ),
     );
