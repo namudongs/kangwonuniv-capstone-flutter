@@ -2,94 +2,72 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AnsEditPage extends StatefulWidget {
-  const AnsEditPage({Key? key, required this.articleId}) : super(key: key);
+  const AnsEditPage({Key? key, required this.articleId, required this.answerId})
+      : super(key: key);
 
   final String articleId;
+  final String answerId; // Added answerId
 
   @override
   State<AnsEditPage> createState() => _AnsEditPageState();
 }
 
 class _AnsEditPageState extends State<AnsEditPage> {
+  final TextEditingController _contentController = TextEditingController();
+
   CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
 
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
-
-  var title;
-  var content;
-
-  getArticle() async {
-    var result = await FirebaseFirestore.instance
-        .collection('articles')
+  Future<void> getAnswer() async {
+    DocumentSnapshot answerSnapshot = await articles
         .doc(widget.articleId)
+        .collection('answer')
+        .doc(widget.answerId)
         .get();
-    print(result);
-    title = result['title'];
-    content = result['content'];
-    contentController.text = content;
-    titleController.text = title;
-    return result.data();
+
+    if (answerSnapshot.exists) {
+      Map<String, dynamic> data = answerSnapshot.data() as Map<String, dynamic>;
+      _contentController.text = data['content'];
+    }
   }
 
   Future<void> saveForm() async {
-    final String title = titleController.text;
-    final String content = contentController.text;
-    articles.doc(widget.articleId).update({"title": title, "content": content});
-    titleController.text = "";
-    contentController.text = "";
-    Navigator.of(context).pop();
-    // 수정 결과가 pop 되는 페이지에 반영되어야 함
+    await articles
+        .doc(widget.articleId)
+        .collection('answer')
+        .doc(widget.answerId)
+        .update({'content': _contentController.text});
+
+    Navigator.of(context).pop(); // Pop back to the previous page
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAnswer(); // Load the answer when the page initializes
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Column(
-            children: [
-              Text(
-                '질문 수정하기',
-              ),
-            ],
+      appBar: AppBar(
+        title: const Text('답변 수정하기'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: saveForm, // Save the updated answer
           ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-                onPressed: saveForm,
-                icon: const Icon(
-                  Icons.check,
-                ))
-          ],
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TextField(
+          controller: _contentController,
+          decoration: const InputDecoration(labelText: '내용'),
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
         ),
-        body: FutureBuilder(
-          future: getArticle(),
-          builder: (context, snaphot) {
-            return snaphot.hasData
-                ? Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: titleController,
-                              decoration:
-                                  const InputDecoration(labelText: '제목'),
-                            ),
-                            TextField(
-                              controller: contentController,
-                              decoration:
-                                  const InputDecoration(labelText: '내용'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                : const Center(child: CircularProgressIndicator());
-          },
-        ));
+      ),
+    );
   }
 }

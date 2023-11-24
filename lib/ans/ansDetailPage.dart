@@ -2,6 +2,7 @@
 
 import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
+import 'package:capstone/qu/quEditPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -36,14 +37,74 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
         .collection('answer')
         .orderBy('created_at', descending: false)
         .get();
-    var answersData = answersSnapshot.docs.map((doc) => doc.data()).toList();
+    var answersData =
+        answersSnapshot.docs.map((doc) => doc.data()..['id'] = doc.id).toList();
 
     return {'article': articleData, 'answers': answersData};
   }
 
-  Future<void> delete() async {
-    await articles.doc(widget.articleId).delete();
-    Navigator.of(context).pop();
+  Future<void> quDelete() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('질문 삭제'),
+          content: const Text('이 질문을 삭제하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('삭제'),
+              onPressed: () async {
+                await articles.doc(widget.articleId).delete();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> ansDelete(String answerId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('답변 삭제'),
+          content: const Text('이 답변을 삭제하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('삭제'),
+              onPressed: () async {
+                await articles
+                    .doc(widget.articleId)
+                    .collection('answer')
+                    .doc(answerId)
+                    .delete();
+
+                await articles.doc(widget.articleId).update({
+                  'answers_count': FieldValue.increment(-1),
+                });
+                Navigator.of(context).pop();
+                setState(() {});
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -101,25 +162,10 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
       ),
 
       floatingActionButtonLocation:
-          FloatingActionButtonLocation.endFloat, // 위치 중앙 하단 설정
+          FloatingActionButtonLocation.centerFloat, // 위치 중앙 하단 설정
       appBar: AppBar(
         title: const Text('상세보기'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AnsEditPage(
-                        articleId: widget.articleId,
-                      )));
-            },
-            icon: const Icon(Icons.edit),
-          ),
-          IconButton(
-            onPressed: delete,
-            icon: const Icon(Icons.delete),
-          ),
-        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
           future: getArticleAndAnswers(),
@@ -202,6 +248,57 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                                 fontSize: 16,
                               ),
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            fullscreenDialog: true,
+                                            builder: (context) => QuEditPage(
+                                                  articleId: widget.articleId,
+                                                )));
+                                  },
+                                  child: Container(
+                                    margin: const EdgeInsets.only(top: 10),
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[50],
+                                      border: Border.all(
+                                        color: Colors.grey[300]!,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '수정',
+                                      style: TextStyle(fontSize: 11),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    quDelete();
+                                  },
+                                  child: Container(
+                                    margin:
+                                        const EdgeInsets.only(top: 10, left: 5),
+                                    width: 40,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[50],
+                                      border: Border.all(
+                                        color: Colors.grey[300]!,
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      '삭제',
+                                      style: TextStyle(fontSize: 11),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ]),
                     ),
                   ),
@@ -277,6 +374,59 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                                 style: const TextStyle(
                                   fontSize: 16,
                                 ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      // 답변의 수정 로직 여기서 설정
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                              builder: (context) => AnsEditPage(
+                                                    articleId: widget.articleId,
+                                                    answerId: answer[
+                                                        'id'], // 답변 ID 전달
+                                                  )));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 10),
+                                      width: 40,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[50],
+                                        border: Border.all(
+                                          color: Colors.grey[300]!,
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '수정',
+                                        style: TextStyle(fontSize: 11),
+                                      ),
+                                    ),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      ansDelete(answer['id']);
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          top: 10, left: 5),
+                                      width: 40,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[50],
+                                        border: Border.all(
+                                          color: Colors.grey[300]!,
+                                        ),
+                                      ),
+                                      child: const Text(
+                                        '삭제',
+                                        style: TextStyle(fontSize: 11),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ]),
                       ),

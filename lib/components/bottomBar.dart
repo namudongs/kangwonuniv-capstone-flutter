@@ -2,6 +2,7 @@
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
+import 'package:capstone/profile/profilePage.dart';
 import 'package:capstone/qu/quAddPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           AnsPage(),
           QuAddPage(),
           NotifyPage(),
-          NotifyPage()
+          ProfilePage(),
         ],
       ),
       bottomNavigationBar: StylishBottomBar(

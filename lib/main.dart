@@ -44,6 +44,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: Color.fromARGB(255, 106, 0, 0),
+          secondary: Colors.black,
+        ),
         fontFamily: 'NanumGothic',
         brightness: Brightness.light,
         scaffoldBackgroundColor: Colors.grey[100],
