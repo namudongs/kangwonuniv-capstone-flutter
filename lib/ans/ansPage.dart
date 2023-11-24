@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -83,9 +82,9 @@ class _AnsPageState extends State<AnsPage> {
                                 ),
                                 Row(
                                   children: [
-                                    const Text(
-                                      '답변 ${0}',
-                                      style: TextStyle(
+                                    Text(
+                                      '답변 ${documentSnapshot['answers_count']}개',
+                                      style: const TextStyle(
                                         fontSize: 12,
                                         color: Colors.black54,
                                         fontWeight: FontWeight.bold,
@@ -103,100 +102,84 @@ class _AnsPageState extends State<AnsPage> {
                                     ),
                                   ],
                                 ),
-                                const Padding(
-                                    padding: EdgeInsets.only(top: 10)),
+                                const Padding(padding: EdgeInsets.only(top: 5)),
                                 Row(
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        print('답변하기 버튼 클릭');
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                fullscreenDialog: true,
-                                                builder: (context) =>
-                                                    AnsAddPage(
-                                                      articleId:
-                                                          documentSnapshot.id,
-                                                    )));
+                                        print('관심질문 버튼 클릭');
                                       },
                                       child: Container(
-                                        width: 80,
-                                        height: 30,
                                         decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          boxShadow: [
-                                            BoxShadow(
+                                          color: Colors.grey[50],
+                                          border: Border(
+                                            bottom: BorderSide(
                                               color:
-                                                  Colors.grey.withOpacity(0.3),
-                                              spreadRadius: 0.1,
-                                              blurRadius: 3,
-                                              offset: const Offset(0, 0),
+                                                  Colors.black.withOpacity(0.1),
+                                              width: 1,
                                             ),
-                                          ],
+                                            top: BorderSide(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              width: 1,
+                                            ),
+                                            left: BorderSide(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              width: 1,
+                                            ),
+                                          ),
                                         ),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    2 -
+                                                12,
+                                        height: 30,
                                         child: const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.edit_document,
-                                              size: 11,
-                                              color: Colors.black87,
-                                            ),
                                             Text(
-                                              ' 답변하기',
+                                              '관심질문',
                                               style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black87),
-                                            )
+                                                fontSize: 12,
+                                                color: Colors.black87,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                    const Padding(
-                                        padding: EdgeInsets.only(left: 5)),
                                     GestureDetector(
                                       onTap: () {
                                         print('공유하기 버튼 클릭');
                                       },
                                       child: Container(
-                                        width: 80,
-                                        height: 30,
                                         decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.3),
-                                              spreadRadius: 0.1,
-                                              blurRadius: 3,
-                                              offset: const Offset(0, 0),
-                                            ),
-                                          ],
+                                          color: Colors.grey[50],
+                                          border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.1),
+                                            width: 1,
+                                          ),
                                         ),
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                    2 -
+                                                11,
+                                        height: 30,
                                         child: const Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
                                           children: [
-                                            Icon(
-                                              Icons.share_rounded,
-                                              size: 11,
-                                              color: Colors.black87,
-                                            ),
                                             Text(
-                                              ' 공유하기',
+                                              '공유하기',
                                               style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black87),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),

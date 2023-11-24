@@ -28,6 +28,7 @@ class _QuAddPageState extends State<QuAddPage> {
       'title': title,
       'content': content,
       'created_at': Timestamp.now(),
+      'answers_count': 0,
       'user': {
         'uid': appUser!.uid,
         'name': appUser!.userName,

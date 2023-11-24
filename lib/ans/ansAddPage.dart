@@ -29,11 +29,15 @@ class _AnsAddPageState extends State<AnsAddPage> {
     return result.data();
   }
 
+  Future<void> answerCountUpdate() async {
+    await articles.doc(widget.articleId).update({
+      'answers_count': FieldValue.increment(1),
+    });
+  }
+
   Future<void> saveForm() async {
-    final String title = _titleController.text;
     final String content = _contentController.text;
     await articles.doc(widget.articleId).collection('answer').add({
-      'title': title,
       'content': content,
       'created_at': Timestamp.now(),
       'user': {
@@ -83,6 +87,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
             onPressed: () {
               print('체크 버튼 클릭됨');
               saveForm();
+              answerCountUpdate();
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => AnsDetailPage(
@@ -100,31 +105,11 @@ class _AnsAddPageState extends State<AnsAddPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                      child: TextField(
-                        controller: _titleController,
-                        cursorColor: const Color.fromARGB(255, 104, 0, 123),
-                        cursorWidth: 1,
-                        cursorHeight: 19,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                          isCollapsed: true,
-                          hintText: '제목',
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                    ),
                     const Divider(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                       child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: MediaQuery.of(context).size.height * 0.9,
                         child: TextField(
                           controller: _contentController,
                           focusNode: _contentFocusNode,
@@ -135,7 +120,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
-                            hintText: '궁금한 내용을 질문해보세요!',
+                            hintText: '답변 내용을 입력하세요.',
                           ),
                           style: const TextStyle(
                             fontSize: 13,

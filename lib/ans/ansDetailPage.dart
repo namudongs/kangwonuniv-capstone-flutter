@@ -77,6 +77,7 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.of(context).push(MaterialPageRoute(
+                fullscreenDialog: true,
                 builder: (context) => AnsAddPage(
                       articleId: widget.articleId,
                     )));
@@ -140,6 +141,8 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
 
             return SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     decoration: BoxDecoration(
@@ -173,18 +176,26 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                                 ),
                                 const Padding(
                                     padding: EdgeInsets.only(left: 10)),
-                                Text(articleData['user']['name']),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${articleData['user']['name']}',
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                      ),
+                                    ),
+                                    Text(
+                                        '${articleData['user']['major']}﹒${articleData['user']['university']}',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                        )),
+                                  ],
+                                ),
                               ],
                             ),
                             const Padding(padding: EdgeInsets.only(top: 15)),
-                            Text(
-                              articleData['title'],
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 5)),
                             Text(
                               articleData['content'],
                               style: const TextStyle(
@@ -195,14 +206,17 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    '답변',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Text(
+                      '답변',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   for (var answer in answersData)
                     Padding(
                       padding: const EdgeInsets.only(top: 10),
@@ -237,20 +251,29 @@ class _AnsDetailPageState extends State<AnsDetailPage> {
                                   ),
                                   const Padding(
                                       padding: EdgeInsets.only(left: 10)),
-                                  Text(answer['user']['name']), // 답변 작성자 이름
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '${answer['user']['name']}',
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                      Text(
+                                          '${answer['user']['major']}﹒${answer['user']['university']}',
+                                          style: const TextStyle(
+                                            fontSize: 11,
+                                          )),
+                                    ],
+                                  ),
                                 ],
                               ),
                               const Padding(padding: EdgeInsets.only(top: 15)),
                               Text(
-                                answer['title'], // 답변 제목
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5)),
-                              Text(
-                                answer['content'], // 답변 내용
+                                answer['content'],
                                 style: const TextStyle(
                                   fontSize: 16,
                                 ),
