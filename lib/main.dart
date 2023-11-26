@@ -34,7 +34,8 @@ class MyApp extends StatelessWidget {
         ),
         fontFamily: 'NanumGothic',
         brightness: Brightness.light,
-        scaffoldBackgroundColor: Colors.grey[100],
+        // scaffoldBackgroundColor: Colors.grey[100],
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
           elevation: 0,

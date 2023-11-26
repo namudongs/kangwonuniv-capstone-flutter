@@ -11,6 +11,25 @@ class AuthController extends GetxController {
   Rxn<User> firebaseUser = Rxn<User>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  @override
+  void onInit() {
+    super.onInit();
+    firebaseUser.bindStream(_auth.authStateChanges());
+
+    // 사용자의 로그인 상태가 변경될 때마다 fetchUserData 호출
+    ever(firebaseUser, handleAuthChanged);
+  }
+
+  void handleAuthChanged(User? user) {
+    if (user != null) {
+      // 사용자가 로그인한 경우, 사용자 데이터를 가져옵니다.
+      fetchUserData();
+    } else {
+      // 사용자가 로그아웃한 경우, 관련 로직을 처리합니다.
+      // 예: 상태 초기화, 다른 화면으로 이동 등
+    }
+  }
+
   Future<void> fetchUserData() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? currentUser = auth.currentUser;
@@ -25,19 +44,10 @@ class AuthController extends GetxController {
               AppUser.fromMap(userSnapshot.data()! as Map<String, dynamic>);
         }
       }
-      Get.snackbar('환영합니다!', '${appUser?.userName}님 환영합니다!',
-          snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
-      Get.snackbar('실패', '사용자 정보를 불러오는데에 오류가 발생했습니다. $e',
+      Get.snackbar('실패', '사용자 정보를 불러오는데 오류가 발생했습니다. $e',
           snackPosition: SnackPosition.BOTTOM);
     }
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
-    fetchUserData();
   }
 
   void signOut() async {

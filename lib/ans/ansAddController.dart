@@ -24,6 +24,7 @@ class AnsAddController extends GetxController {
           .add({
         'content': content.value,
         'created_at': Timestamp.now(),
+        'is_adopted': false,
         'user': {
           'uid': appUser!.uid,
           'name': appUser!.userName,

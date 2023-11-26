@@ -35,6 +35,7 @@ class QuAddController extends GetxController {
         'category': categoryController.selectedCategory.value,
         'like': 0,
         'likes_uid': [],
+        'is_adopted': false,
         'user': {
           'uid': appUser!.uid,
           'name': appUser!.userName,

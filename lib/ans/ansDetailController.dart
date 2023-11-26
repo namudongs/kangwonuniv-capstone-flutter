@@ -32,8 +32,54 @@ class AnsDetailController extends GetxController {
         .orderBy('created_at', descending: false)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs.map((doc) => doc.data()..['id'] = doc.id).toList();
+      var answers = snapshot.docs.map((doc) {
+        return {
+          ...doc.data(),
+          'id': doc.id,
+        };
+      }).toList();
+
+      // 채택된 답변을 맨 위로 올립니다
+      answers.sort((a, b) {
+        if (a['is_adopted'] == true) {
+          return -1;
+        } else if (b['is_adopted'] == true) {
+          return 1;
+        }
+        return 0;
+      });
+
+      return answers;
     });
+  }
+
+  Future<void> is_adopted(String articleId, String answerId) async {
+    final DocumentReference articleRef = articles.doc(articleId);
+    final DocumentReference answerRef =
+        articles.doc(articleId).collection('answer').doc(answerId);
+
+    try {
+      final DocumentSnapshot articleSnapshot = await articleRef.get();
+      final Map<String, dynamic> articleData =
+          articleSnapshot.data() as Map<String, dynamic>? ?? {};
+      final String? currentUserId = appUser?.uid;
+      final String? writerId = articleData['user']['uid'];
+
+      if (currentUserId == null) {
+        Get.snackbar('오류', '사용자 정보를 찾을 수 없습니다.');
+        return;
+      }
+
+      if (currentUserId == writerId) {
+        await articleRef.update({'is_adopted': true});
+        await answerRef.update({'is_adopted': true});
+        Get.snackbar('성공', '채택되었습니다.');
+      }
+    } catch (e) {
+      Get.snackbar('오류', '채택 중 오류가 발생했습니다: $e');
+    }
+
+    print('채택버튼클릭');
   }
 
   Future<void> updateLike(String articleId) async {
