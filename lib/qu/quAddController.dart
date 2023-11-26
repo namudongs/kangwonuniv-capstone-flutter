@@ -33,6 +33,8 @@ class QuAddController extends GetxController {
         'created_at': Timestamp.now(),
         'answers_count': 0,
         'category': categoryController.selectedCategory.value,
+        'like': 0,
+        'likes_uid': [],
         'user': {
           'uid': appUser!.uid,
           'name': appUser!.userName,

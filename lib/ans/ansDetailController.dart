@@ -1,3 +1,4 @@
+import 'package:capstone/main.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,10 +36,54 @@ class AnsDetailController extends GetxController {
     });
   }
 
-  Future<void> quDelete(String articleId) async {
+  Future<void> updateLike(String articleId) async {
+    final String? currentUserId = appUser?.uid;
+    if (currentUserId == null) {
+      Get.snackbar('오류', '사용자 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    final DocumentReference articleRef = articles.doc(articleId);
+
     try {
-      await firestore.collection('articles').doc(articleId).delete();
+      final DocumentSnapshot articleSnapshot = await articleRef.get();
+      final Map<String, dynamic> articleData =
+          articleSnapshot.data() as Map<String, dynamic>? ?? {};
+      final List<dynamic> likesUid = articleData['likes_uid'] ?? [];
+
+      if (likesUid.contains(currentUserId)) {
+        // 좋아요 취소
+        await articleRef.update({'like': FieldValue.increment(-1)});
+        await articleRef.update({
+          'likes_uid': FieldValue.arrayRemove([currentUserId])
+        });
+      } else {
+        // 좋아요
+        await articleRef.update({'like': FieldValue.increment(1)});
+        await articleRef.update({
+          'likes_uid': FieldValue.arrayUnion([currentUserId])
+        });
+      }
+    } catch (e) {
+      Get.snackbar('오류', '좋아요 처리 중 오류가 발생했습니다: $e');
+    }
+  }
+
+  Future<void> quDelete(String articleId) async {
+    final WriteBatch batch = firestore.batch();
+
+    try {
+      final CollectionReference answersRef =
+          articles.doc(articleId).collection('answer');
+      final QuerySnapshot answersSnapshot = await answersRef.get();
+      for (var doc in answersSnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+
+      batch.delete(articles.doc(articleId));
+      await batch.commit();
       Get.back();
+      Get.snackbar('성공', '질문과 모든 답변이 삭제되었습니다.');
     } catch (e) {
       Get.snackbar('오류', '질문 삭제 중 오류 발생: $e');
     }
