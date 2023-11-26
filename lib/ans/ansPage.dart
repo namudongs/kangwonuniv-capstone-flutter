@@ -66,14 +66,22 @@ class AnsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                documentSnapshot['category'],
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
+              Container(
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(19, 102, 30, 30),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  documentSnapshot['category'],
+                  style: const TextStyle(
+                    fontSize: 10,
+                    color: Color.fromARGB(200, 106, 0, 0),
+                    // fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              SizedBox(height: documentSnapshot['title'].isNotEmpty ? 5 : 0),
               if (documentSnapshot['title'].isNotEmpty)
                 Text(documentSnapshot['title'],
                     style: const TextStyle(fontSize: 16, color: Colors.black)),
@@ -122,17 +130,18 @@ class AnsPage extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(
-          height: 1,
-          thickness: 0.1,
-          color: Colors.grey,
-        ),
-        Container(
-          height: 100,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
-        )
+        // ------------------------------------------ 답변 표시 ------------------------------------------
+        // const Divider(
+        //   height: 1,
+        //   thickness: 0.1,
+        //   color: Colors.grey,
+        // ),
+        // Container(
+        //   height: 100,
+        //   decoration: const BoxDecoration(
+        //     color: Colors.white,
+        //   ),
+        // ),
       ],
     );
   }

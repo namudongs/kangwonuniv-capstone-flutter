@@ -5,6 +5,7 @@ import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/qu/quEditPage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -27,7 +28,7 @@ class AnsDetailPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withOpacity(0.4),
               blurRadius: 10,
               spreadRadius: 5,
               offset: Offset.zero,
@@ -88,17 +89,18 @@ class AnsDetailPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                        offset: Offset.zero,
-                      ),
-                    ],
-                  ),
+                      color: Colors.white,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.grey.withOpacity(0.4),
+                      //     blurRadius: 10,
+                      //     spreadRadius: 1,
+                      //     offset: Offset.zero,
+                      //   ),
+                      // ],
+                      borderRadius: BorderRadius.circular(30)),
                   child: Column(
                     children: [
                       Padding(
@@ -307,7 +309,7 @@ class AnsDetailPage extends StatelessWidget {
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: answer['is_adopted'] == true
-                                      ? const Color.fromARGB(40, 157, 0, 0)
+                                      ? const Color.fromARGB(35, 157, 0, 0)
                                       : Colors.grey[50],
                                   border: Border.all(
                                     color: Colors.grey[100]!,
@@ -324,11 +326,10 @@ class AnsDetailPage extends StatelessWidget {
                                               answer['user']['uid'] &&
                                           articleData['is_adopted'] == false,
                                       child: Container(
-                                        alignment: Alignment.center,
                                         margin: const EdgeInsets.fromLTRB(
                                             0, 0, 0, 5),
                                         padding: const EdgeInsets.all(5),
-                                        width: 50,
+                                        width: 160,
                                         decoration: BoxDecoration(
                                           color: const Color.fromARGB(
                                               20, 157, 0, 0),
@@ -340,14 +341,27 @@ class AnsDetailPage extends StatelessWidget {
                                             controller.is_adopted(
                                                 articleId, answer['id']);
                                           },
-                                          child: const Text(
-                                            '채택하기',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              // fontWeight: FontWeight.bold,
-                                              color: Color.fromARGB(
-                                                  255, 157, 0, 0),
-                                            ),
+                                          child: const Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Icon(CupertinoIcons.checkmark,
+                                                  size: 15,
+                                                  color: Color.fromARGB(
+                                                      255, 146, 0, 0)),
+                                              SizedBox(width: 3),
+                                              Text(
+                                                '도움이 되었다면 채택하기',
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  // fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(
+                                                      255, 146, 0, 0),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
