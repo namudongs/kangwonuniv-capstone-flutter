@@ -22,55 +22,60 @@ class AnsDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AnsDetailController(articleId));
     return Scaffold(
-      floatingActionButton: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.4),
-              blurRadius: 10,
-              spreadRadius: 5,
-              offset: Offset.zero,
+      floatingActionButton: Obx(() {
+        return Visibility(
+          visible: controller.articleData.value?['is_adopted'] == false,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  blurRadius: 10,
+                  spreadRadius: 5,
+                  offset: Offset.zero,
+                ),
+              ],
+              image: const DecorationImage(
+                  image: AssetImage('assets/images/background_1.png'),
+                  fit: BoxFit.cover,
+                  opacity: 0.9),
             ),
-          ],
-          image: const DecorationImage(
-              image: AssetImage('assets/images/background_1.png'),
-              fit: BoxFit.cover,
-              opacity: 0.9),
-        ),
-        width: MediaQuery.of(context).size.width / 4 + 10,
-        height: 35,
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            Get.to(
-                fullscreenDialog: true, () => AnsAddPage(articleId: articleId));
-          },
-          label: const Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                CupertinoIcons.pencil,
-                color: Colors.white,
-                size: 24,
-              ),
-              SizedBox(width: 3),
-              Text(
-                '답변하기',
-                style: TextStyle(
-                    fontFamily: 'NanumSquare',
-                    fontSize: 16,
+            width: MediaQuery.of(context).size.width / 4 + 10,
+            height: 35,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                Get.to(
+                    fullscreenDialog: true,
+                    () => AnsAddPage(articleId: articleId));
+              },
+              label: const Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    CupertinoIcons.pencil,
                     color: Colors.white,
-                    fontWeight: FontWeight.w500),
+                    size: 24,
+                  ),
+                  SizedBox(width: 3),
+                  Text(
+                    '답변하기',
+                    style: TextStyle(
+                        fontFamily: 'NanumSquare',
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ],
               ),
-            ],
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-      ),
-
+        );
+      }),
       floatingActionButtonLocation:
           FloatingActionButtonLocation.centerFloat, // 위치 중앙 하단 설정
       appBar: AppBar(

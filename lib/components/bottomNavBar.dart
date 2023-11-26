@@ -19,14 +19,13 @@ class BottomNavBarController extends GetxController {
   }
 
   void goToAnsPage() {
-    changeTab(1); // '답변하기' 탭으로 이동
+    changeTab(1);
   }
 }
 
 class BottomNavBar extends StatelessWidget {
   BottomNavBar({Key? key}) : super(key: key);
 
-  final PageController pageController = PageController();
   final BottomNavBarController bottomNavBarController =
       Get.put(BottomNavBarController());
 

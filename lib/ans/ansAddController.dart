@@ -1,3 +1,4 @@
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,11 +39,10 @@ class AnsAddController extends GetxController {
         'answers_count': FieldValue.increment(1),
       });
       Get.back();
-      Get.snackbar('성공', '답변이 추가되었습니다.', snackPosition: SnackPosition.BOTTOM);
+      snackBar('성공', '답변이 추가되었습니다.');
       content.value = '';
     } catch (e) {
-      Get.snackbar('오류', '답변 추가 중 오류가 발생했습니다: $e',
-          snackPosition: SnackPosition.BOTTOM);
+      snackBar('오류', '답변 추가 중 오류가 발생했습니다: $e');
     }
   }
 }

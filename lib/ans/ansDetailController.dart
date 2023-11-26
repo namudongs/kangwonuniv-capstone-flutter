@@ -1,4 +1,5 @@
 import 'package:capstone/components/bottomNavBar.dart';
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,24 +68,24 @@ class AnsDetailController extends GetxController {
       final String? writerId = articleData['user']['uid'];
 
       if (currentUserId == null) {
-        Get.snackbar('오류', '사용자 정보를 찾을 수 없습니다.');
+        snackBar('오류', '사용자 정보를 찾을 수 없습니다.');
         return;
       }
 
       if (currentUserId == writerId) {
         await articleRef.update({'is_adopted': true});
         await answerRef.update({'is_adopted': true});
-        Get.snackbar('성공', '채택되었습니다.');
+        snackBar('성공', '채택되었습니다.');
       }
     } catch (e) {
-      Get.snackbar('오류', '채택 중 오류가 발생했습니다: $e');
+      snackBar('오류', '채택 중 오류가 발생했습니다: $e');
     }
   }
 
   Future<void> updateLike(String articleId) async {
     final String? currentUserId = appUser?.uid;
     if (currentUserId == null) {
-      Get.snackbar('오류', '사용자 정보를 찾을 수 없습니다.');
+      snackBar('오류', '사용자 정보를 찾을 수 없습니다.');
       return;
     }
 
@@ -110,7 +111,7 @@ class AnsDetailController extends GetxController {
         });
       }
     } catch (e) {
-      Get.snackbar('오류', '좋아요 처리 중 오류가 발생했습니다: $e');
+      snackBar('오류', '좋아요 처리 중 오류가 발생했습니다: $e');
     }
   }
 
@@ -127,13 +128,13 @@ class AnsDetailController extends GetxController {
 
       batch.delete(articles.doc(articleId));
       await batch.commit();
-      Get.snackbar('성공', '질문과 모든 답변이 삭제되었습니다.');
+      snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
       Get.offAll(() => BottomNavBar());
       BottomNavBarController bottomNavBarController =
           Get.put(BottomNavBarController());
       bottomNavBarController.goToAnsPage();
     } catch (e) {
-      Get.snackbar('오류', '질문 삭제 중 오류 발생: $e');
+      snackBar('오류', '질문 삭제 중 오류 발생: $e');
     }
   }
 
@@ -152,10 +153,9 @@ class AnsDetailController extends GetxController {
           .update({'answers_count': FieldValue.increment(-1)});
 
       answersData.removeWhere((answer) => answer['id'] == answerId);
-      Get.snackbar('성공', '답변이 삭제되었습니다.', snackPosition: SnackPosition.BOTTOM);
+      snackBar('성공', '답변이 삭제되었습니다.');
     } catch (e) {
-      Get.snackbar('오류', '답변 삭제 중 오류 발생: $e',
-          snackPosition: SnackPosition.BOTTOM);
+      snackBar('오류', '답변 삭제 중 오류 발생: $e');
     }
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:capstone/authentication/appUser.dart';
 import 'package:capstone/authentication/mainPage.dart';
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -45,8 +46,7 @@ class AuthController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar('실패', '사용자 정보를 불러오는데 오류가 발생했습니다. $e',
-          snackPosition: SnackPosition.BOTTOM);
+      snackBar('실패', '사용자 정보를 불러오는데 오류가 발생했습니다. $e');
     }
   }
 

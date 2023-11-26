@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 String formatTimestamp(Timestamp timestamp) {
   DateTime dateTime = timestamp.toDate();
@@ -20,4 +22,17 @@ String formatTimestamp(Timestamp timestamp) {
   } else {
     return '방금 전';
   }
+}
+
+snackBar(String title, String message) {
+  return Get.snackbar(
+    title,
+    message,
+    snackPosition: SnackPosition.BOTTOM,
+    backgroundColor: Colors.black.withOpacity(0.8),
+    colorText: Colors.white,
+    margin: const EdgeInsets.all(10),
+    borderRadius: 10,
+    duration: const Duration(seconds: 1),
+  );
 }
