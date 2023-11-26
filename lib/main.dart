@@ -27,6 +27,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = Get.put(AuthController());
     return GetMaterialApp(
+      initialRoute: "/",
+      navigatorKey: Get.key,
+      routes: {
+        "/MainPage": (context) => MainPage(),
+        "/BottomNavBar": (context) => BottomNavBar(),
+      },
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
           primary: Color.fromARGB(255, 106, 0, 0),

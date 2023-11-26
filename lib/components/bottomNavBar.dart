@@ -1,4 +1,5 @@
-// ignore_for_file: avoid_print, unnecessary_const, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
+
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
@@ -6,113 +7,92 @@ import 'package:capstone/profile/profilePage.dart';
 import 'package:capstone/qu/quAddPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import 'package:stylish_bottom_bar/model/bar_items.dart';
 
-class BottomNavBar extends StatefulWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
+class BottomNavBarController extends GetxController {
+  var selectedIndex = 0.obs;
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _BottomNavBarState createState() => _BottomNavBarState();
+  void changeTab(int index) {
+    selectedIndex.value = index;
+  }
+
+  void goToAnsPage() {
+    changeTab(1); // '답변하기' 탭으로 이동
+  }
 }
 
-class _BottomNavBarState extends State<BottomNavBar> {
-  PageController controller = PageController(initialPage: 0);
-  var selected = 0;
+class BottomNavBar extends StatelessWidget {
+  BottomNavBar({Key? key}) : super(key: key);
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
+  final PageController pageController = PageController();
+  final BottomNavBarController bottomNavBarController =
+      Get.put(BottomNavBarController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: [
-          HomePage(),
-          AnsPage(),
-          QuAddPage(),
-          NotifyPage(),
-          ProfilePage(),
-        ],
-      ),
-      bottomNavigationBar: StylishBottomBar(
-        option: AnimatedBarOptions(
-          iconSize: 20,
-          iconStyle: IconStyle.Default,
+      body: Obx(
+        () => IndexedStack(
+          index: bottomNavBarController.selectedIndex.value,
+          children: [
+            HomePage(),
+            AnsPage(),
+            QuAddPage(),
+            NotifyPage(),
+            ProfilePage(),
+          ],
         ),
-        currentIndex: selected,
-        onTap: (index) {
-          if (index == 2) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                fullscreenDialog: true,
-                builder: (context) => const QuAddPage(),
-              ),
-            );
-          } else {
-            setState(() {
-              selected = index;
-              controller.jumpToPage(index);
-            });
-          }
-        },
-        items: [
-          BottomBarItem(
-            icon: const Icon(Icons.home_rounded),
-            title: const Text(
-              '홈',
-              style: TextStyle(fontSize: 10),
-            ),
-            selectedColor: const Color.fromARGB(255, 106, 0, 0),
-          ),
-          BottomBarItem(
-              icon: const Icon(Icons.article_outlined),
-              selectedIcon: const Icon(Icons.article_rounded),
-              title: const Text(
-                '답변하기',
-                style: TextStyle(fontSize: 10),
-              ),
-              selectedColor: const Color.fromARGB(255, 106, 0, 0)),
-          BottomBarItem(
-            icon: const Icon(Icons.question_mark),
-            title: const Text(
-              '질문하기',
-              style: TextStyle(fontSize: 10),
-            ),
-            selectedColor: const Color.fromARGB(255, 106, 0, 0),
-          ),
-          BottomBarItem(
-            icon: const Icon(Icons.notifications_none),
-            selectedIcon: const Icon(Icons.notifications_rounded),
-            title: const Text(
-              '알림',
-              style: TextStyle(fontSize: 10),
-            ),
-            selectedColor: const Color.fromARGB(255, 106, 0, 0),
-          ),
-          BottomBarItem(
-            icon: const Icon(CupertinoIcons.person),
-            selectedIcon: const Icon(CupertinoIcons.person_fill),
-            title: const Text(
-              '프로필',
-              style: TextStyle(fontSize: 10),
-            ),
-            selectedColor: const Color.fromARGB(255, 106, 0, 0),
-          ),
-        ],
       ),
+      bottomNavigationBar: Obx(() => StylishBottomBar(
+            option: AnimatedBarOptions(
+              iconSize: 20,
+              iconStyle: IconStyle.Default,
+            ),
+            currentIndex: bottomNavBarController.selectedIndex.value,
+            onTap: (index) {
+              if (index == 2) {
+                Get.to(() => const QuAddPage(), fullscreenDialog: true);
+              } else {
+                bottomNavBarController.changeTab(index);
+              }
+            },
+            items: _buildBottomBarItems(),
+          )),
     );
+  }
+
+  List<BottomBarItem> _buildBottomBarItems() {
+    return [
+      BottomBarItem(
+        icon: const Icon(Icons.home_rounded),
+        title: const Text('홈', style: TextStyle(fontSize: 10)),
+        selectedColor: const Color.fromARGB(255, 106, 0, 0),
+      ),
+      BottomBarItem(
+        icon: const Icon(Icons.article_outlined),
+        selectedIcon: const Icon(Icons.article_rounded),
+        title: const Text('답변하기', style: TextStyle(fontSize: 10)),
+        selectedColor: const Color.fromARGB(255, 106, 0, 0),
+      ),
+      BottomBarItem(
+        icon: const Icon(Icons.question_mark),
+        title: const Text('질문하기', style: TextStyle(fontSize: 10)),
+        selectedColor: const Color.fromARGB(255, 106, 0, 0),
+      ),
+      BottomBarItem(
+        icon: const Icon(Icons.notifications_none),
+        selectedIcon: const Icon(Icons.notifications_rounded),
+        title: const Text('알림', style: TextStyle(fontSize: 10)),
+        selectedColor: const Color.fromARGB(255, 106, 0, 0),
+      ),
+      BottomBarItem(
+        icon: const Icon(CupertinoIcons.person),
+        selectedIcon: const Icon(CupertinoIcons.person_fill),
+        title: const Text('프로필', style: TextStyle(fontSize: 10)),
+        selectedColor: const Color.fromARGB(255, 106, 0, 0),
+      ),
+    ];
   }
 }

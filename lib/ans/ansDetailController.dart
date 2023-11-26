@@ -1,3 +1,4 @@
+import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/main.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,8 +79,6 @@ class AnsDetailController extends GetxController {
     } catch (e) {
       Get.snackbar('오류', '채택 중 오류가 발생했습니다: $e');
     }
-
-    print('채택버튼클릭');
   }
 
   Future<void> updateLike(String articleId) async {
@@ -128,8 +127,11 @@ class AnsDetailController extends GetxController {
 
       batch.delete(articles.doc(articleId));
       await batch.commit();
-      Get.back();
       Get.snackbar('성공', '질문과 모든 답변이 삭제되었습니다.');
+      Get.offAll(() => BottomNavBar());
+      BottomNavBarController bottomNavBarController =
+          Get.put(BottomNavBarController());
+      bottomNavBarController.goToAnsPage();
     } catch (e) {
       Get.snackbar('오류', '질문 삭제 중 오류 발생: $e');
     }

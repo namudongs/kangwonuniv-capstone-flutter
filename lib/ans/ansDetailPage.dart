@@ -167,7 +167,8 @@ class AnsDetailPage extends StatelessWidget {
                                   fontSize: 15,
                                 ),
                               ),
-                              if (articleData['user']['uid'] == appUser?.uid)
+                              if (articleData['user']['uid'] == appUser?.uid &&
+                                  articleData['is_adopted'] == false)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -448,8 +449,9 @@ class AnsDetailPage extends StatelessWidget {
                                       ),
                                     ),
                                     Visibility(
-                                      visible:
-                                          answer['user']['uid'] == appUser?.uid,
+                                      visible: answer['user']['uid'] ==
+                                              appUser?.uid &&
+                                          articleData['is_adopted'] == false,
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,

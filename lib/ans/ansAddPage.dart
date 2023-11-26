@@ -88,7 +88,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
                             hintText:
-                                '답변 내용을 입력해주세요!\n\n이용 약관에 위반되거나 부적절한 답변은 삭제될 수 있습니다.\n질문과 무관한 답변 작성 시 이용이 제한될 수 있습니다.\n답변이 채택되지 않은 경우 삭제될 수 있습니다.',
+                                '답변 내용을 입력해주세요.\n\n이용 약관에 위반되거나 부적절한 답변은 삭제될 수 있습니다.\n질문과 무관한 답변 작성 시 이용이 제한될 수 있습니다.\n채택된 답변이 있는 경우 작성한 답변을 수정할 수 없습니다.',
                           ),
                           style: const TextStyle(
                             fontSize: 13,

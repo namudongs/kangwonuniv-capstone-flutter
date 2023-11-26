@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/qu/categoryController.dart';
 import 'package:get/get.dart';
@@ -26,7 +28,7 @@ class QuAddController extends GetxController {
       return;
     }
     try {
-      await articles.add({
+      DocumentReference docRef = await articles.add({
         'title': title.value,
         'content': content.value,
         'tag': tag.value,
@@ -51,6 +53,11 @@ class QuAddController extends GetxController {
       tag.value = '';
 
       Get.back();
+      BottomNavBarController bottomNavBarController =
+          Get.find<BottomNavBarController>();
+      bottomNavBarController.goToAnsPage();
+      Get.to(() => AnsDetailPage(articleId: docRef.id));
+
       Get.snackbar('성공', '질문이 등록되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {
       Get.snackbar('실패', '오류가 발생했습니다. $e', snackPosition: SnackPosition.BOTTOM);
