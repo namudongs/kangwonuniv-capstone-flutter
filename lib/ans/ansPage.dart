@@ -75,22 +75,26 @@ class AnsPage extends StatelessWidget {
                 child: Text(
                   documentSnapshot['category'],
                   style: const TextStyle(
-                    fontSize: 10,
-                    color: Color.fromARGB(200, 106, 0, 0),
-                    // fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 12,
+                      color: Color.fromARGB(200, 106, 0, 0),
+                      fontFamily: 'NanumSquare'),
                 ),
               ),
-              SizedBox(height: documentSnapshot['title'].isNotEmpty ? 5 : 0),
+              const SizedBox(height: 5),
               if (documentSnapshot['title'].isNotEmpty)
                 Text(documentSnapshot['title'],
-                    style: const TextStyle(fontSize: 16, color: Colors.black)),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'NanumSquare',
+                    )),
               Visibility(
                 visible: documentSnapshot['title'].isNotEmpty,
                 replacement: Text(
                   documentSnapshot['content'].replaceAll('\n', ' '),
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 18,
                     color: Colors.black,
                   ),
                   maxLines: 1,
@@ -99,7 +103,7 @@ class AnsPage extends StatelessWidget {
                 child: Text(
                   documentSnapshot['content'].replaceAll('\n', ' '),
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 15,
                     color: Colors.black54,
                   ),
                   maxLines: 2,

@@ -47,19 +47,22 @@ class AnsDetailPage extends StatelessWidget {
                 fullscreenDialog: true, () => AnsAddPage(articleId: articleId));
           },
           label: const Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.add,
+                CupertinoIcons.pencil,
                 color: Colors.white,
-                size: 17,
+                size: 24,
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 3),
               Text(
                 '답변하기',
                 style: TextStyle(
-                    fontSize: 13,
+                    fontFamily: 'NanumSquare',
+                    fontSize: 16,
                     color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -112,7 +115,8 @@ class AnsDetailPage extends StatelessWidget {
                               const Text(
                                 'Q.',
                                 style: TextStyle(
-                                  fontSize: 30,
+                                  fontFamily: 'NanumSquare',
+                                  fontSize: 40,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 106, 0, 0),
                                 ),
@@ -120,8 +124,9 @@ class AnsDetailPage extends StatelessWidget {
                               const SizedBox(height: 10),
                               Text(articleData['category'],
                                   style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'NanumSquare',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                     color: Color.fromARGB(158, 106, 0, 0),
                                   )),
                               Visibility(
@@ -129,18 +134,21 @@ class AnsDetailPage extends StatelessWidget {
                                 child: Text(
                                   articleData['title'],
                                   style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'NanumSquare',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
-                                    margin:
-                                        const EdgeInsets.only(top: 5, right: 5),
-                                    width: 25,
+                                    margin: const EdgeInsets.only(
+                                        top: 1, right: 10, bottom: 15),
+                                    width: 30,
+                                    height: 30,
                                     child: const CircleAvatar(
                                       backgroundColor: Color(0xffE6E6E6),
                                     ),
@@ -148,14 +156,15 @@ class AnsDetailPage extends StatelessWidget {
                                   Text(
                                       '${articleData['user']['name']}﹒${formatTimestamp(articleData['created_at'])}\n${articleData['user']['university']} ${articleData['user']['major']}',
                                       style: const TextStyle(
-                                        fontSize: 9,
+                                        fontFamily: 'NanumSquare',
+                                        fontSize: 11,
                                       )),
                                 ],
                               ),
                               Text(
                                 articleData['content'],
                                 style: const TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 15,
                                 ),
                               ),
                               if (articleData['user']['uid'] == appUser?.uid)
@@ -184,7 +193,10 @@ class AnsDetailPage extends StatelessWidget {
                                         ),
                                         child: const Text(
                                           '수정',
-                                          style: TextStyle(fontSize: 11),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontFamily: 'NanumSquare',
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -194,7 +206,7 @@ class AnsDetailPage extends StatelessWidget {
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.only(
-                                            top: 10, left: 5),
+                                            top: 10, left: 7),
                                         width: 40,
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
@@ -205,7 +217,10 @@ class AnsDetailPage extends StatelessWidget {
                                         ),
                                         child: const Text(
                                           '삭제',
-                                          style: TextStyle(fontSize: 11),
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontFamily: 'NanumSquare',
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -237,12 +252,12 @@ class AnsDetailPage extends StatelessWidget {
                                         .contains(appUser?.uid),
                                     replacement: Icon(
                                       Icons.favorite_border_outlined,
-                                      size: 17,
+                                      size: 19,
                                       color: Colors.black.withOpacity(0.5),
                                     ),
                                     child: Icon(
                                       Icons.favorite,
-                                      size: 17,
+                                      size: 19,
                                       color: Colors.red.withOpacity(0.8),
                                     ),
                                   ),
@@ -251,7 +266,8 @@ class AnsDetailPage extends StatelessWidget {
                                 Text(
                                   '${articleData['like'] ?? 0}',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontFamily: 'NanumSquare',
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black.withOpacity(0.5),
                                   ),
@@ -259,14 +275,15 @@ class AnsDetailPage extends StatelessWidget {
                                 const SizedBox(width: 15),
                                 Icon(
                                   Icons.mode_comment_outlined,
-                                  size: 17,
+                                  size: 19,
                                   color: Colors.black.withOpacity(0.5),
                                 ),
                                 const SizedBox(width: 3),
                                 Text(
                                   '${answersData.length}',
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontFamily: 'NanumSquare',
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black.withOpacity(0.5),
                                   ),
@@ -355,6 +372,7 @@ class AnsDetailPage extends StatelessWidget {
                                               Text(
                                                 '도움이 되었다면 채택하기',
                                                 style: TextStyle(
+                                                  fontFamily: 'NanumSquare',
                                                   fontSize: 11,
                                                   // fontWeight: FontWeight.bold,
                                                   color: Color.fromARGB(
@@ -383,7 +401,7 @@ class AnsDetailPage extends StatelessWidget {
                                           children: [
                                             Icon(
                                               Icons.check_circle,
-                                              size: 15,
+                                              size: 17,
                                               color: Color.fromARGB(
                                                   255, 157, 0, 0),
                                             ),
@@ -391,7 +409,8 @@ class AnsDetailPage extends StatelessWidget {
                                             Text(
                                               '채택된 답변입니다.',
                                               style: TextStyle(
-                                                  fontSize: 11,
+                                                  fontFamily: 'NanumSquare',
+                                                  fontSize: 13,
                                                   fontWeight: FontWeight.normal,
                                                   color: Color.fromARGB(
                                                       255, 157, 0, 0)),
@@ -407,74 +426,88 @@ class AnsDetailPage extends StatelessWidget {
                                         Text(
                                           '${answer['user']['name']}',
                                           style: const TextStyle(
-                                            fontSize: 11,
+                                            fontFamily: 'NanumSquare',
+                                            fontSize: 12,
                                             fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: answer['user']['uid'] ==
-                                              appUser?.uid,
-                                          child: Row(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Get.to(AnsEditPage(
-                                                    articleId: articleId,
-                                                    answerId: answer['id'],
-                                                  ));
-                                                },
-                                                child: Container(
-                                                  width: 30,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[100],
-                                                    border: Border.all(
-                                                      color: Colors.grey[300]!,
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    '수정',
-                                                    style:
-                                                        TextStyle(fontSize: 9),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(width: 5),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  controller.ansDelete(
-                                                      articleId, answer['id']);
-                                                },
-                                                child: Container(
-                                                  width: 30,
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[100],
-                                                    border: Border.all(
-                                                      color: Colors.grey[300]!,
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    '삭제',
-                                                    style:
-                                                        TextStyle(fontSize: 9),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
                                     Text(
                                       formatTimestamp(answer['created_at']),
-                                      style: const TextStyle(fontSize: 9),
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontFamily: 'NanumSquare',
+                                      ),
                                     ),
                                     const SizedBox(height: 5),
                                     Text(
                                       answer['content'],
                                       style: const TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible:
+                                          answer['user']['uid'] == appUser?.uid,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Get.to(AnsEditPage(
+                                                articleId: articleId,
+                                                answerId: answer['id'],
+                                              ));
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
+                                              width: 35,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[100],
+                                                border: Border.all(
+                                                  color: Colors.grey[300]!,
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                '수정',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: 'NanumSquare',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          GestureDetector(
+                                            onTap: () {
+                                              controller.ansDelete(
+                                                  articleId, answer['id']);
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10),
+                                              width: 35,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[100],
+                                                border: Border.all(
+                                                  color: Colors.grey[300]!,
+                                                ),
+                                              ),
+                                              child: const Text(
+                                                '삭제',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: 'NanumSquare',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
