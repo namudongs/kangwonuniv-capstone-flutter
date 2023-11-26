@@ -43,6 +43,10 @@ class QuAddController extends GetxController {
       });
 
       categoryController.updateCategory('카테고리');
+      title.value = '';
+      content.value = '';
+      tag.value = '';
+
       Get.back();
       Get.snackbar('성공', '질문이 등록되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {

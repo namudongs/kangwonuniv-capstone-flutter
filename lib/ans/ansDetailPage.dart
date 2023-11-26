@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:capstone/ans/ansDetailController.dart';
+import 'package:intl/intl.dart';
 
 class AnsDetailPage extends StatelessWidget {
   final String articleId;
@@ -98,163 +99,202 @@ class AnsDetailPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const CircleAvatar(
-                                backgroundColor: Colors.white,
-                                child: CircleAvatar(
-                                  backgroundColor: Color(0xffE6E6E6),
-                                  child: Icon(
-                                    Icons.person,
-                                    color: Color(0xffCCCCCC),
+                              const Text(
+                                'Q.',
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 106, 0, 0),
+                                ),
+                              ),
+                              Text(articleData['category'],
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(158, 106, 0, 0),
+                                  )),
+                              Visibility(
+                                visible: articleData['title'].isNotEmpty,
+                                child: Text(
+                                  articleData['title'],
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ),
-                              const Padding(padding: EdgeInsets.only(left: 10)),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              const Padding(padding: EdgeInsets.only(top: 5)),
+                              Row(
                                 children: [
                                   Text(
-                                    '${articleData['user']['name']}',
-                                    style: const TextStyle(
-                                      fontSize: 11,
-                                    ),
-                                  ),
-                                  Text(
-                                      '${articleData['user']['major']}﹒${articleData['user']['university']}',
+                                      '${articleData['user']['name']}﹒10분 전﹒${articleData['user']['university']} ${articleData['user']['major']}',
                                       style: const TextStyle(
-                                        fontSize: 11,
+                                        fontSize: 9,
                                       )),
                                 ],
                               ),
-                            ],
-                          ),
-                          const Padding(padding: EdgeInsets.only(top: 8)),
-                          Visibility(
-                            visible: articleData['title'].isNotEmpty,
-                            child: Text(
-                              articleData['title'],
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                              const Padding(padding: EdgeInsets.only(top: 8)),
+                              Text(
+                                articleData['content'],
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                ),
+                              ),
+                              if (articleData['user']['uid'] == appUser?.uid)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                fullscreenDialog: true,
+                                                builder: (context) =>
+                                                    QuEditPage(
+                                                      articleId: articleId,
+                                                    )));
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 10),
+                                        width: 40,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[50],
+                                          border: Border.all(
+                                            color: Colors.grey[300]!,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          '수정',
+                                          style: TextStyle(fontSize: 11),
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.quDelete(articleId);
+                                      },
+                                      child: Container(
+                                        margin: const EdgeInsets.only(
+                                            top: 10, left: 5),
+                                        width: 40,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[50],
+                                          border: Border.all(
+                                            color: Colors.grey[300]!,
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          '삭제',
+                                          style: TextStyle(fontSize: 11),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ]),
+                      ),
+                      Divider(
+                        color: Colors.black.withOpacity(0.1),
+                        height: 0,
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Icon(
+                              Icons.comment_outlined,
+                              size: 15,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              '${answersData.length}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black.withOpacity(0.7),
                               ),
                             ),
-                          ),
-                          Text(
-                            articleData['content'],
-                            style: const TextStyle(
-                              fontSize: 14,
+                            const SizedBox(width: 5),
+                            Icon(
+                              Icons.favorite_border,
+                              size: 15,
+                              color: Colors.black.withOpacity(0.7),
                             ),
-                          ),
-                          if (articleData['user']['uid'] == appUser?.uid)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            fullscreenDialog: true,
-                                            builder: (context) => QuEditPage(
-                                                  articleId: articleId,
-                                                )));
-                                  },
-                                  child: Container(
-                                    margin: const EdgeInsets.only(top: 10),
-                                    width: 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[50],
-                                      border: Border.all(
-                                        color: Colors.grey[300]!,
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      '수정',
-                                      style: TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.quDelete(articleId);
-                                  },
-                                  child: Container(
-                                    margin:
-                                        const EdgeInsets.only(top: 10, left: 5),
-                                    width: 40,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[50],
-                                      border: Border.all(
-                                        color: Colors.grey[300]!,
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      '삭제',
-                                      style: TextStyle(fontSize: 11),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            const SizedBox(width: 2),
+                            Text(
+                              '${articleData['like'] ?? 0}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
                             ),
-                        ]),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Text(
-                    '답변',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                for (var answer in answersData)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            offset: Offset.zero,
-                          ),
-                        ],
+                            const SizedBox(width: 5),
+                            Icon(
+                              Icons.remove_red_eye_outlined,
+                              size: 15,
+                              color: Colors.black.withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              '${articleData['view'] ?? 0}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black.withOpacity(0.7),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                      Divider(
+                        color: Colors.black.withOpacity(0.1),
+                        height: 0,
+                        thickness: 1,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // 답변
+                      for (var answer in answersData)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  child: CircleAvatar(
-                                    backgroundColor: Color(0xffE6E6E6),
-                                    child: Icon(
-                                      Icons.person,
-                                      color: Color(0xffCCCCCC),
-                                    ),
+                            const SizedBox(
+                              width: 30,
+                              child: CircleAvatar(
+                                backgroundColor: Color(0xffE6E6E6),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, bottom: 20),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[50],
+                                  border: Border.all(
+                                    color: Colors.grey[100]!,
                                   ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                const Padding(
-                                    padding: EdgeInsets.only(left: 10)),
-                                Column(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -262,82 +302,29 @@ class AnsDetailPage extends StatelessWidget {
                                       '${answer['user']['name']}',
                                       style: const TextStyle(
                                         fontSize: 11,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
+                                    const Text(
+                                      '1분 전',
+                                      style: TextStyle(fontSize: 9),
+                                    ),
+                                    const SizedBox(height: 5),
                                     Text(
-                                        '${answer['user']['major']}﹒${answer['user']['university']}',
-                                        style: const TextStyle(
-                                          fontSize: 11,
-                                        )),
+                                      answer['content'],
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                      ),
+                                    ),
                                   ],
                                 ),
-                              ],
-                            ),
-                            const Padding(padding: EdgeInsets.only(top: 15)),
-                            Text(
-                              answer['content'],
-                              style: const TextStyle(
-                                fontSize: 16,
                               ),
                             ),
-                            if (answer['user']['uid'] == appUser?.uid)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // 답변의 수정 로직 여기서 설정
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                              builder: (context) => AnsEditPage(
-                                                    articleId: articleId,
-                                                    answerId: answer[
-                                                        'id'], // 답변 ID 전달
-                                                  )));
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(top: 10),
-                                      width: 40,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[50],
-                                        border: Border.all(
-                                          color: Colors.grey[300]!,
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        '수정',
-                                        style: TextStyle(fontSize: 11),
-                                      ),
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      controller.ansDelete(
-                                          articleId, answer['id']);
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 10, left: 5),
-                                      width: 40,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[50],
-                                        border: Border.all(
-                                          color: Colors.grey[300]!,
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        '삭제',
-                                        style: TextStyle(fontSize: 11),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                          ]),
-                    ),
+                          ],
+                        ),
+                    ],
                   ),
+                ),
               ],
             );
           }),
