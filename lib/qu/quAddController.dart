@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:capstone/main.dart';
+import 'package:capstone/qu/categoryController.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -12,6 +13,8 @@ class QuAddController extends GetxController {
 
   final CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
+
+  final CategoryController categoryController = Get.find<CategoryController>();
 
   void updateCategory(String newCategory) {
     category.value = newCategory;
@@ -29,7 +32,7 @@ class QuAddController extends GetxController {
         'tag': tag.value,
         'created_at': Timestamp.now(),
         'answers_count': 0,
-        'category': category.value,
+        'category': categoryController.selectedCategory.value,
         'user': {
           'uid': appUser!.uid,
           'name': appUser!.userName,
@@ -39,6 +42,7 @@ class QuAddController extends GetxController {
         },
       });
 
+      categoryController.updateCategory('카테고리');
       Get.back();
       Get.snackbar('성공', '질문이 등록되었습니다.', snackPosition: SnackPosition.BOTTOM);
     } catch (e) {

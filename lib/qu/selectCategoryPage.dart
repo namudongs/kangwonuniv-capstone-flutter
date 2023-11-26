@@ -9,7 +9,7 @@ class SelectCategoryPage extends StatefulWidget {
 }
 
 class _SelectCategoryPageState extends State<SelectCategoryPage> {
-  final List<String> categories = ['카테고리 1', '카테고리 2', '카테고리 3'];
+  final List<String> categories = ['인문계열', '이공계열', '대학생활'];
 
   void selectCategory(String category) {
     Get.back(result: category);

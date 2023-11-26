@@ -64,6 +64,14 @@ class AnsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              documentSnapshot['category'],
+              style: const TextStyle(
+                fontSize: 12,
+                color: Colors.black54,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             if (documentSnapshot['title'].isNotEmpty)
               Text(documentSnapshot['title'],
                   style: const TextStyle(fontSize: 16, color: Colors.black)),
