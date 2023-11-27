@@ -179,13 +179,10 @@ class AnsDetailPage extends StatelessWidget {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                fullscreenDialog: true,
-                                                builder: (context) =>
-                                                    QuEditPage(
-                                                      articleId: articleId,
-                                                    )));
+                                        Get.to(
+                                          QuEditPage(articleId: articleId),
+                                          fullscreenDialog: true,
+                                        );
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.only(top: 10),

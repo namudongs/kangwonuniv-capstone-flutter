@@ -50,7 +50,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
             Icons.close,
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Get.back();
           },
         ),
         actions: <Widget>[
