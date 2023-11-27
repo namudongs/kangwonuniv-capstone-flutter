@@ -13,6 +13,37 @@ class SignUpController extends GetxController {
   var isEmailFocused = false.obs;
   var isPasswordFocused = false.obs;
   var isNameFocused = false.obs;
+  var isEmailValid = false.obs;
+  var isPasswordValid = false.obs;
+  var isNameValid = false.obs;
+
+  var isEmailEmpty = true.obs;
+  var isPasswordEmpty = true.obs;
+  var isNameEmpty = true.obs;
+
+  void checkEmailEmpty() {
+    isEmailEmpty.value = emailController.text.isEmpty;
+  }
+
+  void checkPasswordEmpty() {
+    isPasswordEmpty.value = passwordController.text.isEmpty;
+  }
+
+  void checkNameEmpty() {
+    isNameEmpty.value = nameController.text.isEmpty;
+  }
+
+  void checkEmailValidity() {
+    isEmailValid.value = emailController.text.length >= 6;
+  }
+
+  void checkPasswordValidity() {
+    isPasswordValid.value = passwordController.text.length >= 6;
+  }
+
+  void checkNameValidity() {
+    isNameValid.value = nameController.text.length >= 2;
+  }
 
   late FocusNode emailFocusNode;
   late FocusNode passwordFocusNode;
