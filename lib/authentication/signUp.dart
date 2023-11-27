@@ -92,7 +92,10 @@ class SignUp extends StatelessWidget {
                       textInputAction: TextInputAction.next,
                       controller: controller.passwordController,
                       focusNode: controller.passwordFocusNode,
-                      style: const TextStyle(fontSize: 15),
+                      style: const TextStyle(
+                        fontFamily: 'NanumGothic',
+                        fontSize: 15,
+                      ),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,

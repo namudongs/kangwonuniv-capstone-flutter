@@ -32,13 +32,6 @@ class QuEditController extends GetxController {
   }
 
   Future<void> saveForm() async {
-    if (title.value.isEmpty) {
-      snackBar(
-        '질문 수정 실패',
-        '제목을 입력해주세요.',
-      );
-      return;
-    }
     if (content.value.isEmpty) {
       snackBar(
         '질문 수정 실패',

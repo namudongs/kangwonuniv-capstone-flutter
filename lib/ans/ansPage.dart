@@ -91,7 +91,7 @@ class AnsPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '${documentSnapshot['user']['name']}﹒${documentSnapshot['user']['major']}',
+                    '${documentSnapshot['user']['name']}﹒${documentSnapshot['user']['university']} ${documentSnapshot['user']['major']}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black.withOpacity(0.8),
@@ -237,7 +237,24 @@ Widget buildAcceptedAnswerWidget(DocumentSnapshot acceptedAnswer) {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(155, 157, 0, 0),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    '${acceptedAnswer['user']['name']}﹒${acceptedAnswer['user']['university']} ${acceptedAnswer['user']['major']}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
               Text(
                 acceptedAnswer['content'].replaceAll('\n', ' '),
                 style: const TextStyle(
@@ -247,25 +264,6 @@ Widget buildAcceptedAnswerWidget(DocumentSnapshot acceptedAnswer) {
                 ),
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    '${acceptedAnswer['user']['name']}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  const SizedBox(
-                    width: 20,
-                    child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(100, 157, 0, 0),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
@@ -353,19 +351,8 @@ Widget buildNoAdoptedAnswerWidget(DocumentSnapshot documentSnapshot) {
                   ),
                 ],
               ),
-              const SizedBox(height: 5),
-              Text(
-                documentSnapshot['content'].replaceAll('\n', ' '),
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
-                  // fontWeight: FontWeight.bold,
-                ),
-                maxLines: 5,
-                overflow: TextOverflow.ellipsis,
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
                     width: 20,
@@ -375,13 +362,23 @@ Widget buildNoAdoptedAnswerWidget(DocumentSnapshot documentSnapshot) {
                   ),
                   const SizedBox(width: 5),
                   Text(
-                    '${documentSnapshot['user']['name']}',
+                    '${documentSnapshot['user']['name']}﹒${documentSnapshot['user']['university']} ${documentSnapshot['user']['major']}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black.withOpacity(0.8),
                     ),
                   ),
                 ],
+              ),
+              Text(
+                documentSnapshot['content'].replaceAll('\n', ' '),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  // fontWeight: FontWeight.bold,
+                ),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

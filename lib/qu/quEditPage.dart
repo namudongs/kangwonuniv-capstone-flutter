@@ -2,7 +2,6 @@ import 'package:capstone/components/utils.dart';
 import 'package:capstone/qu/categoryController.dart';
 import 'package:capstone/qu/quEditController.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 

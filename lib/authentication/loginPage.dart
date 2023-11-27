@@ -92,7 +92,10 @@ class LoginPage extends StatelessWidget {
                       textInputAction: TextInputAction.done,
                       controller: controller.passwordController,
                       focusNode: controller.passwordFocusNode,
-                      style: const TextStyle(fontSize: 15),
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NanumGothic',
+                      ),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
