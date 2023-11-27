@@ -126,6 +126,7 @@ class AnsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Visibility(
                         visible: documentSnapshot['likes_uid']
@@ -138,7 +139,7 @@ class AnsPage extends StatelessWidget {
                         child: Icon(
                           Icons.favorite,
                           size: 16,
-                          color: Colors.red.withOpacity(0.8),
+                          color: Colors.red.withOpacity(1),
                         ),
                       ),
                       const SizedBox(width: 3),
