@@ -120,31 +120,29 @@ class AnsDetailPage extends StatelessWidget {
                               const Text(
                                 'Q.',
                                 style: TextStyle(
-                                  fontFamily: 'NanumSquare',
                                   fontSize: 40,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 106, 0, 0),
                                 ),
                               ),
-                              const SizedBox(height: 10),
                               Text(articleData['category'],
                                   style: const TextStyle(
-                                    fontFamily: 'NanumSquare',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromARGB(158, 106, 0, 0),
                                   )),
+                              const SizedBox(height: 10),
                               Visibility(
                                 visible: articleData['title'].isNotEmpty,
                                 child: Text(
                                   articleData['title'],
                                   style: const TextStyle(
-                                    fontFamily: 'NanumSquare',
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,7 +159,6 @@ class AnsDetailPage extends StatelessWidget {
                                   Text(
                                       '${articleData['user']['name']}﹒${formatTimestamp(articleData['created_at'])}\n${articleData['user']['university']} ${articleData['user']['major']}',
                                       style: const TextStyle(
-                                        fontFamily: 'NanumSquare',
                                         fontSize: 11,
                                       )),
                                 ],
@@ -198,7 +195,6 @@ class AnsDetailPage extends StatelessWidget {
                                           '수정',
                                           style: TextStyle(
                                             fontSize: 13,
-                                            fontFamily: 'NanumSquare',
                                           ),
                                         ),
                                       ),
@@ -222,7 +218,6 @@ class AnsDetailPage extends StatelessWidget {
                                           '삭제',
                                           style: TextStyle(
                                             fontSize: 13,
-                                            fontFamily: 'NanumSquare',
                                           ),
                                         ),
                                       ),
@@ -269,7 +264,6 @@ class AnsDetailPage extends StatelessWidget {
                                 Text(
                                   '${articleData['like'] ?? 0}',
                                   style: TextStyle(
-                                    fontFamily: 'NanumSquare',
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black.withOpacity(0.5),
@@ -285,7 +279,6 @@ class AnsDetailPage extends StatelessWidget {
                                 Text(
                                   '${answersData.length}',
                                   style: TextStyle(
-                                    fontFamily: 'NanumSquare',
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black.withOpacity(0.5),
@@ -375,7 +368,6 @@ class AnsDetailPage extends StatelessWidget {
                                               Text(
                                                 '도움이 되었다면 채택하기',
                                                 style: TextStyle(
-                                                  fontFamily: 'NanumSquare',
                                                   fontSize: 11,
                                                   // fontWeight: FontWeight.bold,
                                                   color: Color.fromARGB(
@@ -412,7 +404,6 @@ class AnsDetailPage extends StatelessWidget {
                                             Text(
                                               '채택된 답변입니다.',
                                               style: TextStyle(
-                                                  fontFamily: 'NanumSquare',
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.normal,
                                                   color: Color.fromARGB(
@@ -429,7 +420,6 @@ class AnsDetailPage extends StatelessWidget {
                                         Text(
                                           '${answer['user']['name']}',
                                           style: const TextStyle(
-                                            fontFamily: 'NanumSquare',
                                             fontSize: 12,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -440,7 +430,6 @@ class AnsDetailPage extends StatelessWidget {
                                       formatTimestamp(answer['created_at']),
                                       style: const TextStyle(
                                         fontSize: 10,
-                                        fontFamily: 'NanumSquare',
                                       ),
                                     ),
                                     const SizedBox(height: 5),
@@ -480,7 +469,6 @@ class AnsDetailPage extends StatelessWidget {
                                                 '수정',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  fontFamily: 'NanumSquare',
                                                 ),
                                               ),
                                             ),
@@ -506,7 +494,6 @@ class AnsDetailPage extends StatelessWidget {
                                                 '삭제',
                                                 style: TextStyle(
                                                   fontSize: 12,
-                                                  fontFamily: 'NanumSquare',
                                                 ),
                                               ),
                                             ),

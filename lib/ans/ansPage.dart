@@ -3,6 +3,7 @@
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/ans/ansController.dart';
 import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,30 +20,24 @@ class AnsPage extends StatelessWidget {
           title: const Text('답변하기'),
         ),
         body: Container(
-          decoration: BoxDecoration(color: Colors.grey[50]),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: Obx(() {
-                if (controller.articleList.value.isEmpty) {
-                  return const Center(child: Text('등록된 질문이 없습니다.'));
-                }
-                return ListView.builder(
-                  itemCount: controller.articleList.value.length,
-                  itemBuilder: (context, index) {
-                    final DocumentSnapshot documentSnapshot =
-                        controller.articleList.value[index];
-                    return GestureDetector(
-                      onTap: () => Get.to(
-                          () => AnsDetailPage(articleId: documentSnapshot.id)),
-                      child: buildArticleItem(documentSnapshot, context),
-                    );
-                  },
+          decoration: BoxDecoration(color: Colors.black.withOpacity(0.02)),
+          child: Obx(() {
+            if (controller.articleList.value.isEmpty) {
+              return const Center(child: Text('등록된 질문이 없습니다.'));
+            }
+            return ListView.builder(
+              itemCount: controller.articleList.value.length,
+              itemBuilder: (context, index) {
+                final DocumentSnapshot documentSnapshot =
+                    controller.articleList.value[index];
+                return GestureDetector(
+                  onTap: () => Get.to(
+                      () => AnsDetailPage(articleId: documentSnapshot.id)),
+                  child: buildArticleItem(documentSnapshot, context),
                 );
-              }),
-            ),
-          ),
+              },
+            );
+          }),
         ));
   }
 
@@ -54,14 +49,12 @@ class AnsPage extends StatelessWidget {
           margin: const EdgeInsets.fromLTRB(0, 15, 0, 0),
           decoration: BoxDecoration(
             color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.0),
-                blurRadius: 0.5,
-                spreadRadius: 0.1,
-                offset: Offset.zero,
+            border: Border(
+              top: BorderSide(
+                color: Colors.black.withOpacity(0.1),
+                width: 1,
               ),
-            ],
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,8 +80,25 @@ class AnsPage extends StatelessWidget {
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontFamily: 'NanumSquare',
                     )),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black.withOpacity(0.5),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    '${documentSnapshot['user']['name']}﹒${documentSnapshot['user']['major']}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
               Visibility(
                 visible: documentSnapshot['title'].isNotEmpty,
                 replacement: Text(
@@ -106,28 +116,54 @@ class AnsPage extends StatelessWidget {
                     fontSize: 15,
                     color: Colors.black54,
                   ),
-                  maxLines: 2,
+                  maxLines: 5,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Padding(padding: EdgeInsets.only(top: 5)),
+              const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.favorite_border_outlined,
+                        size: 15,
+                        color: Colors.black54,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${documentSnapshot['like']}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Icon(
+                        Icons.mode_comment_outlined,
+                        size: 15,
+                        color: Colors.black54,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        '${documentSnapshot['answers_count']}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                   Text(
-                    '답변 ${documentSnapshot['answers_count']}개',
+                    formatTimestamp(documentSnapshot['created_at']),
                     style: const TextStyle(
                       fontSize: 12,
                       color: Colors.black54,
-                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  Text(
-                    '﹒${documentSnapshot['user']['major']}',
-                    style: const TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                  Text(
-                    '﹒${formatTimestamp(documentSnapshot['created_at'])}',
-                    style: const TextStyle(fontSize: 12, color: Colors.black54),
                   ),
                 ],
               ),
@@ -135,18 +171,213 @@ class AnsPage extends StatelessWidget {
           ),
         ),
         // ------------------------------------------ 답변 표시 ------------------------------------------
-        // const Divider(
-        //   height: 1,
-        //   thickness: 0.1,
-        //   color: Colors.grey,
-        // ),
-        // Container(
-        //   height: 100,
-        //   decoration: const BoxDecoration(
-        //     color: Colors.white,
-        //   ),
-        // ),
+
+        Container(
+          margin: const EdgeInsets.only(bottom: 15),
+          decoration: const BoxDecoration(color: Colors.white),
+          child: Obx(() {
+            var answer = controller.acceptedAnswers.value[documentSnapshot.id];
+            if (answer != null && documentSnapshot['is_adopted'] == true) {
+              return buildAcceptedAnswerWidget(answer);
+            } else if (answer != null &&
+                documentSnapshot['is_adopted'] == false &&
+                answer['user']['uid'] != appUser!.uid) {
+              return buildNoAdoptedAnswerWidget(answer);
+            } else {
+              return buildNoAnswerWidget();
+            }
+          }),
+        ),
       ],
     );
   }
+}
+
+Widget buildAcceptedAnswerWidget(DocumentSnapshot acceptedAnswer) {
+  return Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(35, 157, 0, 0),
+      border: Border.all(
+        color: Colors.black.withOpacity(0.1),
+        width: 1,
+      ),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(
+                children: [
+                  Icon(
+                    Icons.check_circle,
+                    size: 17,
+                    color: Color.fromARGB(255, 157, 0, 0),
+                  ),
+                  SizedBox(width: 3),
+                  Text(
+                    '채택된 답변입니다.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                      color: Color.fromARGB(255, 157, 0, 0),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Text(
+                acceptedAnswer['content'].replaceAll('\n', ' '),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  // fontWeight: FontWeight.bold,
+                ),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '${acceptedAnswer['user']['name']}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  const SizedBox(
+                    width: 20,
+                    child: CircleAvatar(
+                      backgroundColor: Color.fromARGB(100, 157, 0, 0),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildNoAnswerWidget() {
+  return Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(255, 255, 255, 255),
+      border: Border.all(
+        color: Colors.black.withOpacity(0.1),
+        width: 1,
+      ),
+    ),
+    child: const Row(
+      children: [
+        Icon(Icons.check_circle_outline, color: Color.fromARGB(255, 106, 0, 0)),
+        SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '답변을 작성해주세요.',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                '질문자에게 도움이 되는 답변을 작성해주세요.',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget buildNoAdoptedAnswerWidget(DocumentSnapshot documentSnapshot) {
+  return Container(
+    padding: const EdgeInsets.all(15),
+    decoration: BoxDecoration(
+      color: Colors.black.withOpacity(0.1),
+      border: Border.all(
+        color: Colors.black.withOpacity(0.1),
+        width: 1,
+      ),
+    ),
+    child: Row(
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.check,
+                    size: 17,
+                    color: Colors.black.withOpacity(0.8),
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    '채택을 기다리고 있는 답변입니다.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 5),
+              Text(
+                documentSnapshot['content'].replaceAll('\n', ' '),
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  // fontWeight: FontWeight.bold,
+                ),
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    width: 20,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.black.withOpacity(0.8),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    '${documentSnapshot['user']['name']}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

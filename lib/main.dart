@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
           primary: Color.fromARGB(255, 106, 0, 0),
           secondary: Colors.black,
         ),
-        fontFamily: 'NanumGothic',
+
+        fontFamily: 'NanumSquare',
         brightness: Brightness.light,
         // scaffoldBackgroundColor: Colors.grey[100],
         scaffoldBackgroundColor: Colors.white,
