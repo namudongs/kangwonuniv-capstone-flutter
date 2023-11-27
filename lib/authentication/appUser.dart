@@ -1,5 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class AppUser {
   final String uid;
   final String email;
@@ -7,7 +9,7 @@ class AppUser {
   final String university;
   final int grade;
   final String major;
-  List<Map<String, dynamic>>? timetable;
+  final Timestamp timestamp;
 
   AppUser({
     required this.uid,
@@ -16,7 +18,7 @@ class AppUser {
     required this.university,
     required this.grade,
     required this.major,
-    this.timetable,
+    required this.timestamp,
   });
 
   Map<String, dynamic> toMap() {
@@ -27,7 +29,7 @@ class AppUser {
       'university': university,
       'grade': grade,
       'major': major,
-      'timetable': timetable,
+      'timestamp': timestamp,
     };
   }
 
@@ -39,7 +41,7 @@ class AppUser {
       university: map['university'],
       grade: map['grade'],
       major: map['major'],
-      timetable: List<Map<String, dynamic>>.from(map['timetable'] ?? []),
+      timestamp: Timestamp.now(),
     );
   }
 }

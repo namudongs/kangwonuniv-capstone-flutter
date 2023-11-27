@@ -1,7 +1,7 @@
+import 'package:capstone/authentication/loginPage.dart';
+import 'package:capstone/authentication/signUp.dart';
 import 'package:capstone/components/colorRoundButton.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/authentication/loginPage.dart';
-import 'package:capstone/authentication/signupPage.dart';
 import 'package:lottie/lottie.dart';
 
 class MainPage extends StatelessWidget {
@@ -59,7 +59,7 @@ class MainPage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const SignupPage()));
+                                  builder: (context) => SignUp()));
                         },
                         title: "회원가입",
                         color: Colors.lightBlue,

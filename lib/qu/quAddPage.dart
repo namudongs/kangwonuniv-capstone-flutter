@@ -97,7 +97,7 @@ class _QuAddPageState extends State<QuAddPage> {
                                       : Theme.of(context).hintColor,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
