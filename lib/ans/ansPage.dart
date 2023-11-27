@@ -112,9 +112,9 @@ class AnsPage extends StatelessWidget {
                 ),
                 child: Text(
                   documentSnapshot['content'].replaceAll('\n', ' '),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
-                    color: Colors.black54,
+                    color: Colors.black.withOpacity(0.8),
                   ),
                   maxLines: 5,
                   overflow: TextOverflow.ellipsis,
@@ -123,14 +123,23 @@ class AnsPage extends StatelessWidget {
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
                     children: [
-                      const Icon(
-                        Icons.favorite_border_outlined,
-                        size: 15,
-                        color: Colors.black54,
+                      Visibility(
+                        visible: documentSnapshot['likes_uid']
+                            .contains(appUser?.uid ?? 'uid'),
+                        replacement: Icon(
+                          Icons.favorite_border_outlined,
+                          size: 16,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                        child: Icon(
+                          Icons.favorite,
+                          size: 16,
+                          color: Colors.red.withOpacity(0.8),
+                        ),
                       ),
                       const SizedBox(width: 3),
                       Text(
@@ -144,7 +153,7 @@ class AnsPage extends StatelessWidget {
                       const SizedBox(width: 10),
                       const Icon(
                         Icons.mode_comment_outlined,
-                        size: 15,
+                        size: 16,
                         color: Colors.black54,
                       ),
                       const SizedBox(width: 3),

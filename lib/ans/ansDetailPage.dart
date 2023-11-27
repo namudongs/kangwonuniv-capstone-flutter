@@ -235,10 +235,9 @@ class AnsDetailPage extends StatelessWidget {
                         padding: const EdgeInsets.all(15.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 GestureDetector(
                                   onTap: () {
