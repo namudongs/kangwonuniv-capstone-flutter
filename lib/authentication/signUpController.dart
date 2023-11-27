@@ -16,6 +16,7 @@ class SignUpController extends GetxController {
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
   var isNameValid = false.obs;
+  var isNameChecked = false.obs;
 
   var isEmailEmpty = true.obs;
   var isPasswordEmpty = true.obs;
@@ -43,6 +44,45 @@ class SignUpController extends GetxController {
 
   void checkNameValidity() {
     isNameValid.value = nameController.text.length >= 2;
+  }
+
+  void checkName() {
+    if (nameController.text.isEmpty) {
+      isNameEmpty.value = true;
+      isNameChecked.value = false;
+      snackBar('오류', '닉네임을 입력해주세요.');
+      return;
+    }
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('userName', isEqualTo: nameController.text)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        isNameValid.value = false;
+      } else {
+        isNameValid.value = true;
+      }
+      isNameChecked.value = true;
+    });
+  }
+
+  Future<bool> checkEmail() {
+    // 이메일 중복확인
+    return FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: emailController.text)
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        return false;
+      } else {
+        return true;
+      }
+    }, onError: (e) {
+      return false; // or handle the error accordingly
+    });
   }
 
   late FocusNode emailFocusNode;
@@ -113,6 +153,33 @@ class SignUpController extends GetxController {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final CollectionReference users =
         FirebaseFirestore.instance.collection('users');
+
+    if (!isEmailValid.value) {
+      snackBar('오류', '유효하지 않은 이메일입니다.');
+      return;
+    }
+    if (!isPasswordValid.value) {
+      snackBar('오류', '유효하지 않은 비밀번호입니다.');
+      return;
+    }
+    if (isNameEmpty.value || !isNameChecked.value || !isNameValid.value) {
+      snackBar('오류', '닉네임을 확인해주세요.');
+      return;
+    }
+
+    if (selectedInfo.value == '대학교와 학과를 선택해주세요') {
+      snackBar('오류', '대학교와 학과를 선택해주세요.');
+      return;
+    }
+
+    if (selectedGrade.value == '학년을 선택해주세요') {
+      snackBar('오류', '학년을 선택해주세요.');
+      return;
+    }
+
+    if (await checkEmail() == false) {
+      snackBar('오류', '이미 존재하는 이메일입니다.');
+    }
 
     try {
       // Firebase Authentication을 사용하여 사용자 계정 생성

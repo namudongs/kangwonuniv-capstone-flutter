@@ -87,6 +87,7 @@ class SignUp extends StatelessWidget {
                         controller.checkPasswordValidity();
                         controller.checkPasswordEmpty();
                       },
+                      obscureText: true,
                       keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.next,
                       controller: controller.passwordController,
@@ -110,47 +111,93 @@ class SignUp extends StatelessWidget {
                               '비밀번호가 유효하지 않습니다.', false, context)),
                 ),
                 Obx(
-                  () => Container(
-                    alignment: Alignment.center,
+                  () => SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.only(left: 10, right: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: controller.isNameFocused.value
-                            ? const Color.fromARGB(255, 157, 0, 0)
-                            : Colors.black.withOpacity(0.2),
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: TextField(
-                      onChanged: (String value) {
-                        controller.checkNameValidity();
-                        controller.checkNameEmpty();
-                      },
-                      keyboardType: TextInputType.name,
-                      textInputAction: TextInputAction.done,
-                      controller: controller.nameController,
-                      focusNode: controller.nameFocusNode,
-                      style: const TextStyle(fontSize: 15),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        hintText: '닉네임',
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: controller.isNameFocused.value
+                                  ? const Color.fromARGB(255, 157, 0, 0)
+                                  : Colors.black.withOpacity(0.2),
+                              width: 1,
+                            ),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: TextField(
+                            onChanged: (String value) {
+                              controller.checkNameEmpty();
+                              controller.isNameChecked.value = false;
+                            },
+                            keyboardType: TextInputType.name,
+                            textInputAction: TextInputAction.done,
+                            controller: controller.nameController,
+                            focusNode: controller.nameFocusNode,
+                            style: const TextStyle(fontSize: 15),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                              hintText: '닉네임',
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            controller.checkNameEmpty();
+                            controller.checkNameValidity();
+                          },
+                          child: Container(
+                            height: 50,
+                            margin: const EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                foregroundColor: Colors.white,
+                                backgroundColor:
+                                    const Color.fromARGB(150, 157, 0, 0),
+                              ),
+                              onPressed: () {
+                                controller.checkName();
+                              },
+                              child: const Text(
+                                '중복확인',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
                 Obx(
-                  () => controller.isNameEmpty.value
-                      ? const SizedBox.shrink()
-                      : (controller.isNameValid.value
-                          ? _buildValidationMessage(
-                              '중복되지 않은 닉네임입니다.', true, context)
-                          : _buildValidationMessage(
-                              '중복된 닉네임입니다.', false, context)),
+                  () {
+                    if (controller.isNameEmpty.value) {
+                      return const SizedBox
+                          .shrink(); // 닉네임 필드가 비어있으면 아무것도 표시하지 않음
+                    } else if (!controller.isNameChecked.value) {
+                      return _buildValidationMessage(
+                          '닉네임 중복확인을 해 주세요.', false, context);
+                    } else if (!controller.isNameValid.value) {
+                      return _buildValidationMessage(
+                          '중복된 닉네임입니다.', false, context);
+                    } else {
+                      return _buildValidationMessage(
+                          '중복되지 않은 닉네임입니다.', true, context);
+                    }
+                  },
                 ),
                 GestureDetector(
                   onTap: () => _showModal(context),
