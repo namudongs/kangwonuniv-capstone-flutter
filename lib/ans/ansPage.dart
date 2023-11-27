@@ -190,8 +190,7 @@ class AnsPage extends StatelessWidget {
             if (answer != null && documentSnapshot['is_adopted'] == true) {
               return buildAcceptedAnswerWidget(answer);
             } else if (answer != null &&
-                documentSnapshot['is_adopted'] == false &&
-                answer['user']['uid'] != appUser!.uid) {
+                documentSnapshot['is_adopted'] == false) {
               return buildNoAdoptedAnswerWidget(answer);
             } else {
               return buildNoAnswerWidget();

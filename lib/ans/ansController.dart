@@ -61,15 +61,20 @@ class AnsController extends GetxController {
           .doc(articleId)
           .collection('answer')
           .orderBy('created_at', descending: true)
-          .limit(1)
           .get();
 
-      return bestAnswerSnapshot.docs.isNotEmpty
-          ? bestAnswerSnapshot.docs.first
-          : null;
+      for (var answer in bestAnswerSnapshot.docs) {
+        if (articleSnapshot.data()?['user']['uid'] !=
+            answer.data()['user']['uid']) {
+          return answer;
+        } else {
+          continue;
+        }
+      }
     } catch (e) {
       print(e);
       return null;
     }
+    return null;
   }
 }
