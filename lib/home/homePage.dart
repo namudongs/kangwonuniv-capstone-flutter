@@ -114,12 +114,12 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 Divider(
-                  height: 30,
+                  height: 50,
                   thickness: 1,
                   color: Colors.grey.withOpacity(0.3),
                 ),
                 Container(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Column(
                     children: [
                       Container(
