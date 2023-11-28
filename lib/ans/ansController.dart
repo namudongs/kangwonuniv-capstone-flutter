@@ -38,7 +38,6 @@ class AnsController extends GetxController {
           .get();
 
       bool isAdopted = articleSnapshot.data()?['is_adopted'] ?? false;
-      print(isAdopted);
 
       if (isAdopted) {
         // 채택된 답변 찾기

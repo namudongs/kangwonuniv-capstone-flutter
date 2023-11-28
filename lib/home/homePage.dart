@@ -2,10 +2,8 @@
 
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
-import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,10 +17,12 @@ class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
   Timer? _timer;
   int totalArticles = 0;
+  var messageString = "";
 
   @override
   void initState() {
     super.initState();
+
     // 5초마다 페이지 전환
     // _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
     //   if (_pageController.hasClients && totalArticles > 0) {
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 2 - 50,
+                        height: MediaQuery.of(context).size.height / 2,
                         child: StreamBuilder<List<Map<String, dynamic>?>>(
                           stream: HomeController().getRecentArticlesStream(),
                           builder: (context, snapshot) {

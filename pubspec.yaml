@@ -40,13 +40,13 @@ dependencies:
   firebase_auth: ^4.7.2
   cloud_firestore: ^4.8.5
   shared_preferences: ^2.2.1
-  firebase_messaging: ^latest_version
-  flutter_local_notifications: ^latest_version
   get: ^4.6.5
   stylish_bottom_bar: ^1.0.3
   image_picker : ^1.0.4
   video_player: ^2.8.1
   expansion_tile_card: ^3.0.0
+  firebase_messaging: ^14.7.6
+  flutter_local_notifications: ^16.2.0
 
   
 dev_dependencies:
