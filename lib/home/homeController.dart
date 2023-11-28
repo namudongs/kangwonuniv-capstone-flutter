@@ -6,13 +6,16 @@ class HomeController extends GetxController {
 
   Stream<List<Map<String, dynamic>?>> getRecentArticlesStream() {
     return firestore
-      .collection('articles')
-      .orderBy('created_at', descending: true) // 내림차순 정렬
-      .snapshots()
-      .map((snapshot) {
-        return snapshot.docs.map((doc) {
-          return doc.data() as Map<String, dynamic>?;
-        }).toList();
-      });
+        .collection('articles')
+        .orderBy('created_at', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return {
+          'id': doc.id, // 문서 ID 추가
+          ...doc.data()
+        };
+      }).toList();
+    });
   }
 }

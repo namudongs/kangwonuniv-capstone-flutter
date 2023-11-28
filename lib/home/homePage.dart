@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print, file_names
 
+import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
 import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              '🔥최근 질문 보기',
+                              '🔥질문에 답변하고 QU를 얻어보세요!',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 2,
+                        height: MediaQuery.of(context).size.height / 2 - 50,
                         child: StreamBuilder<List<Map<String, dynamic>?>>(
                           stream: HomeController().getRecentArticlesStream(),
                           builder: (context, snapshot) {
@@ -164,8 +165,14 @@ class _HomePageState extends State<HomePage> {
                                 if (article == null) {
                                   return const SizedBox.shrink();
                                 }
-                                return buildArticleItem(
-                                    article, context); // 각 문서를 위젯으로 변환
+                                return GestureDetector(
+                                  onTap: () {
+                                    // AnsDetailPage로 이동
+                                    Get.to(AnsDetailPage(
+                                        articleId: article['id']));
+                                  },
+                                  child: buildArticleItem(article, context),
+                                ); // 각 문서를 위젯으로 변환
                               },
                             );
                           },
@@ -185,7 +192,8 @@ class _HomePageState extends State<HomePage> {
   Widget buildArticleItem(Map<String, dynamic> article, context) {
     return Column(children: [
       Container(
-        margin: const EdgeInsets.only(bottom: 20),
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(bottom: 15),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           border: Border.all(

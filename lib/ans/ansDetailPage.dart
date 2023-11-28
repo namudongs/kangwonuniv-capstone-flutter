@@ -243,29 +243,33 @@ class AnsDetailPage extends StatelessWidget {
                                   onTap: () {
                                     controller.updateLike(articleId);
                                   },
-                                  child: Visibility(
-                                    visible: controller
-                                        .articleData.value!['likes_uid']
-                                        .contains(appUser?.uid),
-                                    replacement: Icon(
-                                      Icons.favorite_border_outlined,
-                                      size: 19,
-                                      color: Colors.black.withOpacity(0.5),
-                                    ),
-                                    child: Icon(
-                                      Icons.favorite,
-                                      size: 19,
-                                      color: Colors.red.withOpacity(0.8),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 3),
-                                Text(
-                                  '${articleData['like'] ?? 0}',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black.withOpacity(0.5),
+                                  child: Row(
+                                    children: [
+                                      Visibility(
+                                        visible: controller
+                                            .articleData.value!['likes_uid']
+                                            .contains(appUser?.uid),
+                                        replacement: Icon(
+                                          Icons.favorite_border_outlined,
+                                          size: 19,
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                        child: Icon(
+                                          Icons.favorite,
+                                          size: 19,
+                                          color: Colors.red.withOpacity(0.8),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        '${articleData['like'] ?? 0}',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 const SizedBox(width: 15),
