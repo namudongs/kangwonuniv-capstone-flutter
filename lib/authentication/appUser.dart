@@ -8,6 +8,7 @@ class AppUser {
   final String userName;
   final String university;
   final int grade;
+  final int qu;
   final String major;
   final Timestamp timestamp;
 
@@ -17,6 +18,7 @@ class AppUser {
     required this.userName,
     required this.university,
     required this.grade,
+    required this.qu,
     required this.major,
     required this.timestamp,
   });
@@ -28,6 +30,7 @@ class AppUser {
       'userName': userName,
       'university': university,
       'grade': grade,
+      'qu': qu,
       'major': major,
       'timestamp': timestamp,
     };
@@ -40,6 +43,7 @@ class AppUser {
       userName: map['userName'],
       university: map['university'],
       grade: map['grade'],
+      qu: map['qu'],
       major: map['major'],
       timestamp: Timestamp.now(),
     );

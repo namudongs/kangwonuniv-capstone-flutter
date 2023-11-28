@@ -322,17 +322,19 @@ class SignUp extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Column(
-            children: <Widget>[
-              ...controller.universities
-                  .map((university) => ListTile(
-                        title: Text(university),
-                        onTap: () => _showDepartments(context, university),
-                      ))
-                  .toList(),
-            ],
+        return SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(top: 10),
+            child: Column(
+              children: <Widget>[
+                ...controller.universities
+                    .map((university) => ListTile(
+                          title: Text(university),
+                          onTap: () => _showDepartments(context, university),
+                        ))
+                    .toList(),
+              ],
+            ),
           ),
         );
       },
