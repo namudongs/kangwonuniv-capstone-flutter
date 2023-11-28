@@ -9,155 +9,159 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios,
-              size: 20,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          const Text(
-                            "로그인",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "재학중인 학교의 이메일로 로그인하세요.",
-                            style: TextStyle(
-                                fontSize: 15, color: Colors.grey[700]),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40),
-                        child: Column(
-                          children: <Widget>[
-                            MakeInput(
-                                label: "이메일",
-                                obscureText: false,
-                                controller: emailController),
-                            MakeInput(
-                              label: "비밀번호",
-                              obscureText: true,
-                              controller: passwordController,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: ColorRoundButton(
-                              tapFunc: () async {
-                                String email = emailController.text;
-                                String password = passwordController.text;
-
-                                final navigator = Navigator.of(context);
-
-                                if (email.isEmpty || password.isEmpty) {
-                                  print('이메일 또는 비밀번호를 입력해주세요.');
-                                  return;
-                                } else if (!email.contains('@')) {
-                                  print('이메일 형식이 올바르지 않습니다.');
-                                  return;
-                                } else if (password.length < 6) {
-                                  print('비밀번호는 6자리 이상이어야 합니다.');
-                                  return;
-                                } else if (password.contains(' ')) {
-                                  print('비밀번호에 공백이 포함되어 있습니다.');
-                                  return;
-                                } else {
-                                  await FirebaseAuth.instance
-                                      .signInWithEmailAndPassword(
-                                          email: email, password: password)
-                                      .then((value) async {
-                                    print(
-                                        '로그인 성공\n이메일: $email, 비밀번호: $password');
-                                    await authController.fetchUserData();
-
-                                    navigator.pushNamedAndRemoveUntil(
-                                        '/', (_) => false);
-                                    navigator.push(
-                                      MaterialPageRoute(
-                                          builder: (_) => BottomNavBar()),
-                                    );
-                                  }).catchError((e) {
-                                    print(
-                                        '로그인 실패\n이메일: $email, 비밀번호: $password');
-                                    print(e);
-                                    sleep(Durations.medium1);
-                                  });
-                                }
-                              },
-                              title: "로그인",
-                              color: Colors.lightBlueAccent,
-                              buttonWidth: double.infinity,
-                              buttonHeight: 60,
-                              fontSize: 18)),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const Text("아직 계정이 없으신가요? "),
-                            GestureDetector(
-                              onTap: () {
-                                print('회원가입 버튼 클릭');
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignupPage()));
-                              },
-                              child: const Text(
-                                "회원가입",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.underline),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('로그인'),
+      ),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Obx(
+                () => Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: controller.isEmailFocused.value
+                          ? const Color.fromARGB(255, 157, 0, 0)
+                          : Colors.black.withOpacity(0.2),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextField(
+                    autofocus: true,
+                    onChanged: (String value) {
+                      controller.checkEmailValidity();
+                      controller.checkEmailEmpty();
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    controller: controller.emailController,
+                    focusNode: controller.emailFocusNode,
+                    style: const TextStyle(fontSize: 15),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      hintText: '이메일',
+                    ),
                   ),
                 ),
-                SizedBox(
-                    height: MediaQuery.of(context).size.height / 3,
-                    child: Lottie.asset(
-                      'assets/lottie/animation_lkij23o3.json',
-                    ))
-              ],
-            ),
+              ),
+              Obx(() => controller.isEmailEmpty.value
+                  ? const SizedBox.shrink()
+                  : (controller.isEmailValid.value
+                      ? _buildValidationMessage('이메일이 유효합니다.', true, context)
+                      : _buildValidationMessage(
+                          '이메일이 유효하지 않습니다.', false, context))),
+              const SizedBox(
+                height: 10,
+              ),
+              Obx(
+                () => Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: controller.isPasswordFocused.value
+                          ? const Color.fromARGB(255, 157, 0, 0)
+                          : Colors.black.withOpacity(0.2),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: TextField(
+                    onChanged: (String value) {
+                      controller.checkPasswordValidity();
+                      controller.checkPasswordEmpty();
+                    },
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
+                    onSubmitted: (value) {
+                      controller.login();
+                    },
+                    textInputAction: TextInputAction.done,
+                    controller: controller.passwordController,
+                    focusNode: controller.passwordFocusNode,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'NanumGothic',
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.zero,
+                      hintText: '비밀번호',
+                    ),
+                  ),
+                ),
+              ),
+              Obx(() => controller.isPasswordEmpty.value
+                  ? const SizedBox.shrink()
+                  : (controller.isPasswordValid.value
+                      ? _buildValidationMessage('비밀번호가 유효합니다.', true, context)
+                      : _buildValidationMessage(
+                          '비밀번호가 유효하지 않습니다.', false, context))),
+              const SizedBox(
+                height: 15,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(150, 157, 0, 0),
+                ),
+                onPressed: () {
+                  controller.login();
+                },
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: const Text(
+                    '로그인',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildValidationMessage(String message, bool isValid, context) {
+    return SizedBox(
+      height: 20,
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Row(
+        children: [
+          Icon(
+            isValid ? Icons.check_circle : Icons.cancel,
+            size: 17,
+            color: const Color.fromARGB(255, 157, 0, 0),
+          ),
+          const SizedBox(width: 3),
+          Text(
+            message,
+            style: const TextStyle(
+              fontFamily: 'NanumSquare',
+              fontSize: 13,
+              fontWeight: FontWeight.normal,
+              color: Color.fromARGB(255, 157, 0, 0),
+            ),
+          ),
+        ],
       ),
     );
   }
