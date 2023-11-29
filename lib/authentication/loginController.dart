@@ -88,6 +88,7 @@ class LoginController extends GetxController {
         print('로그인 성공\n이메일: $email, 비밀번호: $password');
 
         await authController.fetchUserData();
+        await notificationController.saveDeviceToken();
         Get.offAll(() => BottomNavBar());
       }).catchError((e) {
         print('로그인 실패\n이메일: $email, 비밀번호: $password $e');

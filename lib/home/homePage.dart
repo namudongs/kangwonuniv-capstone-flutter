@@ -2,6 +2,8 @@
 
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
+import 'package:capstone/main.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:get/get.dart';
@@ -15,6 +17,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
   Timer? _timer;
   int totalArticles = 0;
   var messageString = "";
@@ -22,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    notificationController.saveDeviceToken();
 
     // 5초마다 페이지 전환
     // _timer = Timer.periodic(const Duration(seconds: 5), (timer) {

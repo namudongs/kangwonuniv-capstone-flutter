@@ -36,7 +36,6 @@ void main() async {
     }
   });
 
-  notificationController.saveDeviceToken();
   runApp(const MyApp());
 }
 
