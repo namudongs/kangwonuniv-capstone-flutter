@@ -1,10 +1,12 @@
-// ignore_for_file: avoid_print, prefer_const_constructors
+// ignore_for_file: avoid_print, prefer_const_constructors, unused_local_variable
 import 'dart:io';
 
 import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/notfiy/notificationController.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +18,22 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 AppUser? appUser;
 
 final _messaging = FirebaseMessaging.instance;
+
+void saveDeviceToken(String userId) async {
+  String? token = await _messaging.getToken();
+  print("토큰이 변경되었습니다: $token");
+  var tokenRef = FirebaseFirestore.instance
+      .collection('users')
+      .doc(userId)
+      .collection('tokens')
+      .doc('token');
+
+  await tokenRef.set({
+    'token': token,
+    'createdAt': FieldValue.serverTimestamp(), // 토큰 생성 시간
+    'platform': Platform.operatingSystem // 플랫폼 정보
+  });
+}
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -78,8 +96,17 @@ void main() async {
       }
     }
   });
-
   // 포어그라운드 수신 코드 끝
+
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  firebaseMessaging.onTokenRefresh.listen((newToken) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      // 새 토큰을 Firestore에 저장
+      saveDeviceToken(appUser!.uid);
+      return;
+    }
+  });
+
   runApp(const MyApp());
 }
 

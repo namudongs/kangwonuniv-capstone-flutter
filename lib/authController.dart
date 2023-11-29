@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:io';
+
 import 'package:capstone/authentication/appUser.dart';
 import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {

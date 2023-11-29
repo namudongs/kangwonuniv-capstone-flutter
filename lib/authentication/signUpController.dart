@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'dart:io';
+
 import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/appUser.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -205,6 +208,8 @@ class SignUpController extends GetxController {
     }
   }
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   Future<void> registerUser() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final CollectionReference users =
@@ -258,9 +263,26 @@ class SignUpController extends GetxController {
 
       await users.doc(userCredential.user!.uid).set(appUser.toMap());
       snackBar('회원가입', '회원가입에 성공하였습니다.');
+
+      String? token = await _firebaseMessaging.getToken();
+      print("토큰: $token");
+      if (token != null) {
+        var tokenRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .collection('tokens')
+            .doc('token');
+
+        await tokenRef.set({
+          'token': token,
+          'createdAt': FieldValue.serverTimestamp(), // 토큰 생성 시간
+          'platform': Platform.operatingSystem // 플랫폼 정보
+        });
+      }
+
       auth.authStateChanges().listen((User? user) {
         if (user == null) {
-          snackBar('로그아웃', '로그아웃하였습니다.');
+          snackBar('로그아웃', '로그아웃 상태입니다.');
         } else {
           Get.offAll(() => BottomNavBar());
         }

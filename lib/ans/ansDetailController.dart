@@ -55,6 +55,7 @@ class AnsDetailController extends GetxController {
     });
   }
 
+  // ignore: non_constant_identifier_names
   Future<void> is_adopted(String articleId, String answerId) async {
     final DocumentReference articleRef = articles.doc(articleId);
     final DocumentReference answerRef =
