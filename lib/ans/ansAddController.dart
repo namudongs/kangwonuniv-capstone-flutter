@@ -11,6 +11,7 @@ class AnsAddController extends GetxController {
       Get.find<NotificationController>();
   RxString content = ''.obs;
   String articleId;
+  var isLoading = false.obs; // 상태 변수 (Observable)
 
   AnsAddController(this.articleId);
 
@@ -21,6 +22,9 @@ class AnsAddController extends GetxController {
     }
 
     try {
+      if (isLoading.value) return;
+      isLoading.value = true;
+
       await FirebaseFirestore.instance
           .collection('articles')
           .doc(articleId)
@@ -43,7 +47,7 @@ class AnsAddController extends GetxController {
         'answers_count': FieldValue.increment(1),
       });
 
-// 질문 문서에서 사용자 UID 조회
+      // 질문 문서에서 사용자 UID 조회
       DocumentSnapshot articleSnapshot = await articles.doc(articleId).get();
       String questionUserId = articleSnapshot['user']['uid'];
       print("질문자 UID: $questionUserId");
@@ -56,6 +60,7 @@ class AnsAddController extends GetxController {
 
       Get.back();
       snackBar('성공', '답변이 추가되었습니다.');
+      isLoading.value = false;
       content.value = '';
     } catch (e) {
       snackBar('오류', '답변 추가 중 오류가 발생했습니다: $e');

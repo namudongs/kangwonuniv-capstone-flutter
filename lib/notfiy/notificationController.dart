@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_print, empty_catches
 
 import 'dart:io';
-import 'dart:ui';
-
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +13,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class NotificationController extends GetxController {
+  var badgeCount = 0.obs;
+
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -88,6 +89,7 @@ class NotificationController extends GetxController {
     if (message.data['type'] == 'answer') {
       String articleId = message.data['articleId'];
       print('답변 알림을 받았습니다: $articleId');
+      incrementBadge();
       // 앱 내 해당 질문 페이지로 이동
       Get.offAll(() => BottomNavBar());
       BottomNavBarController bottomNavBarController =
@@ -97,6 +99,7 @@ class NotificationController extends GetxController {
     } else if (message.data['type'] == 'adopted') {
       String articleId = message.data['articleId'];
       print('채택 알림을 받았습니다: $articleId');
+      incrementBadge();
       // 앱 내 해당 질문 페이지로 이동
       Get.offAll(() => BottomNavBar());
       BottomNavBarController bottomNavBarController =
@@ -105,6 +108,7 @@ class NotificationController extends GetxController {
       Get.to(AnsDetailPage(articleId: articleId));
     } else {
       print('알 수 없는 알림을 받았습니다: ${message.data}');
+      incrementBadge();
     }
   }
 
@@ -207,5 +211,15 @@ class NotificationController extends GetxController {
     } catch (e) {
       print("알림 전송 실패: $e");
     }
+  }
+
+  void incrementBadge() {
+    badgeCount.value++; // 배지 카운트 증가
+    FlutterAppBadger.updateBadgeCount(badgeCount.value); // 배지 업데이트
+  }
+
+  void clearBadge() {
+    badgeCount.value = 0; // 배지 카운트 초기화
+    FlutterAppBadger.removeBadge(); // 배지 제거
   }
 }

@@ -86,7 +86,7 @@ class LoginController extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         print('로그인 성공\n이메일: $email, 비밀번호: $password');
-        notificationController.saveDeviceToken();
+
         await authController.fetchUserData();
         Get.offAll(() => BottomNavBar());
       }).catchError((e) {

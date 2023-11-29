@@ -54,14 +54,12 @@ class _QuAddPageState extends State<QuAddPage> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.check,
-            ),
-            onPressed: () {
-              controller.saveForm();
-            },
-          ),
+          controller.isLoading.value
+              ? const CircularProgressIndicator() // 로딩 중 로딩 인디케이터 표시
+              : IconButton(
+                  icon: const Icon(Icons.check),
+                  onPressed: () => controller.saveForm(),
+                ),
         ],
       ),
       body: SafeArea(

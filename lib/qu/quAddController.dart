@@ -13,6 +13,7 @@ class QuAddController extends GetxController {
   var content = ''.obs;
   var tag = ''.obs;
   var category = '카테고리'.obs;
+  var isLoading = false.obs;
 
   final CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
@@ -24,6 +25,9 @@ class QuAddController extends GetxController {
   }
 
   Future<void> saveForm() async {
+    if (isLoading.value) return;
+    isLoading.value = true;
+
     if (content.value.isEmpty) {
       snackBar('오류', '질문 내용을 입력해주세요');
       return;
@@ -64,6 +68,7 @@ class QuAddController extends GetxController {
         Get.to(() => AnsDetailPage(articleId: docRef.id));
 
         snackBar('성공', '질문이 등록되었습니다.');
+        isLoading.value = false;
       } catch (e) {
         snackBar('실패', '오류가 발생했습니다. $e');
       }

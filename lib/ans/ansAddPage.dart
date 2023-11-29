@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:capstone/ans/ansAddController.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,14 +56,12 @@ class _AnsAddPageState extends State<AnsAddPage> {
           },
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.check,
-            ),
-            onPressed: () {
-              controller.saveForm(widget.articleId);
-            },
-          ),
+          controller.isLoading.value
+              ? const CircularProgressIndicator() // 로딩 중 로딩 인디케이터 표시
+              : IconButton(
+                  icon: const Icon(Icons.check),
+                  onPressed: () => controller.saveForm(widget.articleId),
+                ),
         ],
       ),
       body: SafeArea(

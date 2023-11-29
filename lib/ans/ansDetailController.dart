@@ -68,8 +68,12 @@ class AnsDetailController extends GetxController {
       final DocumentSnapshot articleSnapshot = await articleRef.get();
       final Map<String, dynamic> articleData =
           articleSnapshot.data() as Map<String, dynamic>? ?? {};
+      final Map<String, dynamic> answerData =
+          (await answerRef.get()).data() as Map<String, dynamic>? ?? {};
+
       final String? currentUserId = appUser?.uid;
       final String? writerId = articleData['user']['uid'];
+      final String? answerWriterId = answerData['user']['uid'];
 
       if (currentUserId == null) {
         snackBar('오류', '사용자 정보를 찾을 수 없습니다.');
@@ -79,8 +83,9 @@ class AnsDetailController extends GetxController {
       if (currentUserId == writerId) {
         await articleRef.update({'is_adopted': true});
         await answerRef.update({'is_adopted': true});
+
         notificationController.sendPushNotification(
-            writerId!, "알림이 도착했어요", "답변이 채택되었습니다!", articleId);
+            answerWriterId!, "알림이 도착했어요", "답변이 채택되었습니다!", articleId);
 
         snackBar('성공', '채택되었습니다.');
       }
