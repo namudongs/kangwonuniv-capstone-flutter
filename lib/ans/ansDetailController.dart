@@ -1,6 +1,7 @@
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -11,6 +12,8 @@ class AnsDetailController extends GetxController {
   final CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
 
   AnsDetailController(this.articleId);
 
@@ -76,6 +79,9 @@ class AnsDetailController extends GetxController {
       if (currentUserId == writerId) {
         await articleRef.update({'is_adopted': true});
         await answerRef.update({'is_adopted': true});
+        notificationController.sendPushNotification(
+            writerId!, "알림이 도착했어요", "답변이 채택되었습니다!", articleId);
+
         snackBar('성공', '채택되었습니다.');
       }
     } catch (e) {

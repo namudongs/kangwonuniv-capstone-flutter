@@ -1,14 +1,10 @@
 // ignore_for_file: prefer_const_constructors
-
-import 'dart:io';
-
 import 'package:capstone/authentication/appUser.dart';
 import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
@@ -28,9 +24,11 @@ class AuthController extends GetxController {
     if (user != null) {
       // 사용자가 로그인한 경우, 사용자 데이터를 가져옵니다.
       fetchUserData();
+      print('사용자 로그인됨');
     } else {
       // 사용자가 로그아웃한 경우, 관련 로직을 처리합니다.
       // 예: 상태 초기화, 다른 화면으로 이동 등
+      print('사용자 로그아웃됨');
     }
   }
 

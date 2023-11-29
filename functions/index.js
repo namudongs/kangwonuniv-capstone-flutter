@@ -24,7 +24,10 @@ admin.initializeApp();
 
 exports.sendPushNotification = functions.https.onRequest(async (req, res) => {
   const userId = req.body.userId; // 요청으로부터 사용자 ID 받기
+  const title = req.body.title; // 알림 제목
   const message = req.body.message; // 알림 메시지
+  const type = req.body.type; // 알림 타입
+  const articleId = req.body.articleId; // 알림을 보낼 게시글 ID
 
   try {
     // 사용자의 토큰 문서 조회
@@ -50,8 +53,12 @@ exports.sendPushNotification = functions.https.onRequest(async (req, res) => {
     // 푸시 알림 데이터
     const payload = {
       notification: {
-        title: "내가 남긴 질문에 답변이 달렸어요!",
+        title: title,
         body: message,
+      },
+      data: {
+        type: type,
+        articleId: articleId,
       },
     };
 
@@ -60,7 +67,7 @@ exports.sendPushNotification = functions.https.onRequest(async (req, res) => {
 
     res.status(200).send(response);
   } catch (error) {
-    console.error("Error sending notification:", error);
+    console.error("(status500)알림 전송에 실패했습니다.:", error);
     res.status(500).send(error);
   }
 });

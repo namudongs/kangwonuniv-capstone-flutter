@@ -1,6 +1,7 @@
 import 'package:capstone/authController.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,8 @@ class LoginController extends GetxController {
   TextEditingController passwordController = TextEditingController();
 
   final AuthController authController = Get.put(AuthController());
+  final NotificationController notificationController =
+      Get.find<NotificationController>();
 
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
@@ -83,11 +86,11 @@ class LoginController extends GetxController {
           .signInWithEmailAndPassword(email: email, password: password)
           .then((value) async {
         print('로그인 성공\n이메일: $email, 비밀번호: $password');
+        notificationController.saveDeviceToken();
         await authController.fetchUserData();
         Get.offAll(() => BottomNavBar());
       }).catchError((e) {
-        print('로그인 실패\n이메일: $email, 비밀번호: $password');
-        print(e);
+        print('로그인 실패\n이메일: $email, 비밀번호: $password $e');
       });
     }
   }
