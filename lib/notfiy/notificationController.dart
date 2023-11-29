@@ -18,6 +18,7 @@ class NotificationController extends GetxController {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   var channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -205,12 +206,49 @@ class NotificationController extends GetxController {
 
       if (response.statusCode == 200) {
         print("알림 전송에 성공했습니다.");
+        await saveNotificationToFirestore(
+            userId, title, message, id); // Firestore에 알림 저장
       } else {
         print("알림 전송에 실패했습니다.");
       }
     } catch (e) {
       print("알림 전송 실패: $e");
     }
+  }
+
+  Future<void> saveNotificationToFirestore(
+      String userId, String title, String message, String id) async {
+    String notificationId = DateTime.now().millisecondsSinceEpoch.toString();
+
+    try {
+      await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('notifications')
+          .doc(notificationId)
+          .set({
+        'title': title,
+        'message': message,
+        'articleId': id,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      print("알림이 Firestore에 저장되었습니다.");
+    } catch (e) {
+      print("Firestore 저장 실패: $e");
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchNotifications(String userId) async {
+    QuerySnapshot querySnapshot = await firestore
+        .collection('users')
+        .doc(userId)
+        .collection('notifications')
+        .orderBy('timestamp', descending: true)
+        .get();
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
   }
 
   void incrementBadge() {
