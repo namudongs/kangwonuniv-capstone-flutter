@@ -45,12 +45,18 @@ class SignUpController extends GetxController {
     isNameEmpty.value = nameController.text.isEmpty;
   }
 
-  void checkEmailValidity() {
-    isEmailValid.value = emailController.text.length >= 6;
+  bool checkEmailValidity() {
+    String email = emailController.text;
+    RegExp emailRegExp = RegExp(
+      r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
+      caseSensitive: false,
+      multiLine: false,
+    );
+    return emailRegExp.hasMatch(email);
   }
 
   void checkPasswordValidity() {
-    isPasswordValid.value = passwordController.text.length >= 6;
+    isPasswordValid.value = passwordController.text.length >= 8;
   }
 
   void checkNameValidity() {
@@ -157,26 +163,6 @@ class SignUpController extends GetxController {
     // ... 추가 대학교
   ];
 
-  final List<String> gradeList = [
-    '1학년',
-    '2학년',
-    '3학년',
-    '4학년',
-    '졸업생',
-  ];
-
-  Map<String, int> gradeToInt = {
-    '1학년': 1,
-    '2학년': 2,
-    '3학년': 3,
-    '4학년': 4,
-    '졸업생': 5,
-  };
-
-  int convertGradeToInt(String grade) {
-    return gradeToInt[grade] ?? 1; // 기본값을 1학년으로 설정
-  }
-
   Map<String, List<String>> collegeDepartmentMap = {
     '경영대학': ['경영학과', '경제학과', '국제무역학과'],
     '인문대학': ['국어국문학과', '영어영문학과', '중어중문학과'],
@@ -204,6 +190,26 @@ class SignUpController extends GetxController {
     // 다른 단과대학과 학과도 이곳에 추가
   };
 
+  final List<String> gradeList = [
+    '1학년',
+    '2학년',
+    '3학년',
+    '4학년',
+    '졸업생',
+  ];
+
+  Map<String, int> gradeToInt = {
+    '1학년': 1,
+    '2학년': 2,
+    '3학년': 3,
+    '4학년': 4,
+    '졸업생': 5,
+  };
+
+  int convertGradeToInt(String grade) {
+    return gradeToInt[grade] ?? 1; // 기본값을 1학년으로 설정
+  }
+
   void updatedGrade(String grade) {
     selectedGrade.value = grade;
   }
@@ -228,7 +234,7 @@ class SignUpController extends GetxController {
       return;
     }
     if (!isPasswordValid.value) {
-      snackBar('오류', '유효하지 않은 비밀번호입니다.');
+      snackBar('오류', '비밀번호는 8자리 이상이어야 합니다.');
       return;
     }
     if (isNameEmpty.value || !isNameChecked.value || !isNameValid.value) {
@@ -328,6 +334,11 @@ class SignUpController extends GetxController {
 
     nameFocusNode.addListener(() {
       isNameFocused.value = nameFocusNode.hasFocus;
+    });
+
+    emailController.addListener(() {
+      isEmailValid.value = checkEmailValidity();
+      checkEmailEmpty(); // 이메일이 비어 있는지도 체크
     });
   }
 

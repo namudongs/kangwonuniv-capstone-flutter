@@ -61,7 +61,7 @@ class LoginPage extends StatelessWidget {
                     : (controller.isEmailValid.value
                         ? _buildValidationMessage('이메일이 유효합니다.', true, context)
                         : _buildValidationMessage(
-                            '이메일이 유효하지 않습니다.', false, context))),
+                            '이메일이 형식이 유효하지 않습니다.', false, context))),
                 const SizedBox(
                   height: 10,
                 ),

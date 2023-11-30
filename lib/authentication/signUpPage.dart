@@ -319,6 +319,12 @@ class SignUpPage extends StatelessWidget {
   }
 
   void _showModal(BuildContext context) {
+    // 검색어를 위한 컨트롤러
+    TextEditingController searchController = TextEditingController();
+
+    // 검색된 대학 목록을 관리하기 위한 상태 변수
+    List<String> filteredUniversities = controller.universities;
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -327,7 +333,31 @@ class SignUpPage extends StatelessWidget {
             margin: const EdgeInsets.only(top: 10),
             child: Column(
               children: <Widget>[
-                ...controller.universities
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      labelText: '대학 검색',
+                      suffixIcon: Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      // 검색어에 따라 대학 목록 필터링
+                      if (value.isEmpty) {
+                        filteredUniversities = controller.universities;
+                      } else {
+                        filteredUniversities = controller.universities
+                            .where((university) => university
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
+                            .toList();
+                      }
+                      // UI 업데이트
+                      (context as Element).markNeedsBuild();
+                    },
+                  ),
+                ),
+                ...filteredUniversities
                     .map((university) => ListTile(
                           title: Text(university),
                           onTap: () => _showDepartments(context, university),
@@ -344,34 +374,79 @@ class SignUpPage extends StatelessWidget {
   void _showDepartments(BuildContext context, String university) {
     Get.back();
 
+// 검색어를 위한 컨트롤러
+    TextEditingController searchController = TextEditingController();
+
+    // 필터링된 대학 부서 목록을 관리하기 위한 상태 변수
+    Map<String, List<String>> filteredCollegeDepartmentMap =
+        Map.from(controller.collegeDepartmentMap);
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return ListView.builder(
-          itemCount: controller.collegeDepartmentMap.length,
-          itemBuilder: (BuildContext context, int index) {
-            String college =
-                controller.collegeDepartmentMap.keys.elementAt(index);
-            return ExpansionTileCard(
-              elevation: 0,
-              baseColor: Colors.transparent, // 배경색 투명 설정
-              expandedColor: Colors.transparent, // 배경색 투명 설정
-              title: Text(college),
-              borderRadius: const BorderRadius.all(Radius.circular(30)),
-              children: controller.collegeDepartmentMap[college]!
-                  .map((department) => ListTile(
-                        title: Text(department),
-                        onTap: () {
-                          Get.back();
-                          controller.selectedCollege = college;
-                          controller.selectedUniv = university;
-                          controller.selectedMajor = department;
-                          controller.updateSelectedInfo(); // 정보 업데이트 호출
-                        },
-                      ))
-                  .toList(),
-            );
-          },
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+              child: TextField(
+                controller: searchController,
+                decoration: const InputDecoration(
+                  labelText: '학과 검색',
+                  suffixIcon: Icon(Icons.search),
+                ),
+                onChanged: (value) {
+                  if (value.isEmpty) {
+                    filteredCollegeDepartmentMap =
+                        Map.from(controller.collegeDepartmentMap);
+                  } else {
+                    filteredCollegeDepartmentMap.clear();
+                    controller.collegeDepartmentMap
+                        .forEach((college, departments) {
+                      List<String> filteredDepartments = departments
+                          .where((department) => department
+                              .toLowerCase()
+                              .contains(value.toLowerCase()))
+                          .toList();
+                      if (filteredDepartments.isNotEmpty) {
+                        filteredCollegeDepartmentMap[college] =
+                            filteredDepartments;
+                      }
+                    });
+                  }
+                  // UI 업데이트
+                  (context as Element).markNeedsBuild();
+                },
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.collegeDepartmentMap.length,
+                itemBuilder: (BuildContext context, int index) {
+                  String college =
+                      controller.collegeDepartmentMap.keys.elementAt(index);
+                  return ExpansionTileCard(
+                    elevation: 0,
+                    baseColor: Colors.transparent, // 배경색 투명 설정
+                    expandedColor: Colors.transparent, // 배경색 투명 설정
+                    title: Text(college),
+                    borderRadius: const BorderRadius.all(Radius.circular(30)),
+                    children: controller.collegeDepartmentMap[college]!
+                        .map((department) => ListTile(
+                              title: Text(department),
+                              onTap: () {
+                                Get.back();
+                                controller.selectedCollege = college;
+                                controller.selectedUniv = university;
+                                controller.selectedMajor = department;
+                                controller.updateSelectedInfo(); // 정보 업데이트 호출
+                              },
+                            ))
+                        .toList(),
+                  );
+                },
+              ),
+            ),
+          ],
         );
       },
     );
