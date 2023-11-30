@@ -41,7 +41,7 @@ class ProfilePage extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              '${appUser?.qu ?? 0}QU',
+              '${appUser?.qu ?? 0} QU',
               style: const TextStyle(
                 fontSize: 15,
                 color: Color.fromARGB(255, 43, 21, 21),
