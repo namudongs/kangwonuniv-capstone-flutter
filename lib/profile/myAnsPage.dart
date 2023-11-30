@@ -26,17 +26,39 @@ class MyAnsPage extends StatelessWidget {
             return const Center(child: Text('작성한 답변이 없습니다'));
           }
 
-          return ListView(
-            children: snapshot.data!.docs.map((doc) {
-              // 여기서 각 문서의 ID (질문 ID)를 사용하여 ListTile 생성
-              return ListTile(
-                title: Text('질문의 콘텐츠: ${doc['content']}'), // 질문의 제목을 표시
-                onTap: () {
-                  // 상세페이지 이동하기
-                  Get.to(() => AnsDetailPage(articleId: doc.id));
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var doc = snapshot.data!.docs[index];
+
+              return FutureBuilder<QuerySnapshot>(
+                future: doc.reference
+                    .collection('answer')
+                    .where('user.uid', isEqualTo: appUser!.uid)
+                    .get(),
+                builder:
+                    (context, AsyncSnapshot<QuerySnapshot> answerSnapshot) {
+                  if (answerSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const SizedBox.shrink(); // 로딩 위젯을 표시할 수 있습니다.
+                  }
+
+                  if (!answerSnapshot.hasData ||
+                      answerSnapshot.data!.docs.isEmpty) {
+                    return const SizedBox.shrink(); // 답변이 없는 경우
+                  }
+
+                  var answerContent =
+                      answerSnapshot.data!.docs.first.get('content');
+                  return ListTile(
+                    title: Text('답변 내용: $answerContent'),
+                    onTap: () {
+                      Get.to(() => AnsDetailPage(articleId: doc.id));
+                    },
+                  );
                 },
               );
-            }).toList(),
+            },
           );
         },
       ),
