@@ -16,6 +16,8 @@ class AnsAddController extends GetxController {
   AnsAddController(this.articleId);
 
   Future<void> saveForm(String articleId) async {
+    final CollectionReference users =
+        FirebaseFirestore.instance.collection('users');
     if (content.value.isEmpty) {
       Get.snackbar('오류', '답변 내용을 입력해주세요', snackPosition: SnackPosition.BOTTOM);
       return;
@@ -25,7 +27,7 @@ class AnsAddController extends GetxController {
       if (isLoading.value) return;
       isLoading.value = true;
 
-      await FirebaseFirestore.instance
+      DocumentReference answerRef = await FirebaseFirestore.instance
           .collection('articles')
           .doc(articleId)
           .collection('answer')
@@ -43,8 +45,13 @@ class AnsAddController extends GetxController {
         },
       });
 
+      await users.doc(appUser!.uid).update({
+        'answers': FieldValue.arrayUnion([answerRef.id])
+      });
+
       await articles.doc(articleId).update({
         'answers_count': FieldValue.increment(1),
+        'user_answers_uids': FieldValue.arrayUnion([appUser!.uid])
       });
 
       // 질문 문서에서 사용자 UID 조회

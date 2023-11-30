@@ -161,10 +161,12 @@ class _HomePageState extends State<HomePage> {
                             }
 
                             totalArticles = snapshot.data?.length ?? 0;
+                            int itemCount =
+                                totalArticles < 3 ? totalArticles : 3;
 
                             return ListView.builder(
                               controller: _pageController,
-                              itemCount: 3,
+                              itemCount: itemCount,
                               itemBuilder: (context, index) {
                                 var article = snapshot.data?[index];
                                 if (article == null) {

@@ -32,7 +32,7 @@ class _NotifyPageState extends State<NotifyPage> {
   @override
   Widget build(BuildContext context) {
     // 여기서 사용자 ID를 어떻게 처리할지는 앱의 나머지 부분에 달려있습니다.
-    String userId = appUser!.uid;
+    String userId = appUser?.uid ?? '이름 없음';
 
     return Scaffold(
       appBar: AppBar(
