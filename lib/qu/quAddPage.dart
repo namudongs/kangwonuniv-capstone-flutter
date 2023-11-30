@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:capstone/qu/categoryController.dart';
 import 'package:capstone/qu/quAddController.dart';
 import 'package:capstone/qu/selectCategoryPage.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
@@ -167,13 +166,35 @@ class _QuAddPageState extends State<QuAddPage> {
                     children: [
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.image),
-                          ),
-                          IconButton(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.video_call),
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, bottom: 10),
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromARGB(150, 157, 0, 0),
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add,
+                                      size: 13,
+                                      color: Color.fromARGB(200, 157, 0, 0)),
+                                  Text(
+                                    '이미지',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(200, 157, 0, 0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),

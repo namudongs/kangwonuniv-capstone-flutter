@@ -104,13 +104,31 @@ class _AnsEditPageState extends State<AnsEditPage> {
                     children: [
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.image),
-                          ),
-                          IconButton(
-                            onPressed: _pickVideo,
-                            icon: const Icon(Icons.video_call),
+                          Container(
+                            margin: const EdgeInsets.only(left: 20, bottom: 10),
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: const Color.fromARGB(150, 157, 0, 0),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add,
+                                    size: 13,
+                                    color: Color.fromARGB(200, 157, 0, 0)),
+                                Text(
+                                  '답변 수정 시 이미지는 수정할 수 없습니다.',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromARGB(200, 157, 0, 0),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -129,17 +147,5 @@ class _AnsEditPageState extends State<AnsEditPage> {
         ),
       ),
     );
-  }
-
-  Future<void> _pickImage() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {}
-  }
-
-  Future<void> _pickVideo() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-    if (video != null) {}
   }
 }

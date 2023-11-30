@@ -88,7 +88,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
                             hintText:
-                                '답변 내용을 입력해주세요.\n\n이용 약관에 위반되거나 부적절한 답변은 삭제될 수 있습니다.\n질문과 무관한 답변 작성 시 이용이 제한될 수 있습니다.\n채택된 답변이 있는 경우 작성한 답변을 수정할 수 없습니다.',
+                                '답변 내용을 입력해주세요.\n\n이용 약관에 위반되거나 부적절한 답변은 삭제될 수 있습니다.\n질문과 무관한 답변 작성 시 이용이 제한될 수 있습니다.\n채택된 답변이 있는 경우 작성한 답변을 수정할 수 없습니다.\n답변 작성 이후 이미지를 수정/삭제할 수 없습니다.',
                           ),
                           style: const TextStyle(
                             fontSize: 13,
@@ -115,13 +115,35 @@ class _AnsAddPageState extends State<AnsAddPage> {
                     children: [
                       Row(
                         children: [
-                          IconButton(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.image),
-                          ),
-                          IconButton(
-                            onPressed: _pickImage,
-                            icon: const Icon(Icons.video_call),
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              margin:
+                                  const EdgeInsets.only(left: 20, bottom: 10),
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: const Color.fromARGB(150, 157, 0, 0),
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add,
+                                      size: 13,
+                                      color: Color.fromARGB(200, 157, 0, 0)),
+                                  Text(
+                                    '이미지',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(200, 157, 0, 0),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
