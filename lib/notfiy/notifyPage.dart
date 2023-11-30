@@ -54,24 +54,32 @@ class _NotifyPageState extends State<NotifyPage> {
                 var notification = snapshot.data![index];
                 String formattedTime =
                     formatTimestamp(notification['timestamp']);
-                return ListTile(
-                  title: Text(formattedTime),
-                  subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(notification['title']),
-                      Text(notification['message']),
-                      Divider(
-                        height: 20,
-                        thickness: 1,
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
                         color: Colors.grey.withOpacity(0.3),
                       ),
-                    ],
+                    ),
                   ),
-                  onTap: () {
-                    Get.to(AnsDetailPage(articleId: notification['articleId']));
-                  },
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ListTile(
+                    leading: const Icon(Icons.notifications,
+                        color: Color.fromARGB(255, 157, 0, 0)), // 아이콘 추가
+                    title: Text(
+                      notification['title'],
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold), // 제목 스타일 조정
+                    ),
+                    subtitle: Text(notification['message']),
+                    trailing: Text(formattedTime,
+                        style:
+                            const TextStyle(color: Colors.grey)), // 날짜 스타일 조정
+                    onTap: () {
+                      Get.to(
+                          AnsDetailPage(articleId: notification['articleId']));
+                    },
+                  ),
                 );
               },
             );

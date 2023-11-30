@@ -25,7 +25,7 @@ class AnsDetailPage extends StatelessWidget {
       floatingActionButton: Obx(() {
         return Visibility(
           // visible: controller.articleData.value?['is_adopted'] == false,
-          visible: controller.articleData.value?['user']['uid'] == appUser?.uid,
+          visible: controller.articleData.value?['user']['uid'] != appUser?.uid,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
