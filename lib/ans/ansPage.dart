@@ -125,15 +125,6 @@ class AnsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      documentSnapshot['content'].replaceAll('\n', ' '),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black.withOpacity(0.8),
-                      ),
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
-                    ),
                     if (imageUrls.isNotEmpty)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(10),
@@ -144,6 +135,15 @@ class AnsPage extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
+                    Text(
+                      documentSnapshot['content'].replaceAll('\n', ' '),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black.withOpacity(0.8),
+                      ),
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ),
               ),

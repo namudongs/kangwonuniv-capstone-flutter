@@ -92,7 +92,7 @@ class AnsDetailPage extends StatelessWidget {
             }
 
             var articleData = controller.articleData.value!;
-            var images = articleData['images'] ?? [];
+            var articleImages = articleData['images'] ?? [];
             var answersData = controller.answersData;
 
             return Column(
@@ -169,7 +169,7 @@ class AnsDetailPage extends StatelessWidget {
                                       )),
                                 ],
                               ),
-                              _buildImageList(context, images),
+                              _buildImageList(context, articleImages, 0.8, 0.6),
                               const SizedBox(height: 10),
                               Text(
                                 articleData['content'],
@@ -313,213 +313,9 @@ class AnsDetailPage extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-// ---------------------------------------------답변-------------------------------------------------------------------------------------
                       for (var answer in answersData)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              child: CircleAvatar(
-                                radius: 30, // 원하는 반지름 크기
-                                backgroundImage: AssetImage(
-                                    answer['user']['avatar']), // 이미지 경로
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, bottom: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.8,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: answer['is_adopted'] == true
-                                      ? const Color.fromARGB(35, 157, 0, 0)
-                                      : Colors.grey[50],
-                                  border: Border.all(
-                                    color: Colors.grey[100]!,
-                                  ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Visibility(
-                                      visible: appUser?.uid ==
-                                              articleData['user']['uid'] &&
-                                          appUser?.uid !=
-                                              answer['user']['uid'] &&
-                                          articleData['is_adopted'] == false,
-                                      child: Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 5),
-                                        padding: const EdgeInsets.all(5),
-                                        width: 160,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              20, 157, 0, 0),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            controller.is_adopted(
-                                                articleId, answer['id']);
-                                          },
-                                          child: const Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Icon(CupertinoIcons.checkmark,
-                                                  size: 15,
-                                                  color: Color.fromARGB(
-                                                      255, 146, 0, 0)),
-                                              SizedBox(width: 3),
-                                              Text(
-                                                '도움이 되었다면 채택하기',
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  // fontWeight: FontWeight.bold,
-                                                  color: Color.fromARGB(
-                                                      255, 146, 0, 0),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible:
-                                          articleData['is_adopted'] == true &&
-                                              answer['is_adopted'] == true,
-                                      child: Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0, 0, 0, 10),
-                                        // padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          // color: Colors.red[100],
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: const Row(
-                                          children: [
-                                            Icon(
-                                              Icons.check_circle,
-                                              size: 17,
-                                              color: Color.fromARGB(
-                                                  255, 157, 0, 0),
-                                            ),
-                                            SizedBox(width: 3),
-                                            Text(
-                                              '채택된 답변입니다.',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.normal,
-                                                  color: Color.fromARGB(
-                                                      255, 157, 0, 0)),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '${answer['user']['name']}',
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      formatTimestamp(answer['created_at']),
-                                      style: const TextStyle(
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      answer['content'],
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: answer['user']['uid'] ==
-                                              appUser?.uid &&
-                                          articleData['is_adopted'] == false,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.to(AnsEditPage(
-                                                articleId: articleId,
-                                                answerId: answer['id'],
-                                              ));
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10),
-                                              width: 35,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[100],
-                                                border: Border.all(
-                                                  color: Colors.grey[300]!,
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                '수정',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 5),
-                                          GestureDetector(
-                                            onTap: () {
-                                              controller.ansDelete(
-                                                  articleId, answer['id']);
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10),
-                                              width: 35,
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[100],
-                                                border: Border.all(
-                                                  color: Colors.grey[300]!,
-                                                ),
-                                              ),
-                                              child: const Text(
-                                                '삭제',
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        _answerWidget(answer, articleData, articleId,
+                            controller, context),
                     ],
                   ),
                 ),
@@ -531,7 +327,201 @@ class AnsDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildImageList(BuildContext context, List<dynamic> files) {
+  Widget _answerWidget(Map<String, dynamic> answer,
+      Map<String, dynamic> articleData, String articleId, controller, context) {
+    List<dynamic> answerImages = answer['images'] ?? [];
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 30,
+          child: CircleAvatar(
+            radius: 30, // 원하는 반지름 크기
+            backgroundImage: AssetImage(answer['user']['avatar']), // 이미지 경로
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 20),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: answer['is_adopted'] == true
+                  ? const Color.fromARGB(35, 157, 0, 0)
+                  : Colors.grey[50],
+              border: Border.all(
+                color: Colors.grey[100]!,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Visibility(
+                  visible: appUser?.uid == articleData['user']['uid'] &&
+                      appUser?.uid != answer['user']['uid'] &&
+                      articleData['is_adopted'] == false,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+                    padding: const EdgeInsets.all(5),
+                    width: 160,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(20, 157, 0, 0),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.is_adopted(articleId, answer['id']);
+                      },
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Icon(CupertinoIcons.checkmark,
+                              size: 15, color: Color.fromARGB(255, 146, 0, 0)),
+                          SizedBox(width: 3),
+                          Text(
+                            '도움이 되었다면 채택하기',
+                            style: TextStyle(
+                              fontSize: 11,
+                              // fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 146, 0, 0),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: articleData['is_adopted'] == true &&
+                      answer['is_adopted'] == true,
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    // padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      // color: Colors.red[100],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          size: 17,
+                          color: Color.fromARGB(255, 157, 0, 0),
+                        ),
+                        SizedBox(width: 3),
+                        Text(
+                          '채택된 답변입니다.',
+                          style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.normal,
+                              color: Color.fromARGB(255, 157, 0, 0)),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${answer['user']['name']}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  formatTimestamp(answer['created_at']),
+                  style: const TextStyle(
+                    fontSize: 10,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      answer['content'],
+                      style: const TextStyle(
+                        fontSize: 14,
+                      ),
+                    ),
+                    _buildImageList(context, answerImages, 0.6, 0.4)
+                  ],
+                ),
+                Visibility(
+                  visible: answer['user']['uid'] == appUser?.uid &&
+                      articleData['is_adopted'] == false,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(AnsEditPage(
+                            articleId: articleId,
+                            answerId: answer['id'],
+                          ));
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          width: 35,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            border: Border.all(
+                              color: Colors.grey[300]!,
+                            ),
+                          ),
+                          child: const Text(
+                            '수정',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          controller.ansDelete(articleId, answer['id']);
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          width: 35,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            border: Border.all(
+                              color: Colors.grey[300]!,
+                            ),
+                          ),
+                          child: const Text(
+                            '삭제',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildImageList(
+      BuildContext context, List<dynamic> files, var width, var height) {
     List<String> imageUrls =
         files.map((file) => file['url'].toString()).toList();
 
@@ -550,8 +540,8 @@ class AnsDetailPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             child: Image.network(
               imageUrls[0],
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.6,
+              width: MediaQuery.of(context).size.width * width,
+              height: MediaQuery.of(context).size.width * height,
               fit: BoxFit.cover,
             ),
           ),
@@ -565,7 +555,7 @@ class AnsDetailPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
-                '클릭하면 나머지 ${imageUrls.length}개 사진을 더 볼 수 있어요',
+                '클릭하면 나머지 ${imageUrls.length - 1}개 사진을 더 볼 수 있어요',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 8,

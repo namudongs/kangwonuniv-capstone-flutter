@@ -158,7 +158,6 @@ class _QuAddPageState extends State<QuAddPage> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _buildSelectedImages(),

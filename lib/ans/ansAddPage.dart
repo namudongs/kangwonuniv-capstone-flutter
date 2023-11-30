@@ -106,7 +106,9 @@ class _AnsAddPageState extends State<AnsAddPage> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  _buildSelectedImages(),
                   Divider(color: Colors.grey.withOpacity(0.5)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,7 +120,7 @@ class _AnsAddPageState extends State<AnsAddPage> {
                             icon: const Icon(Icons.image),
                           ),
                           IconButton(
-                            onPressed: _pickVideo,
+                            onPressed: _pickImage,
                             icon: const Icon(Icons.video_call),
                           ),
                         ],
@@ -143,12 +145,42 @@ class _AnsAddPageState extends State<AnsAddPage> {
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {}
+    if (image != null) {
+      controller.addImage(image); // 이미지 추가
+    }
   }
 
-  Future<void> _pickVideo() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? video = await picker.pickVideo(source: ImageSource.gallery);
-    if (video != null) {}
+  // 화면에 이미지 표시하는 위젯
+  Widget _buildSelectedImages() {
+    return Obx(() => Wrap(
+          children: controller.selectedImages.map((image) {
+            return Container(
+              margin: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.topRight,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      File(image.path),
+                      width: 90,
+                      height: 90,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Positioned(
+                    top: -20,
+                    right: -20,
+                    child: IconButton(
+                      icon: const Icon(Icons.remove_circle),
+                      onPressed: () => controller.removeImage(image), // 이미지 제거
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ));
   }
 }

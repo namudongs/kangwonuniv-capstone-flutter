@@ -144,40 +144,33 @@ class AnsDetailController extends GetxController {
           questionSnapshot.data() as Map<String, dynamic>?;
 
       if (data != null) {
-        List<dynamic> images = data['images'] ?? [];
+        // 질문의 이미지 삭제
+        List<dynamic> questionImages = data['images'] ?? [];
+        await _deleteImagesFromStorage(questionImages);
 
-        // Firebase Storage에서 이미지 파일들을 삭제
-        for (var img in images) {
-          if (img is Map<String, dynamic>) {
-            String? filePath = img['fileName'];
-            print(filePath);
-            if (filePath != null) {
-              await FirebaseStorage.instance.ref('uploads/$filePath').delete();
-            }
-          }
-        }
-
-        // Firestore에서 답변들을 삭제
+        // Firestore에서 답변들을 삭제하며 각 답변의 이미지도 삭제
         final CollectionReference answersRef =
             articles.doc(articleId).collection('answer');
         final QuerySnapshot answersSnapshot = await answersRef.get();
-        for (var doc in answersSnapshot.docs) {
-          batch.delete(doc.reference);
+
+        for (var answerDoc in answersSnapshot.docs) {
+          // 답변 문서에서 이미지 정보 가져오기
+          Map<String, dynamic>? answerData =
+              answerDoc.data() as Map<String, dynamic>?;
+          List<dynamic> answerImages = answerData?['images'] ?? [];
+          await _deleteImagesFromStorage(answerImages);
+
+          // 답변 문서 삭제
+          batch.delete(answerDoc.reference);
         }
 
-        // Firestore에서 질문 문서를 삭제
+        // 질문 문서 삭제
         batch.delete(articles.doc(articleId));
         await batch.commit();
       }
 
       snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
-      Get.offAll(() => BottomNavBar());
-      BottomNavBarController bottomNavBarController =
-          Get.put(BottomNavBarController());
-      bottomNavBarController.goToAnsPage();
-      AuthController authController = Get.find<AuthController>();
-      await authController.increaseUserQu(appUser?.uid ?? '', 50);
-      await authController.fetchUserData();
+      // 나머지 코드...
     } catch (e) {
       // 예외 처리
       snackBar('오류', '질문 삭제 중 오류 발생: $e');
@@ -187,6 +180,23 @@ class AnsDetailController extends GetxController {
 
   Future<void> ansDelete(String articleId, String answerId) async {
     try {
+      // 답변 문서 가져오기
+      DocumentSnapshot answerSnapshot = await firestore
+          .collection('articles')
+          .doc(articleId)
+          .collection('answer')
+          .doc(answerId)
+          .get();
+
+      Map<String, dynamic>? data =
+          answerSnapshot.data() as Map<String, dynamic>?;
+      if (data != null) {
+        // 이미지 삭제
+        List<dynamic> images = data['images'] ?? [];
+        await _deleteImagesFromStorage(images);
+      }
+
+      // 답변 문서 삭제
       await firestore
           .collection('articles')
           .doc(articleId)
@@ -194,6 +204,7 @@ class AnsDetailController extends GetxController {
           .doc(answerId)
           .delete();
 
+      // 답변 카운트 감소
       await firestore
           .collection('articles')
           .doc(articleId)
@@ -206,6 +217,21 @@ class AnsDetailController extends GetxController {
       await authController.fetchUserData();
     } catch (e) {
       snackBar('오류', '답변 삭제 중 오류 발생: $e');
+    }
+  }
+
+  Future<void> _deleteImagesFromStorage(List<dynamic> images) async {
+    for (var img in images) {
+      if (img is Map<String, dynamic>) {
+        String? filePath = img['fileName'];
+        if (filePath != null) {
+          try {
+            await FirebaseStorage.instance.ref('uploads/$filePath').delete();
+          } catch (e) {
+            print('Error deleting file: $e');
+          }
+        }
+      }
     }
   }
 }
