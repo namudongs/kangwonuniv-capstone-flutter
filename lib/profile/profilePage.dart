@@ -101,13 +101,6 @@ class ProfilePage extends StatelessWidget {
             child: ListView(
               children: <Widget>[
                 ListTile(
-                  leading: const Icon(Icons.announcement),
-                  title: const Text('공지사항'),
-                  onTap: () {
-                    // 공지사항 탭 동작
-                  },
-                ),
-                ListTile(
                   leading: const Icon(Icons.settings),
                   title: const Text('설정'),
                   onTap: () {
@@ -115,9 +108,44 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  leading: const Icon(Icons.notifications),
+                  title: const Text('공지사항'),
+                  onTap: () {
+                    // 공지사항 탭 동작
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.help),
+                  title: const Text('도움말'),
+                  onTap: () {
+                    // 도움말 탭 동작
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.article),
+                  title: const Text('약관'),
+                  onTap: () {
+                    // 도움말 탭 동작
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.info),
+                  title: const Text('서비스 정보'),
+                  onTap: () {
+                    // 도움말 탭 동작
+                  },
+                ),
+                ListTile(
                   leading: const Icon(Icons.exit_to_app),
                   title: const Text('로그아웃'),
                   onTap: authController.signOut,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.delete),
+                  title: const Text('회원탈퇴'),
+                  onTap: () {
+                    // 회원탈퇴 탭 동작
+                  },
                 ),
               ],
             ),
