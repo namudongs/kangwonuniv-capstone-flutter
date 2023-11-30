@@ -27,7 +27,10 @@ class AnsDetailController extends GetxController {
 
   Stream<Map<String, dynamic>?> getArticleStream(String articleId) {
     return articles.doc(articleId).snapshots().map((snapshot) {
-      return snapshot.data() as Map<String, dynamic>?;
+      var data = snapshot.data() as Map<String, dynamic>?;
+      // 이미지 URL을 포함하는 'images' 필드를 처리 (필드가 없다면 빈 배열로 초기화)
+      data?['images'] = data['images'] ?? [];
+      return data;
     });
   }
 

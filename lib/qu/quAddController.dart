@@ -1,13 +1,17 @@
 // ignore_for_file: file_names
 
+import 'dart:io';
+
 import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/authController.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/qu/categoryController.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
 class QuAddController extends GetxController {
   var title = ''.obs;
@@ -15,6 +19,7 @@ class QuAddController extends GetxController {
   var tag = ''.obs;
   var category = '카테고리'.obs;
   var isLoading = false.obs;
+  var selectedImages = <XFile>[].obs;
 
   final CollectionReference articles =
       FirebaseFirestore.instance.collection('articles');
@@ -24,6 +29,16 @@ class QuAddController extends GetxController {
 
   void updateCategory(String newCategory) {
     category.value = newCategory;
+  }
+
+  // 이미지 추가 함수
+  void addImage(XFile image) {
+    selectedImages.add(image);
+  }
+
+  // 이미지 제거 함수
+  void removeImage(XFile image) {
+    selectedImages.remove(image);
   }
 
   Future<void> saveForm() async {
@@ -49,6 +64,7 @@ class QuAddController extends GetxController {
           'likes_uid': [],
           'is_adopted': false,
           'qu': 0,
+          'images': [],
           'user': {
             'uid': appUser!.uid,
             'name': appUser!.userName,
@@ -59,10 +75,27 @@ class QuAddController extends GetxController {
           },
         });
 
+        // 선택된 이미지를 Firebase Storage에 업로드하고 URL을 가져옴
+        List<Map<String, dynamic>> uploadedImages = [];
+        for (var image in selectedImages) {
+          String imageUrl = await uploadFile(image);
+          uploadedImages.add({
+            'url': imageUrl,
+            'fileName': image.name,
+            // 여기에 추가 이미지 정보를 넣을 수 있습니다.
+          });
+        }
+
+        // Firestore 문서에 이미지 정보 업데이트
+        if (uploadedImages.isNotEmpty) {
+          await docRef.update({'images': uploadedImages});
+        }
+
         categoryController.updateCategory('카테고리');
         title.value = '';
         content.value = '';
         tag.value = '';
+        selectedImages.clear();
 
         Get.back();
         BottomNavBarController bottomNavBarController =
@@ -79,7 +112,58 @@ class QuAddController extends GetxController {
         isLoading.value = false;
       } catch (e) {
         snackBar('실패', '오류가 발생했습니다. $e');
+        isLoading.value = false;
       }
+    }
+  }
+
+  Future<void> uploadFileToFirebaseStorage(String articleId, XFile file) async {
+    print('호출되었습니다.');
+    String fileName = file.name;
+    String filePath = 'articles/$articleId/$fileName';
+    File fileToUpload = File(file.path);
+
+    try {
+      print('파일 업로드를 시작합니다.');
+      // 파일을 Firebase Storage에 업로드
+      await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
+
+      // 업로드된 파일의 URL 가져오기
+      String downloadURL =
+          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+
+      // Firestore에 파일 정보 저장
+      await FirebaseFirestore.instance
+          .collection('articles')
+          .doc(articleId)
+          .update({
+        'files': FieldValue.arrayUnion([
+          {'url': downloadURL, 'fileName': fileName, 'fileType': file.mimeType}
+        ])
+      });
+      print('이미지가 저장되었습니다.');
+    } catch (e) {
+      print(e);
+      // 오류 처리
+    }
+  }
+
+  Future<String> uploadFile(XFile file) async {
+    String fileName = '${DateTime.now().millisecondsSinceEpoch}_${file.name}';
+    String filePath = 'uploads/$fileName';
+    File fileToUpload = File(file.path);
+
+    try {
+      // 파일을 Firebase Storage에 업로드
+      await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
+
+      // 업로드된 파일의 URL 가져오기
+      String downloadURL =
+          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print('Error uploading file: $e');
+      return '';
     }
   }
 }

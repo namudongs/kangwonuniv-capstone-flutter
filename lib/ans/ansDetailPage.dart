@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:capstone/ans/imageViewer.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
@@ -91,6 +92,7 @@ class AnsDetailPage extends StatelessWidget {
             }
 
             var articleData = controller.articleData.value!;
+            var images = articleData['images'] ?? [];
             var answersData = controller.answersData;
 
             return Column(
@@ -167,6 +169,8 @@ class AnsDetailPage extends StatelessWidget {
                                       )),
                                 ],
                               ),
+                              _buildImageList(context, images),
+                              const SizedBox(height: 10),
                               Text(
                                 articleData['content'],
                                 style: const TextStyle(
@@ -523,6 +527,54 @@ class AnsDetailPage extends StatelessWidget {
             );
           }),
         ),
+      ),
+    );
+  }
+
+  Widget _buildImageList(BuildContext context, List<dynamic> files) {
+    List<String> imageUrls =
+        files.map((file) => file['url'].toString()).toList();
+
+    if (imageUrls.isEmpty) {
+      return const SizedBox(); // 이미지가 없으면 빈 위젯 반환
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Get.to(ImageViewer(imageUrls: imageUrls));
+      },
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.network(
+              imageUrls[0],
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.width * 0.6,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Visibility(
+            visible: imageUrls.length > 1,
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(
+                '클릭하면 나머지 ${imageUrls.length}개 사진을 더 볼 수 있어요',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
