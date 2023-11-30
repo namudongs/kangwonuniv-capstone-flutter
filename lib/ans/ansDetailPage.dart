@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:capstone/components/circleSVGavatar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
@@ -25,7 +24,8 @@ class AnsDetailPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Obx(() {
         return Visibility(
-          visible: controller.articleData.value?['is_adopted'] == false,
+          // visible: controller.articleData.value?['is_adopted'] == false,
+          visible: controller.articleData.value?['user']['uid'] == appUser?.uid,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
