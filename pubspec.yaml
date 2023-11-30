@@ -49,6 +49,7 @@ dependencies:
   flutter_local_notifications: ^16.2.0
   http: ^1.1.2
   flutter_app_badger: ^1.5.0
+  flutter_svg: ^2.0.9
 
   
 dev_dependencies:
@@ -80,6 +81,7 @@ flutter:
     - assets/icons/qu_icon.png
     - assets/images/background_1.png
     - assets/images/background_2.png
+    - assets/avatars/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

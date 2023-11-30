@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:capstone/components/circleSVGavatar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/ans/ansAddPage.dart';
 import 'package:capstone/ans/ansEditPage.dart';
@@ -152,8 +153,11 @@ class AnsDetailPage extends StatelessWidget {
                                         top: 1, right: 10, bottom: 15),
                                     width: 30,
                                     height: 30,
-                                    child: const CircleAvatar(
-                                      backgroundColor: Color(0xffE6E6E6),
+                                    child: CircleAvatar(
+                                      radius: 30, // 원하는 반지름 크기
+                                      backgroundImage: AssetImage(
+                                          articleData['user']
+                                              ['avatar']), // 이미지 경로
                                     ),
                                   ),
                                   Text(
@@ -311,10 +315,12 @@ class AnsDetailPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(
+                            SizedBox(
                               width: 30,
                               child: CircleAvatar(
-                                backgroundColor: Color(0xffE6E6E6),
+                                radius: 30, // 원하는 반지름 크기
+                                backgroundImage: AssetImage(
+                                    answer['user']['avatar']), // 이미지 경로
                               ),
                             ),
                             Padding(

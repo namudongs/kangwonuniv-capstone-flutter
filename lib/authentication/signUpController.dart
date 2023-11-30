@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/appUser.dart';
@@ -24,6 +25,12 @@ class SignUpController extends GetxController {
   var isEmailEmpty = true.obs;
   var isPasswordEmpty = true.obs;
   var isNameEmpty = true.obs;
+
+  String getRandomAvatar() {
+    final random = Random();
+    int avatarNumber = random.nextInt(12) + 1; // 1부터 12까지의 숫자를 생성
+    return 'assets/avatars/avatar_$avatarNumber.png';
+  }
 
   void checkEmailEmpty() {
     isEmailEmpty.value = emailController.text.isEmpty;
@@ -249,6 +256,8 @@ class SignUpController extends GetxController {
         password: passwordController.text,
       );
 
+      String avatarUrl = getRandomAvatar();
+
       // Firestore에 사용자 정보 저장
       final AppUser appUser = AppUser(
         uid: userCredential.user!.uid,
@@ -259,6 +268,7 @@ class SignUpController extends GetxController {
         grade: convertGradeToInt(selectedGrade.value),
         major: selectedMajor,
         timestamp: Timestamp.now(),
+        avatar: avatarUrl,
       );
 
       await users.doc(userCredential.user!.uid).set(appUser.toMap());

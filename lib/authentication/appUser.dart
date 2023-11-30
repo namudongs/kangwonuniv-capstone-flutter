@@ -11,6 +11,7 @@ class AppUser {
   final int qu;
   final String major;
   final Timestamp timestamp;
+  final String avatar;
 
   AppUser({
     required this.uid,
@@ -21,6 +22,7 @@ class AppUser {
     required this.qu,
     required this.major,
     required this.timestamp,
+    required this.avatar,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +35,7 @@ class AppUser {
       'qu': qu,
       'major': major,
       'timestamp': timestamp,
+      'avatar': avatar,
     };
   }
 
@@ -46,6 +49,7 @@ class AppUser {
       qu: map['qu'],
       major: map['major'],
       timestamp: Timestamp.now(),
+      avatar: map['avatar'],
     );
   }
 }

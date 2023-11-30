@@ -53,6 +53,7 @@ class QuAddController extends GetxController {
             'university': appUser!.university,
             'major': appUser!.major,
             'grade': appUser!.grade,
+            'avatar': appUser!.avatar,
           },
         });
 

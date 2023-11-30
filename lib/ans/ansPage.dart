@@ -86,7 +86,9 @@ class AnsPage extends StatelessWidget {
                   SizedBox(
                     width: 20,
                     child: CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.5),
+                      radius: 30, // 원하는 반지름 크기
+                      backgroundImage: AssetImage(
+                          documentSnapshot['user']['avatar']), // 이미지 경로
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -240,10 +242,12 @@ Widget buildAcceptedAnswerWidget(DocumentSnapshot acceptedAnswer) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 20,
                     child: CircleAvatar(
-                      backgroundColor: Color.fromARGB(155, 157, 0, 0),
+                      radius: 30, // 원하는 반지름 크기
+                      backgroundImage: AssetImage(
+                          acceptedAnswer['user']['avatar']), // 이미지 경로
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -357,7 +361,9 @@ Widget buildNoAdoptedAnswerWidget(DocumentSnapshot documentSnapshot) {
                   SizedBox(
                     width: 20,
                     child: CircleAvatar(
-                      backgroundColor: Colors.black.withOpacity(0.8),
+                      radius: 30, // 원하는 반지름 크기
+                      backgroundImage: AssetImage(
+                          documentSnapshot['user']['avatar']), // 이미지 경로
                     ),
                   ),
                   const SizedBox(width: 5),

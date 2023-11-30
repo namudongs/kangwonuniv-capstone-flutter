@@ -42,6 +42,7 @@ class AnsAddController extends GetxController {
           'university': appUser!.university,
           'major': appUser!.major,
           'grade': appUser!.grade,
+          'avatar': appUser!.avatar,
         },
       });
 

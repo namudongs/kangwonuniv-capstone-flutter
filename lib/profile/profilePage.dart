@@ -21,9 +21,10 @@ class ProfilePage extends StatelessWidget {
       body: Column(
         children: <Widget>[
           const SizedBox(height: 20),
-          const CircleAvatar(
-            radius: 50,
-            backgroundImage: NetworkImage('프로필_사진_URL'),
+          CircleAvatar(
+            radius: 50, // 원하는 반지름 크기
+            backgroundImage:
+                AssetImage(appUser?.avatar ?? '로그인되지 않았습니다'), // 이미지 경로
           ),
           const SizedBox(height: 10),
           Text(
