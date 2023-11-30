@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print, file_names
 
-import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

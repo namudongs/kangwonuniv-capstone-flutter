@@ -1,4 +1,4 @@
-import 'package:capstone/ans/ansEditController.dart';
+import 'package:capstone/ans/edit/ansEditController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';

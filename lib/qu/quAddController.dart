@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/authController.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';

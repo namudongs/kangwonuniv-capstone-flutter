@@ -97,6 +97,8 @@ class LoginController extends GetxController {
         await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: password);
         print('로그인 성공\n이메일: $email, 비밀번호: $password');
+        emailController.clear();
+        passwordController.clear();
 
         await authController.fetchUserData();
         await notificationController.saveDeviceToken();

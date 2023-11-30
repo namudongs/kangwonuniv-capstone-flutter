@@ -1,16 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:capstone/ans/imageViewer.dart';
+import 'package:capstone/ans/add/ansAddPage.dart';
+import 'package:capstone/ans/detail/ansDetailController.dart';
+import 'package:capstone/ans/edit/ansEditPage.dart';
+import 'package:capstone/chat/chatPage.dart';
+import 'package:capstone/components/imageViewer.dart';
 import 'package:capstone/components/utils.dart';
-import 'package:capstone/ans/ansAddPage.dart';
-import 'package:capstone/ans/ansEditPage.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/qu/quEditPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:capstone/ans/ansDetailController.dart';
 
 class AnsDetailPage extends StatelessWidget {
   final String articleId;
@@ -155,11 +156,18 @@ class AnsDetailPage extends StatelessWidget {
                                         top: 1, right: 10, bottom: 15),
                                     width: 30,
                                     height: 30,
-                                    child: CircleAvatar(
-                                      radius: 30, // 원하는 반지름 크기
-                                      backgroundImage: AssetImage(
-                                          articleData['user']
-                                              ['avatar']), // 이미지 경로
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 5),
+                                      width: 30.0, // 원하는 폭
+                                      height: 30.0, // 원하는 높이
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                          fit: BoxFit.fill, // 원하는 BoxFit 설정
+                                          image: AssetImage(
+                                              articleData['user']['avatar']),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Text(
@@ -182,7 +190,7 @@ class AnsDetailPage extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    GestureDetector(
+                                    InkWell(
                                       onTap: () {
                                         Get.to(
                                           QuEditPage(articleId: articleId),
@@ -207,7 +215,7 @@ class AnsDetailPage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    GestureDetector(
+                                    InkWell(
                                       onTap: () {
                                         controller.quDelete(articleId);
                                       },
@@ -335,11 +343,16 @@ class AnsDetailPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 30,
-          child: CircleAvatar(
-            radius: 30, // 원하는 반지름 크기
-            backgroundImage: AssetImage(answer['user']['avatar']), // 이미지 경로
+        Container(
+          margin: const EdgeInsets.only(top: 5),
+          width: 30.0, // 원하는 폭
+          height: 30.0, // 원하는 높이
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            image: DecorationImage(
+              fit: BoxFit.fill, // 원하는 BoxFit 설정
+              image: AssetImage(answer['user']['avatar']),
+            ),
           ),
         ),
         Padding(
@@ -371,7 +384,7 @@ class AnsDetailPage extends StatelessWidget {
                       color: const Color.fromARGB(20, 157, 0, 0),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         controller.is_adopted(articleId, answer['id']);
                       },
@@ -399,27 +412,33 @@ class AnsDetailPage extends StatelessWidget {
                   visible: articleData['is_adopted'] == true &&
                       answer['is_adopted'] == true,
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                     // padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       // color: Colors.red[100],
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: const Row(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.check_circle,
-                          size: 17,
-                          color: Color.fromARGB(255, 157, 0, 0),
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 17,
+                              color: Color.fromARGB(255, 157, 0, 0),
+                            ),
+                            SizedBox(width: 3),
+                            Text(
+                              '채택된 답변입니다.',
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.normal,
+                                  color: Color.fromARGB(255, 157, 0, 0)),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 3),
-                        Text(
-                          '채택된 답변입니다.',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.normal,
-                              color: Color.fromARGB(255, 157, 0, 0)),
-                        ),
+                        _goChatwithAnswerWriter(controller, articleId),
                       ],
                     ),
                   ),
@@ -461,7 +480,7 @@ class AnsDetailPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Get.to(AnsEditPage(
                             articleId: articleId,
@@ -487,7 +506,7 @@ class AnsDetailPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           controller.ansDelete(articleId, answer['id']);
                         },
@@ -529,7 +548,7 @@ class AnsDetailPage extends StatelessWidget {
       return const SizedBox(); // 이미지가 없으면 빈 위젯 반환
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         Get.to(ImageViewer(imageUrls: imageUrls));
       },
@@ -567,5 +586,84 @@ class AnsDetailPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _goChatwithAnswerWriter(
+      AnsDetailController controller, String articleId) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      padding: const EdgeInsets.all(5),
+      width: 100,
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(20, 157, 0, 0),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: InkWell(
+        onTap: () async {
+          String chatRoomId = await _createOrGetChatRoom(controller, articleId);
+          if (chatRoomId.isNotEmpty) {
+            // 채팅방 페이지로 이동
+            Get.to(() => ChatPage(
+                  chatRoomId: chatRoomId,
+                  senderId: controller.articleData.value!['user']['uid'],
+                  receiverId: controller.answersData.firstWhere(
+                      (answer) => answer['is_adopted'] == true)['user']['uid'],
+                  senderName: controller.articleData.value!['user']['name'],
+                  receiverName: controller.answersData.firstWhere(
+                      (answer) => answer['is_adopted'] == true)['user']['name'],
+                  senderProfile: controller.articleData.value!['user']
+                      ['avatar'],
+                  receiverProfile: controller.answersData.firstWhere(
+                          (answer) => answer['is_adopted'] == true)['user']
+                      ['avatar'],
+                ));
+          }
+        },
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Icon(CupertinoIcons.chat_bubble,
+                size: 15, color: Color.fromARGB(255, 146, 0, 0)),
+            SizedBox(width: 3),
+            Text(
+              '추가 질문하기',
+              style: TextStyle(
+                fontSize: 11,
+                color: Color.fromARGB(255, 146, 0, 0),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<String> _createOrGetChatRoom(
+      AnsDetailController controller, String articleId) async {
+    final String senderId = controller.articleData.value!['user']['uid'];
+    final String receiverId = controller.answersData
+        .firstWhere((answer) => answer['is_adopted'] == true)['user']['uid'];
+
+    // 채팅방 ID 생성 (senderId와 receiverId를 기반으로 생성)
+    String chatRoomId = senderId.compareTo(receiverId) > 0
+        ? '${senderId}_$receiverId'
+        : '${receiverId}_$senderId';
+
+    // Firestore에 채팅방 정보 저장
+    final chatRoomRef =
+        FirebaseFirestore.instance.collection('chatRooms').doc(chatRoomId);
+    final chatRoomSnapshot = await chatRoomRef.get();
+
+    if (!chatRoomSnapshot.exists) {
+      // 채팅방이 존재하지 않으면 생성
+      await chatRoomRef.set({
+        'users': [senderId, receiverId],
+        'lastMessage': '',
+        'lastMessageTime': FieldValue.serverTimestamp(),
+      });
+    }
+
+    return chatRoomId;
   }
 }

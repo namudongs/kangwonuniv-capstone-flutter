@@ -1,5 +1,4 @@
-import 'package:capstone/ans/ansDetailController.dart';
-import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/main.dart';
@@ -77,13 +76,22 @@ class MyQuPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
-            Text(
-              '${article['title']}', // 질문의 제목 혹은 내용
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Color.fromARGB(200, 106, 0, 0),
-                  fontFamily: 'NanumSquare'),
-            ),
+            Visibility(
+                visible: article['title'].toString().isNotEmpty,
+                replacement: Text(
+                  '${article['content']}',
+                  style: const TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(200, 106, 0, 0),
+                      fontFamily: 'NanumSquare'),
+                ),
+                child: Text(
+                  '${article['title']}',
+                  style: const TextStyle(
+                      fontSize: 16,
+                      color: Color.fromARGB(200, 106, 0, 0),
+                      fontFamily: 'NanumSquare'),
+                )),
             const SizedBox(height: 10),
             Container(
               margin: const EdgeInsets.only(bottom: 2),
@@ -91,8 +99,8 @@ class MyQuPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: article['answers_count'] > 0
                     ? (article['is_adopted'] == true
-                        ? const Color.fromARGB(114, 140, 0, 0)
-                        : const Color.fromARGB(21, 0, 47, 255))
+                        ? const Color.fromARGB(30, 140, 0, 0)
+                        : const Color.fromARGB(20, 0, 47, 255))
                     : const Color.fromARGB(19, 0, 0, 0),
                 borderRadius: BorderRadius.circular(5),
               ),
@@ -106,38 +114,13 @@ class MyQuPage extends StatelessWidget {
                     fontSize: 12,
                     color: article['answers_count'] > 0
                         ? (article['is_adopted'] == true
-                            ? const Color.fromARGB(200, 255, 0, 0)
+                            ? const Color.fromARGB(255, 157, 0, 0)
                             : const Color.fromARGB(200, 38, 0, 255))
                         : const Color.fromARGB(198, 0, 0, 0),
                     fontFamily: 'NanumSquare'),
               ),
             ),
-
             const SizedBox(height: 3),
-            // if (answer['is_adopted'] == true)
-            //   const Row(
-            //     children: [
-            //       Icon(Icons.check_circle,
-            //           size: 13, color: Color.fromARGB(197, 140, 0, 0)),
-            //       SizedBox(width: 2),
-            //       Text(
-            //         '내가 쓴 답변이 채택되었습니다.', // 질문의 카테고리
-            //         style: TextStyle(
-            //             fontSize: 10,
-            //             color: Color.fromARGB(197, 121, 0, 0),
-            //             fontFamily: 'NanumSquare'),
-            //       ),
-            //     ],
-            //   ),
-            // Text(
-            //   '${answer['content'].replaceAll('\n', ' ')}', // 답변의 내용
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     color: Colors.black.withOpacity(0.8),
-            //   ),
-            //   maxLines: 2,
-            //   overflow: TextOverflow.ellipsis,
-            // ),
           ],
         ),
       ),

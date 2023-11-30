@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/ans/ansController.dart';
-import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class AnsPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     controller.articleList.value[index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () => Get.to(
                       () => AnsDetailPage(articleId: documentSnapshot.id)),
                   child: buildArticleItem(documentSnapshot, context),
@@ -92,12 +92,16 @@ class AnsPage extends StatelessWidget {
                     )),
               Row(
                 children: [
-                  SizedBox(
-                    width: 20,
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundImage: AssetImage(
-                          documentSnapshot['user']['avatar']), // 이미지 경로
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill, // 원하는 BoxFit 설정
+                        image: AssetImage(documentSnapshot['user']['avatar']),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -267,12 +271,16 @@ Widget buildAcceptedAnswerWidget(DocumentSnapshot acceptedAnswer) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 20,
-                    child: CircleAvatar(
-                      radius: 30, // 원하는 반지름 크기
-                      backgroundImage: AssetImage(
-                          acceptedAnswer['user']['avatar']), // 이미지 경로
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill, // 원하는 BoxFit 설정
+                        image: AssetImage(acceptedAnswer['user']['avatar']),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 5),
@@ -383,12 +391,16 @@ Widget buildNoAdoptedAnswerWidget(DocumentSnapshot documentSnapshot) {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 20,
-                    child: CircleAvatar(
-                      radius: 30, // 원하는 반지름 크기
-                      backgroundImage: AssetImage(
-                          documentSnapshot['user']['avatar']), // 이미지 경로
+                  Container(
+                    margin: const EdgeInsets.only(top: 10, bottom: 10),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill, // 원하는 BoxFit 설정
+                        image: AssetImage(documentSnapshot['user']['avatar']),
+                      ),
                     ),
                   ),
                   const SizedBox(width: 5),

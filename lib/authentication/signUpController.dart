@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:capstone/authController.dart';
-import 'package:capstone/authentication/appUser.dart';
+import 'package:capstone/components/appUser.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/notfiy/notificationController.dart';
@@ -225,6 +225,11 @@ class SignUpController extends GetxController {
           'platform': Platform.operatingSystem // 플랫폼 정보
         });
       }
+      emailController.clear();
+      passwordController.clear();
+      nameController.clear();
+      selectedInfo.value = '대학교와 학과를 선택해주세요';
+      selectedGrade.value = '학년을 선택해주세요';
 
       auth.authStateChanges().listen((User? user) {
         if (user == null) {

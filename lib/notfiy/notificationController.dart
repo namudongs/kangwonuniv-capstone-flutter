@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, empty_catches
 
 import 'dart:io';
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
-import 'package:capstone/ans/ansDetailPage.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

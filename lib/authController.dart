@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-import 'package:capstone/authentication/appUser.dart';
+import 'package:capstone/components/appUser.dart';
 import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';

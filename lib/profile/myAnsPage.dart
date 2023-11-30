@@ -1,4 +1,4 @@
-import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/main.dart';
