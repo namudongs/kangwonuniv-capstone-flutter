@@ -3,6 +3,7 @@ import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -137,15 +138,38 @@ class AnsDetailController extends GetxController {
     final WriteBatch batch = firestore.batch();
 
     try {
-      final CollectionReference answersRef =
-          articles.doc(articleId).collection('answer');
-      final QuerySnapshot answersSnapshot = await answersRef.get();
-      for (var doc in answersSnapshot.docs) {
-        batch.delete(doc.reference);
+      // Firestore에서 질문 문서를 가져옴
+      DocumentSnapshot questionSnapshot = await articles.doc(articleId).get();
+      Map<String, dynamic>? data =
+          questionSnapshot.data() as Map<String, dynamic>?;
+
+      if (data != null) {
+        List<dynamic> images = data['images'] ?? [];
+
+        // Firebase Storage에서 이미지 파일들을 삭제
+        for (var img in images) {
+          if (img is Map<String, dynamic>) {
+            String? filePath = img['fileName'];
+            print(filePath);
+            if (filePath != null) {
+              await FirebaseStorage.instance.ref('uploads/$filePath').delete();
+            }
+          }
+        }
+
+        // Firestore에서 답변들을 삭제
+        final CollectionReference answersRef =
+            articles.doc(articleId).collection('answer');
+        final QuerySnapshot answersSnapshot = await answersRef.get();
+        for (var doc in answersSnapshot.docs) {
+          batch.delete(doc.reference);
+        }
+
+        // Firestore에서 질문 문서를 삭제
+        batch.delete(articles.doc(articleId));
+        await batch.commit();
       }
 
-      batch.delete(articles.doc(articleId));
-      await batch.commit();
       snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
       Get.offAll(() => BottomNavBar());
       BottomNavBarController bottomNavBarController =
@@ -155,7 +179,9 @@ class AnsDetailController extends GetxController {
       await authController.increaseUserQu(appUser?.uid ?? '', 50);
       await authController.fetchUserData();
     } catch (e) {
+      // 예외 처리
       snackBar('오류', '질문 삭제 중 오류 발생: $e');
+      print(e);
     }
   }
 

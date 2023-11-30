@@ -78,12 +78,14 @@ class QuAddController extends GetxController {
         // 선택된 이미지를 Firebase Storage에 업로드하고 URL을 가져옴
         List<Map<String, dynamic>> uploadedImages = [];
         for (var image in selectedImages) {
-          String imageUrl = await uploadFile(image);
-          uploadedImages.add({
-            'url': imageUrl,
-            'fileName': image.name,
-            // 여기에 추가 이미지 정보를 넣을 수 있습니다.
-          });
+          Map<String, String> fileInfo = await uploadFile(image);
+          if (fileInfo['url']!.isNotEmpty) {
+            uploadedImages.add({
+              'url': fileInfo['url']!,
+              'fileName': fileInfo['fileName']!,
+              // 여기에 추가 이미지 정보를 넣을 수 있습니다.
+            });
+          }
         }
 
         // Firestore 문서에 이미지 정보 업데이트
@@ -118,13 +120,11 @@ class QuAddController extends GetxController {
   }
 
   Future<void> uploadFileToFirebaseStorage(String articleId, XFile file) async {
-    print('호출되었습니다.');
     String fileName = file.name;
     String filePath = 'articles/$articleId/$fileName';
     File fileToUpload = File(file.path);
 
     try {
-      print('파일 업로드를 시작합니다.');
       // 파일을 Firebase Storage에 업로드
       await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
 
@@ -141,14 +141,13 @@ class QuAddController extends GetxController {
           {'url': downloadURL, 'fileName': fileName, 'fileType': file.mimeType}
         ])
       });
-      print('이미지가 저장되었습니다.');
     } catch (e) {
       print(e);
       // 오류 처리
     }
   }
 
-  Future<String> uploadFile(XFile file) async {
+  Future<Map<String, String>> uploadFile(XFile file) async {
     String fileName = '${DateTime.now().millisecondsSinceEpoch}_${file.name}';
     String filePath = 'uploads/$fileName';
     File fileToUpload = File(file.path);
@@ -160,10 +159,12 @@ class QuAddController extends GetxController {
       // 업로드된 파일의 URL 가져오기
       String downloadURL =
           await FirebaseStorage.instance.ref(filePath).getDownloadURL();
-      return downloadURL;
+
+      // fileName과 downloadURL 반환
+      return {'fileName': fileName, 'url': downloadURL};
     } catch (e) {
       print('Error uploading file: $e');
-      return '';
+      return {'fileName': '', 'url': ''};
     }
   }
 }
