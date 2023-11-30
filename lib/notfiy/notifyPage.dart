@@ -69,15 +69,23 @@ class _NotifyPageState extends State<NotifyPage> {
                     title: Text(
                       notification['title'],
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold), // 제목 스타일 조정
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14), // 제목 스타일 조정
                     ),
-                    subtitle: Text(notification['message']),
+                    subtitle: Text(
+                      notification['message'],
+                      style: const TextStyle(fontSize: 12),
+                    ),
                     trailing: Text(formattedTime,
                         style:
                             const TextStyle(color: Colors.grey)), // 날짜 스타일 조정
                     onTap: () {
-                      Get.to(
-                          AnsDetailPage(articleId: notification['articleId']));
+                      if (notification['articleId'] != '') {
+                        Get.to(AnsDetailPage(
+                            articleId: notification['articleId']));
+                      } else {
+                        return;
+                      }
                     },
                   ),
                 );

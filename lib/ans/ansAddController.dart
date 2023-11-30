@@ -1,3 +1,4 @@
+import 'package:capstone/authController.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
@@ -62,12 +63,18 @@ class AnsAddController extends GetxController {
 
       // 푸시 알림 전송
       await notificationController.sendPushNotification(
-          questionUserId, "알림이 도착했어요", "새로운 답변이 달렸습니다!", articleId);
+          questionUserId, "답변이 달렸어요!", "도움이 되었다면 채택을 눌러주세요.", articleId);
 
       print('알림 전송 성공');
 
       Get.back();
       snackBar('성공', '답변이 추가되었습니다.');
+      AuthController authController = Get.find<AuthController>();
+      authController.increaseUserQu(appUser!.uid, 40);
+      authController.fetchUserData();
+      notificationController.saveNotificationToFirestore(
+          appUser!.uid, "답변을 등록하셨습니다.", "답변이 채택되면 알림을 드릴게요!", articleId);
+
       isLoading.value = false;
       content.value = '';
     } catch (e) {

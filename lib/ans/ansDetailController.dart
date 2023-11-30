@@ -1,3 +1,4 @@
+import 'package:capstone/authController.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
@@ -85,7 +86,9 @@ class AnsDetailController extends GetxController {
         await answerRef.update({'is_adopted': true});
 
         notificationController.sendPushNotification(
-            answerWriterId!, "알림이 도착했어요", "답변이 채택되었습니다!", articleId);
+            answerWriterId!, "답변이 채택되었습니다!", "보상으로 50QU를 적립해드렸어요.", articleId);
+        AuthController authController = Get.find<AuthController>();
+        authController.increaseUserQu(answerWriterId, 50);
 
         snackBar('성공', '채택되었습니다.');
       }
@@ -145,6 +148,9 @@ class AnsDetailController extends GetxController {
       BottomNavBarController bottomNavBarController =
           Get.put(BottomNavBarController());
       bottomNavBarController.goToAnsPage();
+      AuthController authController = Get.find<AuthController>();
+      await authController.increaseUserQu(appUser?.uid ?? '', 50);
+      await authController.fetchUserData();
     } catch (e) {
       snackBar('오류', '질문 삭제 중 오류 발생: $e');
     }
@@ -166,6 +172,9 @@ class AnsDetailController extends GetxController {
 
       answersData.removeWhere((answer) => answer['id'] == answerId);
       snackBar('성공', '답변이 삭제되었습니다.');
+      AuthController authController = Get.find<AuthController>();
+      await authController.decreaseUserQu(appUser?.uid ?? '', 40);
+      await authController.fetchUserData();
     } catch (e) {
       snackBar('오류', '답변 삭제 중 오류 발생: $e');
     }

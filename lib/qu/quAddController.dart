@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:capstone/ans/ansDetailPage.dart';
+import 'package:capstone/authController.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
@@ -19,6 +20,7 @@ class QuAddController extends GetxController {
       FirebaseFirestore.instance.collection('articles');
 
   final CategoryController categoryController = Get.find<CategoryController>();
+  final AuthController authController = Get.find<AuthController>();
 
   void updateCategory(String newCategory) {
     category.value = newCategory;
@@ -69,6 +71,11 @@ class QuAddController extends GetxController {
         Get.to(() => AnsDetailPage(articleId: docRef.id));
 
         snackBar('성공', '질문이 등록되었습니다.');
+        await authController.decreaseUserQu(appUser?.uid ?? '', 50);
+        await authController.fetchUserData();
+        notificationController.saveNotificationToFirestore(appUser?.uid ?? '',
+            '질문을 등록하셨습니다.', '답변이 등록되면 알림을 드릴게요!', docRef.id);
+
         isLoading.value = false;
       } catch (e) {
         snackBar('실패', '오류가 발생했습니다. $e');

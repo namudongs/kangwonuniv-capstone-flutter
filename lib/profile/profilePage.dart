@@ -12,8 +12,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userName =
-        appUser?.userName ?? '이름 없음'; // appUser가 null이면 '이름 없음'을 사용
+    final userName = appUser?.userName ?? '이름 없음';
     return Scaffold(
       appBar: AppBar(
         title: const Text('프로필'),
@@ -22,18 +21,32 @@ class ProfilePage extends StatelessWidget {
         children: <Widget>[
           const SizedBox(height: 20),
           CircleAvatar(
-            radius: 50, // 원하는 반지름 크기
+            radius: 50,
             backgroundImage:
-                AssetImage(appUser?.avatar ?? '로그인되지 않았습니다'), // 이미지 경로
+                AssetImage(appUser?.avatar ?? 'assets/avatars/avatar_1.png'),
           ),
           const SizedBox(height: 10),
           Text(
             userName,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const Text(
-            'Qu : 300',
-            style: TextStyle(fontSize: 15),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.05),
+              border: Border.all(
+                color: Colors.grey,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              '${appUser?.qu ?? 0}QU',
+              style: const TextStyle(
+                fontSize: 15,
+                color: Color.fromARGB(255, 43, 21, 21),
+              ),
+            ),
           ),
           const SizedBox(height: 20),
           const Divider(

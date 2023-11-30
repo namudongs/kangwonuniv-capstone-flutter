@@ -51,6 +51,32 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> decreaseUserQu(String userId, int decreaseAmount) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .update({'qu': FieldValue.increment(-decreaseAmount)});
+
+      print('유저의 QU가 $decreaseAmount만큼 감소되었습니다.');
+    } catch (e) {
+      print('유저 큐 감소 실패: $e');
+    }
+  }
+
+  Future<void> increaseUserQu(String userid, int increaseAmount) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userid)
+          .update({'qu': FieldValue.increment(increaseAmount)});
+
+      print('유저의 QU가 $increaseAmount만큼 증가되었습니다.');
+    } catch (e) {
+      print('유저 큐 증가 실패: $e');
+    }
+  }
+
   void signOut() async {
     await _auth.signOut();
     Get.offAll(() => MainPage());

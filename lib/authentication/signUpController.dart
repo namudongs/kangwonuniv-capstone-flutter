@@ -7,6 +7,7 @@ import 'package:capstone/authController.dart';
 import 'package:capstone/authentication/appUser.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -250,7 +251,9 @@ class SignUpController extends GetxController {
     }
 
     try {
-      // Firebase Authentication을 사용하여 사용자 계정 생성
+      final NotificationController notificationController =
+          NotificationController();
+
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
@@ -264,7 +267,7 @@ class SignUpController extends GetxController {
         email: emailController.text,
         userName: nameController.text,
         university: selectedUniv,
-        qu: 0,
+        qu: 300,
         grade: convertGradeToInt(selectedGrade.value),
         major: selectedMajor,
         timestamp: Timestamp.now(),
@@ -273,6 +276,8 @@ class SignUpController extends GetxController {
 
       await users.doc(userCredential.user!.uid).set(appUser.toMap());
       snackBar('회원가입', '회원가입에 성공하였습니다.');
+      notificationController.saveNotificationToFirestore(
+          appUser.uid, '회원가입을 축하드려요!', '300QU를 적립해드렸어요.', '');
 
       String? token = await _firebaseMessaging.getToken();
       print("토큰: $token");
