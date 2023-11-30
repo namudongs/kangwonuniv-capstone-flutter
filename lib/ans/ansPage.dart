@@ -42,6 +42,15 @@ class AnsPage extends StatelessWidget {
   }
 
   Widget buildArticleItem(DocumentSnapshot documentSnapshot, context) {
+    Map<String, dynamic>? data =
+        documentSnapshot.data() as Map<String, dynamic>?;
+    List<dynamic> images = data?.containsKey('images') ?? false
+        ? data!['images'] as List<dynamic>
+        : [];
+
+    List<String> imageUrls =
+        images.map((img) => img['url'].toString()).toList();
+
     return Column(
       children: [
         Container(
@@ -86,7 +95,7 @@ class AnsPage extends StatelessWidget {
                   SizedBox(
                     width: 20,
                     child: CircleAvatar(
-                      radius: 30, // 원하는 반지름 크기
+                      radius: 30,
                       backgroundImage: AssetImage(
                           documentSnapshot['user']['avatar']), // 이미지 경로
                     ),
@@ -112,14 +121,30 @@ class AnsPage extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                child: Text(
-                  documentSnapshot['content'].replaceAll('\n', ' '),
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black.withOpacity(0.8),
-                  ),
-                  maxLines: 5,
-                  overflow: TextOverflow.ellipsis,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      documentSnapshot['content'].replaceAll('\n', ' '),
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black.withOpacity(0.8),
+                      ),
+                      maxLines: 5,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (imageUrls.isNotEmpty)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          imageUrls[0],
+                          width: MediaQuery.of(context).size.width / 5,
+                          height: MediaQuery.of(context).size.width / 5,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                  ],
                 ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10)),
