@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:capstone/components/chatMessage.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -52,6 +54,11 @@ class ChatController extends GetxController {
           .doc(chatRoomId)
           .collection('messages')
           .add(message.toMap());
+
+      String receiverId = message.receiverId;
+      NotificationController notificationController = Get.find();
+      await notificationController.sendPushNotification(
+          receiverId, "새 채팅 메시지", "메시지가 도착했습니다", chatRoomId);
 
       // 선택된 이미지 리스트 초기화
       selectedImages.clear();
