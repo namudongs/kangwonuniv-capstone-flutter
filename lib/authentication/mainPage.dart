@@ -1,8 +1,7 @@
 import 'package:capstone/authentication/loginPage.dart';
-import 'package:capstone/authentication/signUp.dart';
-import 'package:capstone/components/colorRoundButton.dart';
+import 'package:capstone/authentication/signUpPage.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
@@ -10,67 +9,65 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  const Text(
-                    "환영합니다!",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    "실시간 질의응답으로 대학생활을 더 즐겁게",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey[700], fontSize: 15),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 2,
-                child: Lottie.asset('assets/lottie/animation_lkiiozif.json'),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: <Widget>[
-                    ColorRoundButton(
-                        tapFunc: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginPage()));
-                        },
-                        title: "로그인",
-                        color: Colors.white,
-                        buttonWidth: double.infinity,
-                        buttonHeight: 60,
-                        fontSize: 18),
-                    const SizedBox(
-                      height: 10,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Placeholder(
+              fallbackHeight: 600,
+            ), // 이 위젯을 웰컴 스크린으로 사용
+            const SizedBox(
+              height: 20,
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 50,
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    ColorRoundButton(
-                        tapFunc: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SignUp()));
-                        },
-                        title: "회원가입",
-                        color: Colors.lightBlue,
-                        buttonWidth: double.infinity,
-                        buttonHeight: 60,
-                        fontSize: 18)
-                  ],
+                    foregroundColor: Colors.white,
+                    backgroundColor: const Color.fromARGB(150, 157, 0, 0),
+                  ),
+                  onPressed: () {
+                    Get.to(LoginPage());
+                  },
+                  child: const Text(
+                    '로그인',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+            Container(
+              height: 50,
+              // margin: const EdgeInsets.only(bottom: 50),
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(150, 0, 0, 0),
+                ),
+                onPressed: () {
+                  Get.to(SignUpPage());
+                },
+                child: const Text(
+                  '회원가입',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

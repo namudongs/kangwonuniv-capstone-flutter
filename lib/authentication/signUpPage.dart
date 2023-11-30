@@ -3,8 +3,8 @@ import 'package:capstone/authentication/signUpController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUp extends StatelessWidget {
-  SignUp({super.key});
+class SignUpPage extends StatelessWidget {
+  SignUpPage({super.key});
   final SignUpController controller = Get.put(SignUpController());
 
   @override
