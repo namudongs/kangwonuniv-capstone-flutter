@@ -12,9 +12,11 @@ class MainPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            const Placeholder(
-              fallbackHeight: 600,
-            ), // 이 위젯을 웰컴 스크린으로 사용
+            Image.asset(
+              'assets/images/Quniv.png',
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 0.65,
+            ),
             const SizedBox(
               height: 20,
             ),
