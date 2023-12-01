@@ -21,6 +21,10 @@ class BottomNavBarController extends GetxController {
   void goToAnsPage() {
     changeTab(1);
   }
+
+  void goToHomePage() {
+    changeTab(0);
+  }
 }
 
 class BottomNavBar extends StatelessWidget {

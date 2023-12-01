@@ -23,9 +23,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // Firebase 메시징 백그라운드 핸들러 초기화
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // 토큰 리프레시 리스너 설정
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   firebaseMessaging.onTokenRefresh.listen((newToken) {
     if (FirebaseAuth.instance.currentUser != null) {

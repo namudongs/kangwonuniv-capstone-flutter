@@ -24,15 +24,24 @@ String formatTimestamp(Timestamp timestamp) {
   }
 }
 
-snackBar(String title, String message) {
+snackBar(
+  String title,
+  String message, {
+  SnackPosition? snackPosition,
+  Color? backgroundColor,
+  Color? colorText,
+  EdgeInsetsGeometry? margin,
+  double? borderRadius,
+  Duration? duration,
+}) {
   return Get.snackbar(
     title,
     message,
-    snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: Colors.black.withOpacity(0.8),
-    colorText: Colors.white,
+    snackPosition: snackPosition ?? SnackPosition.BOTTOM,
+    backgroundColor: backgroundColor ?? Colors.black.withOpacity(0.8),
+    colorText: colorText ?? Colors.white,
     margin: const EdgeInsets.all(10),
-    borderRadius: 10,
-    duration: const Duration(milliseconds: 1000),
+    borderRadius: borderRadius ?? 10,
+    duration: duration ?? const Duration(milliseconds: 1000),
   );
 }

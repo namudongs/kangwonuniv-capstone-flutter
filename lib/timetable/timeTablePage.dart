@@ -34,6 +34,16 @@ class _TimeTablePageState extends State<TimeTablePage> {
         .update(appUser!.toMap());
   }
 
+  // 분을 시간 형식(HH:mm)으로 변환하는 함수
+  String formatTime(double minutes) {
+    final int totalMinutes = minutes.toInt();
+    final int hours = (totalMinutes / 60).floor() + 9; // 9:00부터 시작
+    final int remainingMinutes = totalMinutes % 60;
+    final String hourString = hours.toString().padLeft(2, '0');
+    final String minuteString = remainingMinutes.toString().padLeft(2, '0');
+    return '$hourString:$minuteString';
+  }
+
   void _fetchTimetable() {
     _selectedLectures =
         appUser!.timetable.map((e) => LectureSlot.fromJson(e)).toList();
@@ -232,7 +242,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                     } else {
                       filteredLectures = [];
                     }
-                    (context as Element).markNeedsBuild(); // UI 업데이트
+                    (context as Element).markNeedsBuild();
                   },
                 ),
               ),
@@ -240,14 +250,73 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 child: ListView.builder(
                   itemCount: filteredLectures.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
+                    if (filteredLectures.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    if (index <= filteredLectures.length &&
+                        index >= 0 &&
+                        filteredLectures[index].lname.isNotEmpty &&
+                        filteredLectures[index].professor.isNotEmpty &&
+                        filteredLectures[index].day.isNotEmpty &&
+                        filteredLectures[index].start.isNotEmpty &&
+                        filteredLectures[index].end.isNotEmpty &&
+                        filteredLectures[index].classroom.isNotEmpty) {
+                      final professor = filteredLectures[index].professor;
+                      final days = filteredLectures[index].day;
+                      final startTimes = filteredLectures[index].start;
+                      final endTimes = filteredLectures[index].end;
+
+                      String scheduleString = '';
+                      for (int i = 0; i < days.length; i++) {
+                        final day = days[i];
+                        final classroom = filteredLectures[index].classroom[i];
+                        final startTime = formatTime(startTimes[i].toDouble());
+                        final endTime = formatTime(endTimes[i].toDouble());
+
+                        if (day.isNotEmpty &&
+                            classroom.isNotEmpty &&
+                            startTime.isNotEmpty &&
+                            endTime.isNotEmpty) {
+                          scheduleString +=
+                              '$day/$classroom/$startTime~$endTime';
+
+                          if (i < days.length - 1) {
+                            scheduleString += '\n';
+                          }
+                        }
+                      }
+
+                      return ListTile(
                         title: Text(filteredLectures[index].lname),
-                        subtitle: Text(
-                            '${filteredLectures[index].professor}﹒${filteredLectures[index].classroom}﹒${filteredLectures[index].day}요일'),
+                        subtitle: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              professor,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            Text(
+                              scheduleString,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ],
+                        ),
                         onTap: () {
                           _addLectureToTimetable(filteredLectures[index]);
                           _setTimetableLength();
-                        });
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
                   },
                 ),
               ),
@@ -295,7 +364,13 @@ class _TimeTablePageState extends State<TimeTablePage> {
           actions: [
             IconButton(
               onPressed: () {
-                _tappedPlus();
+                if (appUser?.university == '강원대학교') {
+                  _tappedPlus();
+                  snackBar('강원대학교', '강원대학교 학생은 과목명 검색이 가능합니다.',
+                      duration: const Duration(seconds: 2));
+                } else {
+                  _tappedLectureAdd();
+                }
               },
               icon: const Icon(CupertinoIcons.add),
               color: Colors.black,
@@ -400,6 +475,12 @@ class _TimeTablePageState extends State<TimeTablePage> {
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop(); // 알림 닫기
+                              },
+                              child: const Text('취소'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 알림 닫기
                                 setState(() {
                                   _selectedLectures.remove(lecture); // 강의 삭제
                                   _saveTimetable();
@@ -407,12 +488,6 @@ class _TimeTablePageState extends State<TimeTablePage> {
                                 });
                               },
                               child: const Text('확인'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // 알림 닫기
-                              },
-                              child: const Text('취소'),
                             ),
                           ],
                         );

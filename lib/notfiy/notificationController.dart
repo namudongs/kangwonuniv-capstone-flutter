@@ -304,8 +304,13 @@ class NotificationController extends GetxController {
   }
 
   Future<void> updateNotifications(String userId) async {
-    var updatedNotifications = await fetchNotifications(userId);
-    notifications.assignAll(updatedNotifications); // RxList 업데이트
-    print('알림을 업데이트헀습니다.');
+    if (userId.isNotEmpty) {
+      // userId가 비어 있지 않은 경우에만 업데이트
+      var updatedNotifications = await fetchNotifications(userId);
+      notifications.assignAll(updatedNotifications); // RxList 업데이트
+      print('알림을 업데이트했습니다.');
+    } else {
+      print('로그인 되어있지 않아 알림을 업데이트하지 못했습니다.');
+    }
   }
 }

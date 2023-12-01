@@ -12,6 +12,15 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              controller.emailController.clear();
+              controller.passwordController.clear();
+              controller.nameController.clear();
+              Get.back();
+            }),
         title: const Text('회원가입'),
       ),
       resizeToAvoidBottomInset: true,
@@ -276,6 +285,9 @@ class SignUpPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     controller.registerUser();
+                    controller.emailController.clear();
+                    controller.passwordController.clear();
+                    controller.nameController.clear();
                   },
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,

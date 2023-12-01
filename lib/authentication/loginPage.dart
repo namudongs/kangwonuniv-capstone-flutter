@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:capstone/authentication/loginController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,14 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              controller.emailController.clear();
+              controller.passwordController.clear();
+              Get.back();
+            }),
         title: const Text('로그인'),
       ),
       resizeToAvoidBottomInset: true,
@@ -90,6 +100,7 @@ class LoginPage extends StatelessWidget {
                       obscureText: true,
                       onSubmitted: (value) {
                         controller.login();
+                        controller.passwordController.clear();
                       },
                       textInputAction: TextInputAction.done,
                       controller: controller.passwordController,

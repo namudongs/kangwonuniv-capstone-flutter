@@ -69,6 +69,8 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
+    emailController.clear();
+    passwordController.clear();
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     emailController.dispose();

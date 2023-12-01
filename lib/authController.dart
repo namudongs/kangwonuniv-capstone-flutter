@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:capstone/components/appUser.dart';
 import 'package:capstone/authentication/mainPage.dart';
+import 'package:capstone/components/bottomNavBar.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,6 +80,7 @@ class AuthController extends GetxController {
 
   void signOut() async {
     await _auth.signOut();
+    BottomNavBarController().goToHomePage();
     Get.offAll(() => MainPage());
   }
 
