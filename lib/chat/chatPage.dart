@@ -1,4 +1,5 @@
 import 'package:capstone/components/imageViewer.dart';
+import 'package:capstone/main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -36,6 +37,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUserUid = appUser?.uid ?? '';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('채팅하기'),
@@ -52,10 +55,9 @@ class _ChatPageState extends State<ChatPage> {
                     return ListView.builder(
                       itemCount: messages.length,
                       itemBuilder: (context, index) {
-                        // 메시지에 이미지가 있는지 확인
-                        bool hasImage = messages[index].images.isNotEmpty;
                         bool isOwnMessage =
-                            messages[index].senderId == widget.senderId;
+                            messages[index].senderId == currentUserUid;
+                        bool hasImage = messages[index].images.isNotEmpty;
 
                         return Align(
                           alignment: isOwnMessage
@@ -66,70 +68,58 @@ class _ChatPageState extends State<ChatPage> {
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: isOwnMessage
-                                    ? MainAxisAlignment.end
-                                    : MainAxisAlignment.start,
-                                children: [
-                                  if (hasImage) ...[
-                                    // 이미지가 있는 경우 이미지 표시
-                                    for (var imageUrl in messages[index].images)
-                                      GestureDetector(
-                                        onTap: () {
-                                          Get.to(ImageViewer(imageUrls: [
-                                            imageUrl,
-                                          ]));
-                                        },
-                                        child: Container(
-                                          margin: const EdgeInsets.all(10),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.network(
-                                              imageUrl,
-                                              width: 150,
-                                              height: 150,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ] else ...[
-                                    // 이미지가 없는 경우 텍스트 메시지 표시
-                                    Container(
-                                      margin:
-                                          const EdgeInsets.fromLTRB(8, 5, 8, 5),
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: isOwnMessage
-                                            ? const Color.fromARGB(
-                                                40, 157, 0, 0)
-                                            : Colors.grey[300],
+                              if (hasImage) ...[
+                                // 이미지가 있는 경우 이미지 표시
+                                for (var imageUrl in messages[index].images)
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                          ImageViewer(imageUrls: [imageUrl]));
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.all(10),
+                                      child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Text(
-                                        messages[index].message,
-                                        style: const TextStyle(fontSize: 16),
-                                      ),
-                                    ),
-                                  ],
-                                  // 프로필 이미지 표시
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      left: isOwnMessage ? 0 : 16,
-                                      right: isOwnMessage ? 16 : 0,
-                                    ),
-                                    height: 40,
-                                    child: CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                        isOwnMessage
-                                            ? widget.senderProfile
-                                            : widget.receiverProfile,
+                                        child: Image.network(
+                                          imageUrl,
+                                          width: 150,
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ],
+                              ] else ...[
+                                // 이미지가 없는 경우 텍스트 메시지 표시
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(8, 5, 8, 5),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: isOwnMessage
+                                        ? const Color.fromARGB(40, 157, 0, 0)
+                                        : Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    messages[index].message,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                              // 프로필 이미지 표시
+                              Container(
+                                margin: EdgeInsets.only(
+                                  left: isOwnMessage ? 0 : 16,
+                                  right: isOwnMessage ? 16 : 0,
+                                ),
+                                height: 40,
+                                child: CircleAvatar(
+                                  backgroundImage: AssetImage(
+                                    isOwnMessage
+                                        ? widget.senderProfile
+                                        : widget.receiverProfile,
+                                  ),
+                                ),
                               ),
                             ],
                           ),

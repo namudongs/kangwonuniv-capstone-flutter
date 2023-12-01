@@ -93,8 +93,8 @@ class AnsAddController extends GetxController {
       print("질문자 UID: $questionUserId");
 
       // 푸시 알림 전송
-      await notificationController.sendPushNotification(
-          questionUserId, "답변이 달렸어요!", "도움이 되었다면 채택을 눌러주세요.", articleId);
+      await notificationController.sendPushNotification(questionUserId,
+          "답변이 달렸어요!", "도움이 되었다면 채택을 눌러주세요.", articleId, 'answer');
 
       print('알림 전송 성공');
 

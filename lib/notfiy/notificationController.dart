@@ -107,6 +107,14 @@ class NotificationController extends GetxController {
           Get.put(BottomNavBarController());
       bottomNavBarController.goToAnsPage();
       Get.to(AnsDetailPage(articleId: articleId));
+    } else if (message.data['type'] == 'chat') {
+      String chatRoomId = message.data['chatRoomId'];
+      incrementBadge();
+      // 앱 내 해당 질문 페이지로 이동
+      Get.offAll(() => BottomNavBar());
+      BottomNavBarController bottomNavBarController =
+          Get.put(BottomNavBarController());
+      bottomNavBarController.goToAnsPage();
     } else {
       print('알 수 없는 알림을 받았습니다: ${message.data}');
       incrementBadge();
@@ -184,8 +192,8 @@ class NotificationController extends GetxController {
     print('권한: ${settings.authorizationStatus}');
   }
 
-  Future<void> sendPushNotification(
-      String userId, String title, String message, String id) async {
+  Future<void> sendPushNotification(String userId, String title, String message,
+      String id, String type) async {
     const String functionUrl =
         'https://us-central1-capstone-flutter-eb3c2.cloudfunctions.net/sendPushNotification'; // Firebase 함수 URL
 
@@ -199,7 +207,7 @@ class NotificationController extends GetxController {
           'userId': userId,
           'title': title,
           'message': message,
-          'type': 'answer',
+          'type': type,
           'articleId': id,
         }),
       );

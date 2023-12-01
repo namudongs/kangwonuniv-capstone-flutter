@@ -89,8 +89,8 @@ class AnsDetailController extends GetxController {
         await articleRef.update({'is_adopted': true});
         await answerRef.update({'is_adopted': true});
 
-        notificationController.sendPushNotification(
-            answerWriterId!, "답변이 채택되었습니다!", "보상으로 50QU를 적립해드렸어요.", articleId);
+        notificationController.sendPushNotification(answerWriterId!,
+            "답변이 채택되었습니다!", "보상으로 50QU를 적립해드렸어요.", articleId, 'answer');
         AuthController authController = Get.find<AuthController>();
         authController.increaseUserQu(answerWriterId, 50);
 
@@ -170,7 +170,9 @@ class AnsDetailController extends GetxController {
       }
 
       snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
-      // 나머지 코드...
+      Get.offAll(() => BottomNavBar());
+      Get.find<AuthController>().fetchUserData();
+      Get.find<BottomNavBarController>().goToAnsPage();
     } catch (e) {
       // 예외 처리
       snackBar('오류', '질문 삭제 중 오류 발생: $e');

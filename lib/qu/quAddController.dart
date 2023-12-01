@@ -77,14 +77,17 @@ class QuAddController extends GetxController {
 
         // 선택된 이미지를 Firebase Storage에 업로드하고 URL을 가져옴
         List<Map<String, dynamic>> uploadedImages = [];
-        for (var image in selectedImages) {
-          Map<String, String> fileInfo = await uploadFile(image);
-          if (fileInfo['url']!.isNotEmpty) {
-            uploadedImages.add({
-              'url': fileInfo['url']!,
-              'fileName': fileInfo['fileName']!,
-              // 여기에 추가 이미지 정보를 넣을 수 있습니다.
-            });
+        if (selectedImages.isNotEmpty) {
+          // 이미지가 선택된 경우에만 실행
+          for (var image in selectedImages) {
+            Map<String, String> fileInfo = await uploadFile(image);
+            if (fileInfo['url']!.isNotEmpty) {
+              uploadedImages.add({
+                'url': fileInfo['url']!,
+                'fileName': fileInfo['fileName']!,
+                // 추가 이미지 정보...
+              });
+            }
           }
         }
 
@@ -118,53 +121,55 @@ class QuAddController extends GetxController {
       }
     }
   }
+}
 
-  Future<void> uploadFileToFirebaseStorage(String articleId, XFile file) async {
-    String fileName = file.name;
-    String filePath = 'articles/$articleId/$fileName';
-    File fileToUpload = File(file.path);
+Future<void> uploadFileToFirebaseStorage(String articleId, XFile file) async {
+  String fileName = file.name;
+  String filePath = 'articles/$articleId/$fileName';
+  File fileToUpload = File(file.path);
 
-    try {
-      // 파일을 Firebase Storage에 업로드
-      await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
+  try {
+    // 파일을 Firebase Storage에 업로드
+    await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
 
-      // 업로드된 파일의 URL 가져오기
-      String downloadURL =
-          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+    // 업로드된 파일의 URL 가져오기
+    String downloadURL =
+        await FirebaseStorage.instance.ref(filePath).getDownloadURL();
 
-      // Firestore에 파일 정보 저장
-      await FirebaseFirestore.instance
-          .collection('articles')
-          .doc(articleId)
-          .update({
-        'files': FieldValue.arrayUnion([
-          {'url': downloadURL, 'fileName': fileName, 'fileType': file.mimeType}
-        ])
-      });
-    } catch (e) {
-      print(e);
-      // 오류 처리
-    }
+    // Firestore에 파일 정보 저장
+    await FirebaseFirestore.instance
+        .collection('articles')
+        .doc(articleId)
+        .update({
+      'files': FieldValue.arrayUnion([
+        {'url': downloadURL, 'fileName': fileName, 'fileType': file.mimeType}
+      ])
+    });
+  } catch (e) {
+    print(e);
+    // 오류 처리
   }
+}
 
-  Future<Map<String, String>> uploadFile(XFile file) async {
-    String fileName = '${DateTime.now().millisecondsSinceEpoch}_${file.name}';
-    String filePath = 'uploads/$fileName';
-    File fileToUpload = File(file.path);
+Future<Map<String, String>> uploadFile(XFile file) async {
+  // 파일 이름이 null이면 대체 이름 사용
+  String fileName =
+      file.name ?? 'default_${DateTime.now().millisecondsSinceEpoch}';
+  String filePath = 'uploads/$fileName';
+  File fileToUpload = File(file.path);
 
-    try {
-      // 파일을 Firebase Storage에 업로드
-      await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
+  try {
+    // 파일을 Firebase Storage에 업로드
+    await FirebaseStorage.instance.ref(filePath).putFile(fileToUpload);
 
-      // 업로드된 파일의 URL 가져오기
-      String downloadURL =
-          await FirebaseStorage.instance.ref(filePath).getDownloadURL();
+    // 업로드된 파일의 URL 가져오기
+    String downloadURL =
+        await FirebaseStorage.instance.ref(filePath).getDownloadURL();
 
-      // fileName과 downloadURL 반환
-      return {'fileName': fileName, 'url': downloadURL};
-    } catch (e) {
-      print('Error uploading file: $e');
-      return {'fileName': '', 'url': ''};
-    }
+    // fileName과 downloadURL 반환
+    return {'fileName': fileName, 'url': downloadURL};
+  } catch (e) {
+    print('Error uploading file: $e');
+    return {'fileName': '', 'url': ''};
   }
 }

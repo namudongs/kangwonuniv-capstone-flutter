@@ -89,6 +89,7 @@ class AnsDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Obx(() {
             if (controller.articleData.value == null) {
+              print(controller.articleData.value);
               return const Center(child: CircularProgressIndicator());
             }
 
@@ -104,14 +105,6 @@ class AnsDetailPage extends StatelessWidget {
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 50),
                   decoration: BoxDecoration(
                       color: Colors.white,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.4),
-                      //     blurRadius: 10,
-                      //     spreadRadius: 1,
-                      //     offset: Offset.zero,
-                      //   ),
-                      // ],
                       borderRadius: BorderRadius.circular(30)),
                   child: Column(
                     children: [
@@ -438,7 +431,12 @@ class AnsDetailPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        _goChatwithAnswerWriter(controller, articleId),
+                        Visibility(
+                            visible: appUser?.uid == answer['user']['uid'] ||
+                                appUser?.uid == articleData['user']['uid'],
+                            replacement: const SizedBox.shrink(),
+                            child:
+                                _goChatwithAnswerWriter(controller, articleId)),
                       ],
                     ),
                   ),
@@ -590,35 +588,61 @@ class AnsDetailPage extends StatelessWidget {
 
   Widget _goChatwithAnswerWriter(
       AnsDetailController controller, String articleId) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-      padding: const EdgeInsets.all(5),
-      width: 100,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(20, 157, 0, 0),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: InkWell(
-        onTap: () async {
-          String chatRoomId = await _createOrGetChatRoom(controller, articleId);
-          if (chatRoomId.isNotEmpty) {
-            // 채팅방 페이지로 이동
-            Get.to(() => ChatPage(
-                  chatRoomId: chatRoomId,
-                  senderId: controller.articleData.value!['user']['uid'],
-                  receiverId: controller.answersData.firstWhere(
-                      (answer) => answer['is_adopted'] == true)['user']['uid'],
-                  senderName: controller.articleData.value!['user']['name'],
-                  receiverName: controller.answersData.firstWhere(
-                      (answer) => answer['is_adopted'] == true)['user']['name'],
-                  senderProfile: controller.articleData.value!['user']
-                      ['avatar'],
-                  receiverProfile: controller.answersData.firstWhere(
-                          (answer) => answer['is_adopted'] == true)['user']
-                      ['avatar'],
-                ));
-          }
-        },
+    final currentUserUid = appUser?.uid ?? '';
+    final isCurrentUserQuestioner =
+        controller.articleData.value!['user']['uid'] == currentUserUid;
+
+    // firstWhere에 orElse를 추가하여 예외 방지
+    final adoptedAnswer = controller.answersData.firstWhere(
+      (answer) => answer['is_adopted'] == true,
+      orElse: () => null, // 조건을 만족하는 요소가 없으면 null 반환
+    );
+
+    // adoptedAnswer가 null인 경우 처리 로직 추가
+    if (adoptedAnswer == null) {
+      return const SizedBox.shrink(); // 또는 다른 위젯 반환
+    }
+
+    String senderName, receiverName, senderProfile, receiverProfile;
+
+    if (isCurrentUserQuestioner) {
+      // 현재 사용자가 질문자일 경우
+      senderName = controller.articleData.value!['user']['name'];
+      senderProfile = controller.articleData.value!['user']['avatar'];
+      receiverName = adoptedAnswer['user']['name'];
+      receiverProfile = adoptedAnswer['user']['avatar'];
+    } else {
+      // 현재 사용자가 답변자일 경우
+      senderName = adoptedAnswer['user']['name'];
+      senderProfile = adoptedAnswer['user']['avatar'];
+      receiverName = controller.articleData.value!['user']['name'];
+      receiverProfile = controller.articleData.value!['user']['avatar'];
+    }
+
+    return InkWell(
+      onTap: () async {
+        String chatRoomId = await _createOrGetChatRoom(controller, articleId);
+        if (chatRoomId.isNotEmpty) {
+          // 채팅방 페이지로 이동
+          Get.to(() => ChatPage(
+                chatRoomId: chatRoomId,
+                senderId: currentUserUid,
+                receiverId: isCurrentUserQuestioner
+                    ? adoptedAnswer['user']['uid']
+                    : controller.articleData.value!['user']['uid'],
+                senderName: senderName,
+                receiverName: receiverName,
+                senderProfile: senderProfile,
+                receiverProfile: receiverProfile,
+              ));
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(20, 157, 0, 0),
+          borderRadius: BorderRadius.circular(5),
+        ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,

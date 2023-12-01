@@ -18,8 +18,8 @@ class ChatMessage {
     required this.receiverProfile,
     required this.message,
     required this.timestamp,
-    this.images = const [],
-  });
+    List<String>? images,
+  }) : images = images ?? [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -46,6 +46,20 @@ class ChatMessage {
       message: map['text'],
       timestamp: map['timestamp'].toDate(),
       images: List<String>.from(map['images'] ?? []),
+    );
+  }
+
+  ChatMessage copyWith({List<String>? images}) {
+    return ChatMessage(
+      senderId: senderId,
+      receiverId: receiverId,
+      senderName: senderName,
+      senderProfile: senderProfile,
+      receiverName: receiverName,
+      receiverProfile: receiverProfile,
+      message: message,
+      timestamp: timestamp,
+      images: images ?? this.images,
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:capstone/components/chatMessage.dart';
+import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,33 +35,32 @@ class ChatController extends GetxController {
 
   Future<void> sendChatMessage(String chatRoomId, ChatMessage message) async {
     try {
-      // 이미지 URL을 저장할 리스트
       List<String> imageUrls = [];
 
-      // 선택된 모든 이미지를 업로드하고 URL을 가져옴
       for (var image in selectedImages) {
         Map<String, String> fileInfo = await uploadFile(image);
         if (fileInfo['url']!.isNotEmpty) {
-          imageUrls.add(fileInfo['url']!); // 이미지 URL을 리스트에 추가
+          imageUrls.add(fileInfo['url']!);
         }
       }
 
-      // 메시지 객체에 이미지 URL 리스트 추가
-      message.images.addAll(imageUrls);
+      // 새로운 리스트를 생성하여 images 필드에 할당
+      message = message.copyWith(images: imageUrls);
 
-      // Firestore에 메시지 저장
       await _firestore
           .collection('chats')
           .doc(chatRoomId)
           .collection('messages')
           .add(message.toMap());
 
-      String receiverId = message.receiverId;
       NotificationController notificationController = Get.find();
       await notificationController.sendPushNotification(
-          receiverId, "새 채팅 메시지", "메시지가 도착했습니다", chatRoomId);
-
-      // 선택된 이미지 리스트 초기화
+        message.receiverId,
+        '새 채팅 메세지',
+        '채팅을 확인해 주세요.',
+        chatRoomId,
+        'chat',
+      );
       selectedImages.clear();
     } catch (e) {
       print('Error sending chat message: $e');

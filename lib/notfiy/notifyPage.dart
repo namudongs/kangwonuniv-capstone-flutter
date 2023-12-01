@@ -80,7 +80,8 @@ class _NotifyPageState extends State<NotifyPage> {
                         style:
                             const TextStyle(color: Colors.grey)), // 날짜 스타일 조정
                     onTap: () {
-                      if (notification['articleId'] != '') {
+                      if (notification['articleId'] != '' ||
+                          notification['articleId'] == 'answer') {
                         Get.to(AnsDetailPage(
                             articleId: notification['articleId']));
                       } else {
