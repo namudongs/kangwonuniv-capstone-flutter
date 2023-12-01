@@ -172,8 +172,10 @@ class AnsDetailController extends GetxController {
 
       snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
       Get.offAll(() => BottomNavBar());
+      BottomNavBarController bottomNavBarController =
+          Get.find<BottomNavBarController>();
       Get.find<AuthController>().fetchUserData();
-      Get.find<BottomNavBarController>().goToAnsPage();
+      bottomNavBarController.goToAnsPage();
     } catch (e) {
       // 예외 처리
       snackBar('오류', '질문 삭제 중 오류 발생: $e');

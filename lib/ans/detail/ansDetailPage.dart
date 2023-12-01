@@ -462,13 +462,14 @@ class AnsDetailPage extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    _buildImageList(context, answerImages, 0.6, 0.4),
+                    const SizedBox(height: 10),
                     Text(
                       answer['content'],
                       style: const TextStyle(
                         fontSize: 14,
                       ),
                     ),
-                    _buildImageList(context, answerImages, 0.6, 0.4)
                   ],
                 ),
                 Visibility(
