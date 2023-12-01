@@ -1,38 +1,38 @@
 class LectureSlot {
-  final String category;
-  final int code;
-  final int division;
+  final String? category;
+  final int? code;
+  final int? division;
   final String lname;
-  final int peoplecount;
-  final String college;
-  final String department;
-  final String major;
-  final int procode;
+  final int? peoplecount;
+  final String? college;
+  final String? department;
+  final String? major;
+  final int? procode;
   final String professor;
-  final String prowork;
+  final String? prowork;
   final List<String> day;
   final List<String> classroom;
   final List<double> start;
   final List<double> end;
-  final int number;
+  final int? number;
 
   LectureSlot({
-    required this.category,
-    required this.code,
-    required this.division,
+    this.category,
+    this.code,
+    this.division,
     required this.lname,
-    required this.peoplecount,
-    required this.college,
-    required this.department,
-    required this.major,
-    required this.procode,
+    this.peoplecount,
+    this.college,
+    this.department,
+    this.major,
+    this.procode,
     required this.professor,
-    required this.prowork,
+    this.prowork,
     required this.day,
     required this.classroom,
     required this.start,
     required this.end,
-    required this.number,
+    this.number,
   });
 
   factory LectureSlot.fromJson(Map<String, dynamic> map) {

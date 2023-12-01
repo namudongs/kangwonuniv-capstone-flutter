@@ -2,13 +2,14 @@
 
 import 'dart:convert';
 
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/main.dart';
+import 'package:capstone/timetable/lectureAddForm.dart';
 import 'package:capstone/timetable/lectureSlot.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 
 List week = ['월', '화', '수', '목', '금'];
 List<LectureSlot> _selectedLectures = [];
@@ -52,7 +53,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                       lecture.start[j] < selectedLecture.end[i]))) {
             if (!conflictingLectures.contains(selectedLecture)) {
               if (lecture.lname == selectedLecture.lname) {
-                print('이미 추가된 강의입니다.');
+                snackBar('오류', '이미 추가된 강의입니다.');
                 break;
               } else {
                 conflictingLectures.add(selectedLecture);
@@ -81,7 +82,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
         return '${e.lname}, ${e.professor}';
       }).join("\n");
 
-      bool shouldProceed = await showDialog(
+      bool? shouldProceed = await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -98,6 +99,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(true);
+                  snackBar('강의 추가', '강의가 추가되었습니다.');
                 },
                 child: const Text('예'),
               ),
@@ -106,8 +108,12 @@ class _TimeTablePageState extends State<TimeTablePage> {
         },
       );
 
-      if (shouldProceed == true) {
+      if (shouldProceed == null) {
+        snackBar('시간을 확인해주세요', '해당 시간대에 이미 강의가 있습니다.');
+        return;
+      } else if (shouldProceed == true) {
         _removeConflictingLectures(conflictingLectures);
+        snackBar('겹친 강의 삭제', '강의가 삭제되었습니다.');
       } else {
         return;
       }
@@ -137,12 +143,16 @@ class _TimeTablePageState extends State<TimeTablePage> {
       double latestEndTime = 0;
 
       for (var lecture in _selectedLectures) {
-        for (int i = 0; i < lecture.day.length; i++) {
-          if (lecture.end[i] > latestEndTime) {
-            latestEndTime = lecture.end[i];
+        if (lecture.day.isNotEmpty && lecture.end.isNotEmpty) {
+          for (int i = 0; i < lecture.day.length; i++) {
+            if (lecture.end[i] > latestEndTime) {
+              latestEndTime = lecture.end[i];
+            }
           }
         }
       }
+
+      // 기존 로직 유지
       if (latestEndTime <= 480) {
         _kColumnLength = 16;
       } else {
@@ -152,6 +162,21 @@ class _TimeTablePageState extends State<TimeTablePage> {
         }
       }
     });
+  }
+
+  void _tappedLectureAdd() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return LectureAddForm(
+          onSubmit: (LectureSlot newLecture) {
+            _addLectureToTimetable(newLecture);
+            _setTimetableLength();
+            Navigator.pop(context); // 팝업 닫기
+          },
+        );
+      },
+    );
   }
 
   void _tappedPlus() {
@@ -180,9 +205,9 @@ class _TimeTablePageState extends State<TimeTablePage> {
                     ),
                     IconButton(
                       onPressed: () {
-                        // Get.to();
+                        _tappedLectureAdd();
                       },
-                      icon: const Icon(Icons.add),
+                      icon: const Icon(CupertinoIcons.add_circled),
                     ),
                   ],
                 ),
@@ -217,7 +242,8 @@ class _TimeTablePageState extends State<TimeTablePage> {
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                         title: Text(filteredLectures[index].lname),
-                        subtitle: Text(filteredLectures[index].professor),
+                        subtitle: Text(
+                            '${filteredLectures[index].professor}﹒${filteredLectures[index].classroom}﹒${filteredLectures[index].day}요일'),
                         onTap: () {
                           _addLectureToTimetable(filteredLectures[index]);
                           _setTimetableLength();
@@ -271,7 +297,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
               onPressed: () {
                 _tappedPlus();
               },
-              icon: const Icon(CupertinoIcons.plus_square),
+              icon: const Icon(CupertinoIcons.add),
               color: Colors.black,
             ),
           ],
@@ -364,11 +390,34 @@ class _TimeTablePageState extends State<TimeTablePage> {
               child: Stack(children: [
                 GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _selectedLectures.remove(lecture);
-                      _saveTimetable();
-                      _setTimetableLength();
-                    });
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('강의 삭제'),
+                          content: const Text('강의를 삭제하시겠습니까?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 알림 닫기
+                                setState(() {
+                                  _selectedLectures.remove(lecture); // 강의 삭제
+                                  _saveTimetable();
+                                  _setTimetableLength();
+                                });
+                              },
+                              child: const Text('확인'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 알림 닫기
+                              },
+                              child: const Text('취소'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Container(
                     width: (MediaQuery.of(context).size.width - 40) / 5,
@@ -382,32 +431,34 @@ class _TimeTablePageState extends State<TimeTablePage> {
                         left: 1.0,
                         right: 1.0,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            lecture.lname,
-                            style: const TextStyle(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              lecture.lname,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              classroom,
+                              style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            classroom,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                          Text(
-                            lecture.professor,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
+                            Text(
+                              lecture.professor,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -458,33 +509,5 @@ class _TimeTablePageState extends State<TimeTablePage> {
         ),
       ),
     ];
-  }
-
-  Widget _buildLectureWidget(LectureSlot lecture, BuildContext context) {
-    return ListTile(
-      title: Text(lecture.lname),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(lecture.professor),
-          lecture.day.length == lecture.classroom.length
-              ? Text(List.generate(
-                  lecture.day.length,
-                  (index) =>
-                      '${lecture.day[index]}(${lecture.classroom[index]})',
-                ).join(', '))
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(lecture.day.join(', ')),
-                    const Text('이러닝 강의'),
-                  ],
-                ),
-        ],
-      ),
-      onTap: () {
-        _addLectureToTimetable(lecture);
-      },
-    );
   }
 }
