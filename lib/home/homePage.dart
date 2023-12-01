@@ -73,61 +73,155 @@ class _HomePageState extends State<HomePage> {
           child: SafeArea(
             child: Column(
               children: [
+                Container(
+                  margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 4 - 20,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                        image: AssetImage('assets/images/background_1.png'),
+                        fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                        offset: Offset.zero,
+                      ),
+                    ],
+                  ),
+                  child: const Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '전공 재학생들에게\n궁금한 것을 물어보세요!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'HomeTitleFont',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        '대학교 전공에 대해 궁금한 것을\n전공자에게 직접 질문하고 답변을 받아보세요.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'HomeTitleFont',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 15),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
+                    InkWell(
                       onTap: () {
-                        print('홈 컨테이너를 탭했습니다.');
-                        Get.to(const TimeTablePage());
+                        print('시간표를 탭했습니다.');
+                        Get.to(const TimeTablePage(), fullscreenDialog: true);
                       },
                       child: Container(
-                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height / 4 - 20,
                         decoration: BoxDecoration(
-                          image: const DecorationImage(
-                              image:
-                                  AssetImage('assets/images/background_1.png'),
-                              fit: BoxFit.cover),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(
+                                  0xFFB76652), // This is the color at the top edge of the image
+                              Color(
+                                  0xFF5F2D20), // This is the color at the bottom edge of the image
+                            ],
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
+                              color: Colors.grey.withOpacity(0.5),
                               blurRadius: 10,
                               spreadRadius: 1,
                               offset: Offset.zero,
                             ),
                           ],
+                          // image: const DecorationImage(
+                          //   image: AssetImage('assets/images/background_1.png'),
+                          //   fit: BoxFit.cover,
+                          // ),
                         ),
+                        margin: const EdgeInsets.fromLTRB(15, 0, 12, 10),
+                        width: MediaQuery.of(context).size.width / 2 - 21,
+                        height: MediaQuery.of(context).size.height / 6,
                         child: const Column(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '전공 재학생들에게\n궁금한 것을 물어보세요!',
-                              textAlign: TextAlign.center,
+                              '시간표',
                               style: TextStyle(
+                                fontFamily: 'HomeTitleFont',
+                                color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              '대학교 전공에 대해 궁금한 것을\n전공자에게 직접 질문하고 답변을 받아보세요.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
-                              ),
-                            ),
+                            Icon(Icons.calendar_today_rounded,
+                                color: Colors.white, size: 70),
                           ],
                         ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        gradient: const LinearGradient(
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
+                          colors: [
+                            Color(
+                                0xFFB76652), // This is the color at the top edge of the image
+                            Color(
+                                0xFF5F2D20), // This is the color at the bottom edge of the image
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                            offset: Offset.zero,
+                          ),
+                        ],
+                      ),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                      width: MediaQuery.of(context).size.width / 2 - 21,
+                      height: MediaQuery.of(context).size.height / 6,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '그룹스터디',
+                            style: TextStyle(
+                              fontFamily: 'HomeTitleFont',
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Icon(Icons.school_rounded,
+                              color: Colors.white, size: 70),
+                        ],
                       ),
                     ),
                   ],
                 ),
                 Divider(
-                  height: 50,
+                  height: 30,
                   thickness: 1,
                   color: Colors.grey.withOpacity(0.3),
                 ),
