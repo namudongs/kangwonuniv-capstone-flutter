@@ -33,6 +33,6 @@ snackBar(String title, String message) {
     colorText: Colors.white,
     margin: const EdgeInsets.all(10),
     borderRadius: 10,
-    duration: const Duration(seconds: 1),
+    duration: const Duration(milliseconds: 1000),
   );
 }

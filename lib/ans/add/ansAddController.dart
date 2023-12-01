@@ -105,6 +105,7 @@ class AnsAddController extends GetxController {
       authController.fetchUserData();
       notificationController.saveNotificationToFirestore(
           appUser!.uid, "답변을 등록하셨습니다.", "답변이 채택되면 알림을 드릴게요!", articleId);
+      notificationController.updateNotifications(appUser!.uid);
 
       isLoading.value = false;
       content.value = '';

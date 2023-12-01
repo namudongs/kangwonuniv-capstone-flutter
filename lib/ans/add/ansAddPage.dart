@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:capstone/ans/add/ansAddController.dart';
+import 'package:capstone/components/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -60,8 +61,15 @@ class _AnsAddPageState extends State<AnsAddPage> {
               ? const CircularProgressIndicator() // 로딩 중 로딩 인디케이터 표시
               : IconButton(
                   icon: const Icon(Icons.check),
-                  onPressed: () => controller.saveForm(widget.articleId),
-                ),
+                  onPressed: () {
+                    if (controller.content.value.isEmpty ||
+                        controller.content.value == '') {
+                      snackBar('오류', '답변 내용을 입력해주세요');
+                      return;
+                    } else {
+                      controller.saveForm(widget.articleId);
+                    }
+                  }),
         ],
       ),
       body: SafeArea(

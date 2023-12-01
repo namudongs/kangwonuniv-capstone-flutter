@@ -14,6 +14,7 @@ import 'dart:convert';
 
 class NotificationController extends GetxController {
   var badgeCount = 0.obs;
+  var notifications = <Map<String, dynamic>>[].obs; // RxList로 알림 목록 관리
 
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -33,6 +34,9 @@ class NotificationController extends GetxController {
     requestPermission();
     _initializeNotification();
     _listenForTokenRefresh();
+
+    var userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    await updateNotifications(userId);
     super.onInit();
   }
 
@@ -108,9 +112,9 @@ class NotificationController extends GetxController {
       bottomNavBarController.goToAnsPage();
       Get.to(AnsDetailPage(articleId: articleId));
     } else if (message.data['type'] == 'chat') {
-      String chatRoomId = message.data['chatRoomId'];
       incrementBadge();
       // 앱 내 해당 질문 페이지로 이동
+      print('알림 타입이 채팅입니다');
       Get.offAll(() => BottomNavBar());
       BottomNavBarController bottomNavBarController =
           Get.put(BottomNavBarController());
@@ -254,6 +258,7 @@ class NotificationController extends GetxController {
         .collection('notifications')
         .orderBy('timestamp', descending: true)
         .get();
+    print('알림을 불러왔습니다.');
     return querySnapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
@@ -267,5 +272,40 @@ class NotificationController extends GetxController {
   void clearBadge() {
     badgeCount.value = 0; // 배지 카운트 초기화
     FlutterAppBadger.removeBadge(); // 배지 제거
+  }
+
+  void deleteAllNotificationsWithTimestamp(
+      String userId, Timestamp timeStamp) async {
+    try {
+      // 일치하는 타임스탬프를 가진 모든 문서를 조회합니다.
+      var querySnapshot = await firestore
+          .collection('users')
+          .doc(userId)
+          .collection('notifications')
+          .where('timestamp', isEqualTo: timeStamp)
+          .get();
+
+      // 각 문서에 대해 삭제를 수행합니다.
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+
+      await updateNotifications(userId);
+      print("일치하는 모든 알림이 삭제되었습니다.");
+    } catch (e) {
+      print("알림 삭제 실패: $e");
+    }
+  }
+
+  @override
+  void dispose() {
+    badgeCount.close();
+    super.dispose();
+  }
+
+  Future<void> updateNotifications(String userId) async {
+    var updatedNotifications = await fetchNotifications(userId);
+    notifications.assignAll(updatedNotifications); // RxList 업데이트
+    print('알림을 업데이트헀습니다.');
   }
 }

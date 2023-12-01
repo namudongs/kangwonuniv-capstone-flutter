@@ -102,7 +102,7 @@ class QuAddController extends GetxController {
         tag.value = '';
         selectedImages.clear();
 
-        Get.back();
+        Get.offAll(() => BottomNavBar());
         BottomNavBarController bottomNavBarController =
             Get.find<BottomNavBarController>();
         bottomNavBarController.goToAnsPage();
@@ -113,6 +113,7 @@ class QuAddController extends GetxController {
         await authController.fetchUserData();
         notificationController.saveNotificationToFirestore(appUser?.uid ?? '',
             '질문을 등록하셨습니다.', '답변이 등록되면 알림을 드릴게요!', docRef.id);
+        notificationController.updateNotifications(appUser!.uid);
 
         isLoading.value = false;
       } catch (e) {

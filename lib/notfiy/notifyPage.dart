@@ -1,9 +1,10 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'package:capstone/ans/detail/ansDetailPage.dart';
-import 'package:capstone/main.dart';
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/notfiy/notificationController.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,7 @@ class NotifyPage extends StatefulWidget {
 
 class _NotifyPageState extends State<NotifyPage> {
   final NotificationController notificationController =
-      NotificationController();
+      Get.put(NotificationController());
 
   String formatTimestamp(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
@@ -26,35 +27,39 @@ class _NotifyPageState extends State<NotifyPage> {
   @override
   void initState() {
     super.initState();
-    notificationController.clearBadge();
   }
 
   @override
   Widget build(BuildContext context) {
-    // 여기서 사용자 ID를 어떻게 처리할지는 앱의 나머지 부분에 달려있습니다.
-    String userId = appUser?.uid ?? '이름 없음';
+    String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('알림'),
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: notificationController.fetchNotifications(userId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('오류가 발생했습니다.'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('알림이 없습니다.'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                var notification = snapshot.data![index];
-                String formattedTime =
-                    formatTimestamp(notification['timestamp']);
-                return Container(
+      body: Obx(() {
+        // 알림 목록이 비어있는지 체크
+        if (notificationController.notifications.isEmpty) {
+          return const Center(child: Text('알림이 없습니다.'));
+        } else {
+          return ListView.builder(
+            itemCount: notificationController.notifications.length,
+            itemBuilder: (context, index) {
+              var notification = notificationController.notifications[index];
+              if (notification['timestamp'] == null) {
+                return const SizedBox.shrink();
+              }
+              String formattedTime = formatTimestamp(notification['timestamp']);
+              return GestureDetector(
+                onLongPress: () {
+                  setState(() {
+                    notificationController.deleteAllNotificationsWithTimestamp(
+                        userId, notification['timestamp']);
+                    notificationController.fetchNotifications(userId);
+                    snackBar('알림 삭제', '알림이 삭제되었습니다.');
+                  });
+                },
+                child: Container(
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
@@ -89,12 +94,12 @@ class _NotifyPageState extends State<NotifyPage> {
                       }
                     },
                   ),
-                );
-              },
-            );
-          }
-        },
-      ),
+                ),
+              );
+            },
+          );
+        }
+      }),
     );
   }
 }
