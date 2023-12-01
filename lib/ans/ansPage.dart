@@ -115,42 +115,48 @@ class AnsPage extends StatelessWidget {
                 ],
               ),
               Visibility(
-                visible: documentSnapshot['title'].isNotEmpty,
-                replacement: Text(
-                  documentSnapshot['content'].replaceAll('\n', ' '),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      documentSnapshot['content'].replaceAll('\n', ' '),
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black.withOpacity(0.8),
-                      ),
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
+                  visible: documentSnapshot['title'].isNotEmpty,
+                  replacement: Text(
+                    documentSnapshot['content'].replaceAll('\n', ' '),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
                     ),
-                    if (imageUrls.isNotEmpty)
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          imageUrls[0],
-                          width: MediaQuery.of(context).size.width / 5,
-                          height: MediaQuery.of(context).size.width / 5,
-                          fit: BoxFit.cover,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        // 텍스트를 Expanded로 감싸서 남은 공간을 모두 사용하도록 함
+                        child: Text(
+                          documentSnapshot['content'].replaceAll('\n', ' '),
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black.withOpacity(0.8),
+                          ),
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                  ],
-                ),
-              ),
+                      if (imageUrls.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 8), // 텍스트와 이미지 사이에 약간의 간격 추가
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              imageUrls[0],
+                              width: MediaQuery.of(context).size.width / 5,
+                              height: MediaQuery.of(context).size.width / 5,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                    ],
+                  )),
               const Padding(padding: EdgeInsets.only(top: 10)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

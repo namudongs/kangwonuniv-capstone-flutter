@@ -35,17 +35,19 @@ class ChatController extends GetxController {
 
   Future<void> sendChatMessage(String chatRoomId, ChatMessage message) async {
     try {
-      List<String> imageUrls = [];
+      List<Map<String, String>> imageInfos = [];
 
       for (var image in selectedImages) {
         Map<String, String> fileInfo = await uploadFile(image);
+        print('Image uploaded: ${fileInfo['url']}');
         if (fileInfo['url']!.isNotEmpty) {
-          imageUrls.add(fileInfo['url']!);
+          print('Image uploaded: ${fileInfo['url']}');
+          imageInfos.add(fileInfo);
         }
       }
 
-      // 새로운 리스트를 생성하여 images 필드에 할당
-      message = message.copyWith(images: imageUrls);
+      // 메시지 객체에 업로드된 이미지 정보 추가
+      message = message.copyWith(images: imageInfos);
 
       await _firestore
           .collection('chats')

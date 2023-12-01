@@ -70,18 +70,18 @@ class _ChatPageState extends State<ChatPage> {
                             children: [
                               if (hasImage) ...[
                                 // 이미지가 있는 경우 이미지 표시
-                                for (var imageUrl in messages[index].images)
+                                for (var imageInfo in messages[index].images)
                                   GestureDetector(
                                     onTap: () {
-                                      Get.to(
-                                          ImageViewer(imageUrls: [imageUrl]));
+                                      Get.to(ImageViewer(
+                                          imageUrls: [imageInfo['url']!]));
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.all(10),
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                          imageUrl,
+                                          imageInfo['url']!,
                                           width: 150,
                                           height: 150,
                                           fit: BoxFit.cover,
@@ -94,6 +94,8 @@ class _ChatPageState extends State<ChatPage> {
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(8, 5, 8, 5),
                                   padding: const EdgeInsets.all(10),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
                                   decoration: BoxDecoration(
                                     color: isOwnMessage
                                         ? const Color.fromARGB(40, 157, 0, 0)
@@ -177,6 +179,7 @@ class _ChatPageState extends State<ChatPage> {
         receiverName: widget.receiverName,
         receiverProfile: widget.receiverProfile,
         timestamp: DateTime.now(),
+        images: [], // 빈 이미지 리스트 초기화
       );
 
       _chatController.sendChatMessage(widget.chatRoomId, message);
@@ -190,6 +193,7 @@ class _ChatPageState extends State<ChatPage> {
     if (image != null) {
       Map<String, String> fileInfo = await _chatController.uploadFile(image);
       String imageUrl = fileInfo['url'] ?? '';
+      String imageFileName = fileInfo['fileName'] ?? '';
 
       if (imageUrl.isNotEmpty) {
         ChatMessage message = ChatMessage(
@@ -201,7 +205,9 @@ class _ChatPageState extends State<ChatPage> {
           receiverProfile: widget.receiverProfile,
           timestamp: DateTime.now(),
           message: '',
-          images: [imageUrl],
+          images: [
+            {'url': imageUrl, 'fileName': imageFileName}
+          ], // 이미지 URL과 파일명을 포함
         );
 
         _chatController.sendChatMessage(widget.chatRoomId, message);

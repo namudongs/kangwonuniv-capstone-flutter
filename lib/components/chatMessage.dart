@@ -7,7 +7,7 @@ class ChatMessage {
   String receiverProfile;
   String message;
   DateTime timestamp;
-  List<String> images;
+  List<Map<String, String>> images; // 변경된 부분
 
   ChatMessage({
     required this.senderId,
@@ -18,7 +18,7 @@ class ChatMessage {
     required this.receiverProfile,
     required this.message,
     required this.timestamp,
-    List<String>? images,
+    List<Map<String, String>>? images, // 변경된 부분
   }) : images = images ?? [];
 
   Map<String, dynamic> toMap() {
@@ -31,7 +31,7 @@ class ChatMessage {
       'receiverProfile': receiverProfile,
       'text': message,
       'timestamp': timestamp,
-      'images': images,
+      'images': images.map((imageInfo) => imageInfo).toList(), // 변경된 부분
     };
   }
 
@@ -45,11 +45,14 @@ class ChatMessage {
       receiverProfile: map['receiverProfile'],
       message: map['text'],
       timestamp: map['timestamp'].toDate(),
-      images: List<String>.from(map['images'] ?? []),
+      images: (map['images'] as List)
+          .map((imageInfo) => Map<String, String>.from(imageInfo))
+          .toList(), // 변경된 부분
     );
   }
 
-  ChatMessage copyWith({List<String>? images}) {
+  ChatMessage copyWith({List<Map<String, String>>? images}) {
+    // 변경된 부분
     return ChatMessage(
       senderId: senderId,
       receiverId: receiverId,
