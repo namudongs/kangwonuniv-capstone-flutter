@@ -2,7 +2,6 @@
 
 import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
-import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
 import 'package:capstone/timetable/timeTablePage.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 Row(
                   children: [
                     InkWell(
@@ -128,6 +127,9 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
                           borderRadius: BorderRadius.circular(15),
                           gradient: const LinearGradient(
                             begin: Alignment.topCenter,
@@ -135,8 +137,8 @@ class _HomePageState extends State<HomePage> {
                             colors: [
                               Color(
                                   0xFFB76652), // This is the color at the top edge of the image
-                              Color(
-                                  0xFF5F2D20), // This is the color at the bottom edge of the image
+                              Color.fromARGB(255, 157, 76,
+                                  55), // This is the color at the bottom edge of the image
                             ],
                           ),
                           boxShadow: [
@@ -152,7 +154,7 @@ class _HomePageState extends State<HomePage> {
                           //   fit: BoxFit.cover,
                           // ),
                         ),
-                        margin: const EdgeInsets.fromLTRB(15, 0, 12, 10),
+                        margin: const EdgeInsets.fromLTRB(15, 0, 6, 10),
                         width: MediaQuery.of(context).size.width / 2 - 21,
                         height: MediaQuery.of(context).size.height / 6,
                         child: const Column(
@@ -177,6 +179,9 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(0.3),
+                        ),
                         borderRadius: BorderRadius.circular(15),
                         gradient: const LinearGradient(
                           begin: Alignment.bottomLeft,
@@ -184,8 +189,8 @@ class _HomePageState extends State<HomePage> {
                           colors: [
                             Color(
                                 0xFFB76652), // This is the color at the top edge of the image
-                            Color(
-                                0xFF5F2D20), // This is the color at the bottom edge of the image
+                            Color.fromARGB(255, 158, 62,
+                                35), // This is the color at the bottom edge of the image
                           ],
                         ),
                         boxShadow: [
@@ -197,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      margin: const EdgeInsets.fromLTRB(0, 0, 15, 10),
+                      margin: const EdgeInsets.fromLTRB(6, 0, 15, 10),
                       width: MediaQuery.of(context).size.width / 2 - 21,
                       height: MediaQuery.of(context).size.height / 6,
                       child: const Column(
@@ -205,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '그룹스터디',
+                            '타이머',
                             style: TextStyle(
                               fontFamily: 'HomeTitleFont',
                               color: Colors.white,
@@ -213,8 +218,7 @@ class _HomePageState extends State<HomePage> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          Icon(Icons.school_rounded,
-                              color: Colors.white, size: 70),
+                          Icon(Icons.timer, color: Colors.white, size: 70),
                         ],
                       ),
                     ),

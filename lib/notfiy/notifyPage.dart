@@ -26,6 +26,7 @@ class _NotifyPageState extends State<NotifyPage> {
 
   @override
   void initState() {
+    notificationController.clearBadge();
     super.initState();
   }
 

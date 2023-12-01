@@ -89,7 +89,6 @@ class AnsDetailPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Obx(() {
             if (controller.articleData.value == null) {
-              print(controller.articleData.value);
               return const Center(child: CircularProgressIndicator());
             }
 

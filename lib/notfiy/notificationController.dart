@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'package:capstone/ans/detail/ansDetailPage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'package:capstone/components/bottomNavBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,9 +32,21 @@ class NotificationController extends GetxController {
 
   @override
   void onInit() async {
+    await Firebase.initializeApp();
     requestPermission();
     _initializeNotification();
     _listenForTokenRefresh();
+
+    if (Platform.isIOS) {
+      // iOS 포어그라운드 알림 설정
+      await FirebaseMessaging.instance
+          .setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      print('iOS 포어그라운드 알림 설정');
+    }
 
     var userId = FirebaseAuth.instance.currentUser?.uid ?? '';
     await updateNotifications(userId);
@@ -47,9 +60,8 @@ class NotificationController extends GetxController {
         ?.createNotificationChannel(channel);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      // 앱이 포어그라운드에 있을 때만 사용자 정의 알림 표시
       if (Platform.isAndroid) {
-        // 앱이 포어그라운드에 있을 때만 사용자 정의 알림 표시
-        // 안드로이드의 경우 포어그라운드 알림이 자동으로 표시되지 않음
         if (message.notification != null &&
             message.notification!.title != null) {
           // FlutterLocalNotificationsPlugin을 사용하여 알림 표시
@@ -73,10 +85,17 @@ class NotificationController extends GetxController {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // 앱이 백그라운드에 있거나 포그라운드에 있을 때 알림 클릭
-      print('앱이 백그라운드에 있을 때, 알림을 탭하여 앱을 열었습니다!');
-
       _handleMessage(message);
     });
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+      (message) {
+        if (message != null) {
+          // 앱이 종료된 상태에서 알림 클릭으로 시작된 경우
+          _handleMessage(message);
+        }
+      },
+    );
 
     FirebaseMessaging.instance.getInitialMessage().then(
       (message) {

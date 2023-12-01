@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
           secondary: Colors.black,
         ),
 
-        fontFamily: 'NanumSquare',
+        fontFamily: 'HomeTitleFont',
         brightness: Brightness.light,
         // scaffoldBackgroundColor: Colors.grey[100],
         scaffoldBackgroundColor: Colors.white,

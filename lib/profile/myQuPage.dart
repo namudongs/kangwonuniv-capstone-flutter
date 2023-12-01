@@ -25,10 +25,9 @@ class MyQuPage extends StatelessWidget {
           if (snapshot.data?.docs.isEmpty ?? true) {
             return const Center(child: Text('작성한 질문이 없습니다'));
           }
-          var articleDoc =
-              snapshot.data!.docs.first.data() as Map<String, dynamic>;
           return ListView(
             children: snapshot.data!.docs.map((doc) {
+              var articleDoc = doc.data() as Map<String, dynamic>; // 이 부분을 추가
               return InkWell(
                 onTap: () {
                   // 상세페이지 이동하기
@@ -36,7 +35,7 @@ class MyQuPage extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: buildItem(articleDoc, context),
+                  child: buildItem(articleDoc, context), // 수정된 부분
                 ),
               );
             }).toList(),
@@ -82,14 +81,14 @@ class MyQuPage extends StatelessWidget {
                   '${article['content']}',
                   style: const TextStyle(
                       fontSize: 16,
-                      color: Color.fromARGB(200, 106, 0, 0),
+                      color: Color.fromARGB(199, 0, 0, 0),
                       fontFamily: 'NanumSquare'),
                 ),
                 child: Text(
                   '${article['title']}',
                   style: const TextStyle(
                       fontSize: 16,
-                      color: Color.fromARGB(200, 106, 0, 0),
+                      color: Color.fromARGB(199, 0, 0, 0),
                       fontFamily: 'NanumSquare'),
                 )),
             const SizedBox(height: 10),
