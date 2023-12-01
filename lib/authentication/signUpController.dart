@@ -203,6 +203,7 @@ class SignUpController extends GetxController {
         major: selectedMajor,
         timestamp: Timestamp.now(),
         avatar: avatarUrl,
+        timetable: [],
       );
 
       await users.doc(userCredential.user!.uid).set(appUser.toMap());

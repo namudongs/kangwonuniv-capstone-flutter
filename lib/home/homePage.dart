@@ -4,6 +4,7 @@ import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/notfiy/notificationController.dart';
+import 'package:capstone/timetable/timeTablePage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:get/get.dart';
@@ -75,45 +76,52 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 4 - 20,
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                            image: AssetImage('assets/images/background_1.png'),
-                            fit: BoxFit.cover),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            offset: Offset.zero,
-                          ),
-                        ],
-                      ),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '전공 재학생들에게\n궁금한 것을 물어보세요!',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+                    GestureDetector(
+                      onTap: () {
+                        print('홈 컨테이너를 탭했습니다.');
+                        Get.to(const TimeTablePage());
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 4 - 20,
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                              image:
+                                  AssetImage('assets/images/background_1.png'),
+                              fit: BoxFit.cover),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                              offset: Offset.zero,
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            '대학교 전공에 대해 궁금한 것을\n전공자에게 직접 질문하고 답변을 받아보세요.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
+                          ],
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '전공 재학생들에게\n궁금한 것을 물어보세요!',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 10),
+                            Text(
+                              '대학교 전공에 대해 궁금한 것을\n전공자에게 직접 질문하고 답변을 받아보세요.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

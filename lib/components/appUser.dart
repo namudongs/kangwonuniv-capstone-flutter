@@ -12,6 +12,7 @@ class AppUser {
   final String major;
   final Timestamp timestamp;
   final String avatar;
+  List<Map<String, dynamic>> timetable;
 
   AppUser({
     required this.uid,
@@ -23,6 +24,7 @@ class AppUser {
     required this.major,
     required this.timestamp,
     required this.avatar,
+    required this.timetable,
   });
 
   Map<String, dynamic> toMap() {
@@ -36,6 +38,7 @@ class AppUser {
       'major': major,
       'timestamp': timestamp,
       'avatar': avatar,
+      'timetable': timetable,
     };
   }
 
@@ -50,6 +53,7 @@ class AppUser {
       major: map['major'],
       timestamp: Timestamp.now(),
       avatar: map['avatar'],
+      timetable: List<Map<String, dynamic>>.from(map['timetable'] ?? []),
     );
   }
 }

@@ -87,6 +87,7 @@ flutter:
     - assets/images/background_2.png
     - assets/avatars/
     - assets/images/Quniv.png
+    - assets/timetable/tuning_lectureDB_updated.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
