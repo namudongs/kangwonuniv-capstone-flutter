@@ -176,14 +176,18 @@ class _TimeTablePageState extends State<TimeTablePage> {
 
   void _tappedLectureAdd() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
-        return LectureAddForm(
-          onSubmit: (LectureSlot newLecture) {
-            _addLectureToTimetable(newLecture);
-            _setTimetableLength();
-            Navigator.pop(context); // 팝업 닫기
-          },
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.91,
+          child: LectureAddForm(
+            onSubmit: (LectureSlot newLecture) {
+              _addLectureToTimetable(newLecture);
+              _setTimetableLength();
+              Navigator.pop(context);
+            },
+          ),
         );
       },
     );
@@ -194,11 +198,12 @@ class _TimeTablePageState extends State<TimeTablePage> {
     List<LectureSlot> filteredLectures = [];
 
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: MediaQuery.of(context).size.height * 0.7,
-          margin: const EdgeInsets.only(top: 10),
+          height: MediaQuery.of(context).size.height * 0.9,
+          margin: const EdgeInsets.only(top: 5),
           child: Column(
             children: <Widget>[
               Container(
@@ -206,6 +211,15 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 30,
+                      ),
+                    ),
                     const Text(
                       '강의 추가',
                       style: TextStyle(
@@ -227,7 +241,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                 child: TextField(
                   controller: searchController,
                   decoration: const InputDecoration(
-                    labelText: '과목명 검색',
+                    labelText: '강의명 검색',
                     suffixIcon: Icon(Icons.search),
                   ),
                   onChanged: (value) async {
