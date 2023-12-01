@@ -104,68 +104,73 @@ class _LectureAddFormState extends State<LectureAddForm> {
               ),
             ],
           ),
-          Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _lnameController,
-                  decoration: const InputDecoration(labelText: '과목명'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '과목명을 입력해주세요.';
-                    }
-                    return null;
-                  },
+          SingleChildScrollView(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _lnameController,
+                      decoration: const InputDecoration(labelText: '과목명'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '과목명을 입력해주세요.';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _classroomController,
+                      decoration: const InputDecoration(labelText: '강의실'),
+                    ),
+                    TextFormField(
+                      controller: _professorController,
+                      decoration: const InputDecoration(labelText: '교수명'),
+                    ),
+                    _buildDayCheckboxes(),
+                    // 시작 시간 및 종료 시간 선택기를 여기에 추가합니다.
+                    ListTile(
+                      title: const Text('시작 시간'),
+                      trailing: Text(
+                        _startTime?.format(context) ?? '시간 선택',
+                      ),
+                      onTap: () {
+                        _selectTime(context, true);
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('종료 시간'),
+                      trailing: Text(
+                        _endTime?.format(context) ?? '시간 선택',
+                      ),
+                      onTap: () {
+                        _selectTime(context, false);
+                      },
+                    ),
+                    // const SizedBox(height: 10),
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     foregroundColor: Colors.white,
+                    //     backgroundColor: const Color.fromARGB(150, 157, 0, 0),
+                    //   ),
+                    //   onPressed: () {},
+                    //   child: SizedBox(
+                    //     width: MediaQuery.of(context).size.width * 0.7,
+                    //     child: const Text(
+                    //       '추가하기',
+                    //       textAlign: TextAlign.center,
+                    //       style: TextStyle(fontSize: 16),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
                 ),
-                TextFormField(
-                  controller: _classroomController,
-                  decoration: const InputDecoration(labelText: '강의실'),
-                ),
-                TextFormField(
-                  controller: _professorController,
-                  decoration: const InputDecoration(labelText: '교수명'),
-                ),
-                _buildDayCheckboxes(),
-                // 시작 시간 및 종료 시간 선택기를 여기에 추가합니다.
-                ListTile(
-                  title: const Text('시작 시간'),
-                  trailing: Text(
-                    _startTime?.format(context) ?? '시간 선택',
-                  ),
-                  onTap: () {
-                    _selectTime(context, true);
-                  },
-                ),
-                ListTile(
-                  title: const Text('종료 시간'),
-                  trailing: Text(
-                    _endTime?.format(context) ?? '시간 선택',
-                  ),
-                  onTap: () {
-                    _selectTime(context, false);
-                  },
-                ),
-                // const SizedBox(height: 10),
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10),
-                //     ),
-                //     foregroundColor: Colors.white,
-                //     backgroundColor: const Color.fromARGB(150, 157, 0, 0),
-                //   ),
-                //   onPressed: () {},
-                //   child: SizedBox(
-                //     width: MediaQuery.of(context).size.width * 0.7,
-                //     child: const Text(
-                //       '추가하기',
-                //       textAlign: TextAlign.center,
-                //       style: TextStyle(fontSize: 16),
-                //     ),
-                //   ),
-                // ),
-              ],
+              ),
             ),
           ),
         ],
