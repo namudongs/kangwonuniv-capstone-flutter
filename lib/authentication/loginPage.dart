@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                     : (controller.isEmailValid.value
                         ? _buildValidationMessage('이메일이 유효합니다.', true, context)
                         : _buildValidationMessage(
-                            '이메일이 형식이 유효하지 않습니다.', false, context))),
+                            '유효하지 않은 이메일 주소입니다.', false, context))),
                 const SizedBox(
                   height: 10,
                 ),
@@ -122,7 +122,7 @@ class LoginPage extends StatelessWidget {
                     : (controller.isPasswordValid.value
                         ? _buildValidationMessage('비밀번호가 유효합니다.', true, context)
                         : _buildValidationMessage(
-                            '비밀번호가 유효하지 않습니다.', false, context))),
+                            '비밀번호는 8자리 이상입니다.', false, context))),
                 const SizedBox(
                   height: 15,
                 ),

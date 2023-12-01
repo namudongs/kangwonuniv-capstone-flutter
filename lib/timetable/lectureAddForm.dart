@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/timetable/lectureSlot.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +15,6 @@ class LectureAddForm extends StatefulWidget {
 
 class _LectureAddFormState extends State<LectureAddForm> {
   final _formKey = GlobalKey<FormState>();
-  String? _selectedDay;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
   final _lnameController = TextEditingController();

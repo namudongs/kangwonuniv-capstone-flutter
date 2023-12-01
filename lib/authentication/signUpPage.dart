@@ -74,7 +74,7 @@ class SignUpPage extends StatelessWidget {
                           ? _buildValidationMessage(
                               '이메일이 유효합니다.', true, context)
                           : _buildValidationMessage(
-                              '이메일이 유효하지 않습니다.', false, context)),
+                              '유효하지 않은 이메일 주소입니다.', false, context)),
                 ),
                 Obx(
                   () => Container(
@@ -121,7 +121,7 @@ class SignUpPage extends StatelessWidget {
                           ? _buildValidationMessage(
                               '비밀번호가 유효합니다.', true, context)
                           : _buildValidationMessage(
-                              '비밀번호가 유효하지 않습니다.', false, context)),
+                              '비밀번호는 8자리 이상으로 설정해주세요.', false, context)),
                 ),
                 Obx(
                   () => SizedBox(
@@ -285,9 +285,6 @@ class SignUpPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     controller.registerUser();
-                    controller.emailController.clear();
-                    controller.passwordController.clear();
-                    controller.nameController.clear();
                   },
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.8,

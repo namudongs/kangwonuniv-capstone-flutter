@@ -236,10 +236,33 @@ class SignUpController extends GetxController {
       });
     } on FirebaseAuthException catch (e) {
       print('계정 생성 실패: $e');
-      // 추가적인 에러 처리
+
+      // FirebaseAuthException의 다양한 오류 코드에 따라 분기 처리
+      String errorMessage;
+      switch (e.code) {
+        case 'invalid-email':
+          errorMessage = '유효하지 않은 이메일 주소입니다.';
+          break;
+        case 'weak-password':
+          errorMessage = '비밀번호가 너무 약합니다.';
+          break;
+        case 'email-already-in-use':
+          errorMessage = '이미 사용 중인 이메일입니다.';
+          break;
+        case 'operation-not-allowed':
+          errorMessage = '이메일 및 비밀번호 로그인이 비활성화 되어 있습니다.';
+          break;
+        case 'user-disabled':
+          errorMessage = '사용자 계정이 비활성화 되었습니다.';
+          break;
+        default:
+          errorMessage = '알 수 없는 오류가 발생했습니다. 다시 시도해주세요.';
+      }
+      snackBar('회원가입 오류', errorMessage);
     } catch (e) {
       print('오류 발생: $e');
       // 기타 오류 처리
+      snackBar('오류', '알 수 없는 오류가 발생했습니다.');
     }
   }
 
