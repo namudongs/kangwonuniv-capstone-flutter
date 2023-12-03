@@ -16,6 +16,7 @@ class AnsDetailController extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final NotificationController notificationController =
       Get.find<NotificationController>();
+  final AuthController authController = Get.find<AuthController>();
 
   AnsDetailController(this.articleId);
 
@@ -169,6 +170,8 @@ class AnsDetailController extends GetxController {
         batch.delete(articles.doc(articleId));
         await batch.commit();
       }
+
+      authController.increaseUserQu(appUser?.uid ?? '', 50);
 
       snackBar('성공', '질문과 모든 답변이 삭제되었습니다.');
       Get.offAll(() => BottomNavBar());

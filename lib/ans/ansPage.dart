@@ -15,30 +15,70 @@ class AnsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
         appBar: AppBar(
           title: const Text('답변하기'),
+          bottom:
+              const TabBar(tabs: [Tab(text: 'QU 질문보기'), Tab(text: '전체 질문보기')]),
         ),
-        body: Container(
-          decoration: BoxDecoration(color: Colors.black.withOpacity(0.02)),
-          child: Obx(() {
-            if (controller.articleList.value.isEmpty) {
-              return const Center(child: Text('등록된 질문이 없습니다.'));
-            }
-            return ListView.builder(
-              itemCount: controller.articleList.value.length,
-              itemBuilder: (context, index) {
-                final DocumentSnapshot documentSnapshot =
-                    controller.articleList.value[index];
-                return InkWell(
-                  onTap: () => Get.to(
-                      () => AnsDetailPage(articleId: documentSnapshot.id)),
-                  child: buildArticleItem(documentSnapshot, context),
-                );
-              },
-            );
-          }),
-        ));
+        body: TabBarView(
+          children: [
+            Container(
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.02)),
+              child: Obx(
+                () {
+                  var filteredList = controller.articleList.value
+                      .where((doc) =>
+                          (doc.data() as Map<String, dynamic>)['qu'] != 0)
+                      .toList();
+
+                  if (filteredList.isEmpty) {
+                    return const Center(child: Text('QU를 사용한 질문이 없습니다.'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          filteredList[index];
+                      return InkWell(
+                        onTap: () => Get.to(() =>
+                            AnsDetailPage(articleId: documentSnapshot.id)),
+                        child: buildArticleItem(documentSnapshot, context),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.02)),
+              child: Obx(
+                () {
+                  if (controller.articleList.value.isEmpty) {
+                    return const Center(child: Text('등록된 질문이 없습니다.'));
+                  }
+                  return ListView.builder(
+                    itemCount: controller.articleList.value.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          controller.articleList.value[index];
+                      return InkWell(
+                        onTap: () => Get.to(() =>
+                            AnsDetailPage(articleId: documentSnapshot.id)),
+                        child: buildArticleItem(documentSnapshot, context),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget buildArticleItem(DocumentSnapshot documentSnapshot, context) {
@@ -68,19 +108,41 @@ class AnsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(19, 102, 30, 30),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Text(
-                  documentSnapshot['category'],
-                  style: const TextStyle(
-                      fontSize: 12,
-                      color: Color.fromARGB(200, 106, 0, 0),
-                      fontFamily: 'NanumSquare'),
-                ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(19, 102, 30, 30),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Text(
+                      documentSnapshot['category'],
+                      style: const TextStyle(
+                          fontSize: 12,
+                          color: Color.fromARGB(200, 106, 0, 0),
+                          fontFamily: 'NanumSquare'),
+                    ),
+                  ),
+                  if (documentSnapshot['qu'] > 0)
+                    Container(
+                      margin: const EdgeInsets.only(left: 5),
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Text(
+                        '${documentSnapshot['qu']}QU',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                          color: Color.fromARGB(255, 57, 135, 60),
+                          fontFamily: 'NanumSquare',
+                        ),
+                      ),
+                    ),
+                ],
               ),
               const SizedBox(height: 5),
               if (documentSnapshot['title'].isNotEmpty)

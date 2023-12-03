@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:io';
 
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/qu/categoryController.dart';
 import 'package:capstone/qu/quAddController.dart';
 import 'package:capstone/qu/selectCategoryPage.dart';
@@ -16,6 +17,10 @@ class QuAddPage extends StatefulWidget {
 }
 
 class _QuAddPageState extends State<QuAddPage> {
+  final List<int> selectableValues =
+      List.generate(10, (index) => (index + 1) * 10);
+  RxInt selectedValue = 10.obs;
+  RxBool isCheckboxChecked = false.obs;
   final CategoryController categoryController = Get.put(CategoryController());
 
   Future<void> selectCategory() async {
@@ -23,6 +28,32 @@ class _QuAddPageState extends State<QuAddPage> {
     if (selectedCategory != null) {
       categoryController.updateCategory(selectedCategory);
     }
+  }
+
+  void _showValueSelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('QU 값을 선택하세요', textAlign: TextAlign.center),
+          children: selectableValues.map((int value) {
+            return ListTile(
+              title: Text(
+                value.toString(),
+              ),
+              leading:
+                  const Icon(Icons.radio_button_unchecked, color: Colors.black),
+              onTap: () {
+                selectedValue.value = value;
+                controller.setSelectedQu(selectedValue.value);
+                print('페이지의 QU값: ${selectedValue.value}');
+                Get.back();
+              },
+            );
+          }).toList(),
+        );
+      },
+    );
   }
 
   @override
@@ -60,8 +91,10 @@ class _QuAddPageState extends State<QuAddPage> {
               ? const CircularProgressIndicator() // 로딩 중 로딩 인디케이터 표시
               : IconButton(
                   icon: const Icon(Icons.check),
-                  onPressed: () => controller.saveForm(),
-                ),
+                  onPressed: () {
+                    snackBar('진행 중', '질문을 등록하는 중입니다...');
+                    controller.saveForm();
+                  }),
         ],
       ),
       body: SafeArea(
@@ -73,6 +106,49 @@ class _QuAddPageState extends State<QuAddPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Divider(color: Colors.grey.withOpacity(0.5)),
+                    Row(
+                      children: [
+                        Obx(() => Container(
+                              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              width: 20,
+                              height: 20,
+                              child: Checkbox(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                value: isCheckboxChecked.value,
+                                onChanged: (bool? value) {
+                                  isCheckboxChecked.value = value ?? false;
+                                  if (isCheckboxChecked.value) {
+                                    _showValueSelectionDialog();
+                                  } else {
+                                    selectedValue.value = 0;
+                                    controller.setSelectedQu(0);
+                                    print('페이지의 QU값: ${selectedValue.value}');
+                                  }
+                                },
+                              ),
+                            )),
+                        GestureDetector(
+                          onTap: () {
+                            isCheckboxChecked.value = !isCheckboxChecked.value;
+                          },
+                          child: Obx(() => Text(
+                                isCheckboxChecked.value
+                                    ? '${selectedValue.value}QU 사용'
+                                    : 'QU 사용하기',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: isCheckboxChecked.value
+                                      ? Colors.black
+                                      : Theme.of(context).hintColor,
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                    Divider(color: Colors.grey.withOpacity(0.5)),
                     GestureDetector(
                       onTap: () {
                         selectCategory();

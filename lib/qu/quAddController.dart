@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 class QuAddController extends GetxController {
+  var usedQu = 0.obs;
   var title = ''.obs;
   var content = ''.obs;
   var tag = ''.obs;
@@ -26,6 +27,11 @@ class QuAddController extends GetxController {
 
   final CategoryController categoryController = Get.find<CategoryController>();
   final AuthController authController = Get.find<AuthController>();
+
+  void setSelectedQu(int value) {
+    usedQu.value = value;
+    print('컨트롤러의 QU값: ${usedQu.value}');
+  }
 
   void updateCategory(String newCategory) {
     category.value = newCategory;
@@ -45,6 +51,14 @@ class QuAddController extends GetxController {
     if (isLoading.value) return;
     isLoading.value = true;
 
+    if (appUser!.qu < 50) {
+      snackBar('실패', 'QU가 부족합니다. 질문을 등록할 수 없습니다.');
+      return;
+    } else if (usedQu > 0 && appUser!.qu < 50 + usedQu.value) {
+      snackBar('실패', 'QU가 부족합니다. 질문을 등록할 수 없습니다.');
+      return;
+    }
+
     if (content.value.isEmpty) {
       snackBar('오류', '질문 내용을 입력해주세요');
       return;
@@ -63,7 +77,7 @@ class QuAddController extends GetxController {
           'like': 0,
           'likes_uid': [],
           'is_adopted': false,
-          'qu': 0,
+          'qu': usedQu.value,
           'images': [],
           'user': {
             'uid': appUser!.uid,
@@ -110,6 +124,7 @@ class QuAddController extends GetxController {
 
         snackBar('성공', '질문이 등록되었습니다.');
         await authController.decreaseUserQu(appUser?.uid ?? '', 50);
+        await authController.decreaseUserQu(appUser?.uid ?? '', usedQu.value);
         await authController.fetchUserData();
         notificationController.saveNotificationToFirestore(appUser?.uid ?? '',
             '질문을 등록하셨습니다.', '답변이 등록되면 알림을 드릴게요!', docRef.id);
