@@ -324,6 +324,7 @@ class _TimeTablePageState extends State<TimeTablePage> {
                           ],
                         ),
                         onTap: () {
+                          snackBar('강의 추가', '강의가 추가되었습니다.');
                           _addLectureToTimetable(filteredLectures[index]);
                           _setTimetableLength();
                         },

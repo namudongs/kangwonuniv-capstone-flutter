@@ -89,8 +89,8 @@ class _LectureAddFormState extends State<LectureAddForm> {
                       );
 
                       widget.onSubmit(newLecture);
-                      Get.back();
                       snackBar('강의 추가', '강의가 추가되었습니다.');
+                      Get.back();
                     }
                   } catch (e) {
                     print(e);
