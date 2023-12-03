@@ -92,7 +92,8 @@ class _QuAddPageState extends State<QuAddPage> {
               : IconButton(
                   icon: const Icon(Icons.check),
                   onPressed: () {
-                    snackBar('진행 중', '질문을 등록하는 중입니다...');
+                    snackBar('진행 중', '질문을 등록하는 중입니다...',
+                        duration: const Duration(seconds: 2));
                     controller.saveForm();
                   }),
         ],
@@ -239,6 +240,7 @@ class _QuAddPageState extends State<QuAddPage> {
                   Divider(color: Colors.grey.withOpacity(0.5)),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
                         children: [

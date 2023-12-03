@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:capstone/ans/AnsPage.dart';
+import 'package:capstone/components/utils.dart';
 import 'package:capstone/home/homePage.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
 import 'package:capstone/profile/profilePage.dart';
@@ -56,6 +57,8 @@ class BottomNavBar extends StatelessWidget {
             currentIndex: bottomNavBarController.selectedIndex.value,
             onTap: (index) {
               if (index == 2) {
+                snackBar('주의', '질문 등록시 50QU가 차감됩니다.',
+                    duration: Duration(seconds: 2));
                 Get.to(() => const QuAddPage(), fullscreenDialog: true);
               } else {
                 bottomNavBarController.changeTab(index);

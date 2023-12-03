@@ -26,7 +26,6 @@ class AnsDetailPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: Obx(() {
         return Visibility(
-          // visible: controller.articleData.value?['is_adopted'] == false,
           visible: controller.articleData.value?['user']['uid'] != appUser?.uid,
           child: Container(
             decoration: BoxDecoration(
@@ -121,12 +120,35 @@ class AnsDetailPage extends StatelessWidget {
                                   color: Color.fromARGB(255, 106, 0, 0),
                                 ),
                               ),
-                              Text(articleData['category'],
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(158, 106, 0, 0),
-                                  )),
+                              Row(
+                                children: [
+                                  if (articleData['qu'] > 0)
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 5),
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.green.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Text(
+                                        '${articleData['qu']}QU',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                          color:
+                                              Color.fromARGB(255, 57, 135, 60),
+                                          fontFamily: 'NanumSquare',
+                                        ),
+                                      ),
+                                    ),
+                                  Text(articleData['category'],
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Color.fromARGB(158, 106, 0, 0),
+                                      )),
+                                ],
+                              ),
                               const SizedBox(height: 10),
                               Visibility(
                                 visible: articleData['title'].isNotEmpty,
