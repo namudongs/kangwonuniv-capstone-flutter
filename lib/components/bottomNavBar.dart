@@ -3,6 +3,8 @@
 import 'package:capstone/ans/AnsPage.dart';
 import 'package:capstone/components/utils.dart';
 import 'package:capstone/home/homePage.dart';
+import 'package:capstone/main.dart';
+import 'package:capstone/notfiy/notificationController.dart';
 import 'package:capstone/notfiy/notifyPage.dart';
 import 'package:capstone/profile/profilePage.dart';
 import 'package:capstone/qu/quAddPage.dart';
@@ -58,8 +60,13 @@ class BottomNavBar extends StatelessWidget {
             onTap: (index) {
               if (index == 2) {
                 snackBar('주의', '질문 등록시 50QU가 차감됩니다.',
-                    duration: Duration(seconds: 2));
+                    duration: Duration(milliseconds: 1500));
                 Get.to(() => const QuAddPage(), fullscreenDialog: true);
+              } else if (index == 3) {
+                NotificationController notificationController =
+                    Get.put(NotificationController());
+                notificationController.updateNotifications(appUser!.uid);
+                bottomNavBarController.changeTab(3);
               } else {
                 bottomNavBarController.changeTab(index);
               }

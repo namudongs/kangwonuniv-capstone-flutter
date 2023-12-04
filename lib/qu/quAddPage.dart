@@ -47,7 +47,6 @@ class _QuAddPageState extends State<QuAddPage> {
                 selectedValue.value = value;
                 controller.setSelectedQu(selectedValue.value);
                 print('페이지의 QU값: ${selectedValue.value}');
-                Get.back();
               },
             );
           }).toList(),
@@ -99,195 +98,206 @@ class _QuAddPageState extends State<QuAddPage> {
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Divider(color: Colors.grey.withOpacity(0.5)),
-                    Row(
-                      children: [
-                        Obx(() => Container(
-                              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                              width: 20,
-                              height: 20,
-                              child: Checkbox(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                value: isCheckboxChecked.value,
-                                onChanged: (bool? value) {
-                                  isCheckboxChecked.value = value ?? false;
-                                  if (isCheckboxChecked.value) {
-                                    _showValueSelectionDialog();
-                                  } else {
-                                    selectedValue.value = 0;
-                                    controller.setSelectedQu(0);
-                                    print('페이지의 QU값: ${selectedValue.value}');
-                                  }
-                                },
-                              ),
-                            )),
-                        GestureDetector(
-                          onTap: () {
-                            isCheckboxChecked.value = !isCheckboxChecked.value;
-                          },
-                          child: Obx(() => Text(
-                                isCheckboxChecked.value
-                                    ? '${selectedValue.value}QU 사용'
-                                    : 'QU 사용하기',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: isCheckboxChecked.value
-                                      ? Colors.black
-                                      : Theme.of(context).hintColor,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Divider(color: Colors.grey.withOpacity(0.5)),
+                      Row(
+                        children: [
+                          Obx(() => Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 8, 0),
+                                width: 20,
+                                height: 20,
+                                child: Checkbox(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  value: isCheckboxChecked.value,
+                                  onChanged: (bool? value) {
+                                    isCheckboxChecked.value = value ?? false;
+                                    if (isCheckboxChecked.value) {
+                                      _showValueSelectionDialog();
+                                    } else {
+                                      selectedValue.value = 0;
+                                      controller.setSelectedQu(0);
+                                      print('페이지의 QU값: ${selectedValue.value}');
+                                    }
+                                  },
                                 ),
                               )),
-                        ),
-                      ],
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5)),
-                    GestureDetector(
-                      onTap: () {
-                        selectCategory();
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Icon(Icons.arrow_forward_ios_rounded,
-                                size: 14, color: Theme.of(context).hintColor),
-                            const SizedBox(width: 4),
-                            Obx(
-                              () => Text(
-                                categoryController.selectedCategory.value,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: categoryController
-                                              .selectedCategory.value !=
-                                          '카테고리'
-                                      ? Colors.black
-                                      : Theme.of(context).hintColor,
+                          GestureDetector(
+                            onTap: () {
+                              isCheckboxChecked.value =
+                                  !isCheckboxChecked.value;
+                            },
+                            child: Obx(() => InkWell(
+                                  onTap: () {
+                                    isCheckboxChecked.value =
+                                        !isCheckboxChecked.value;
+                                    _showValueSelectionDialog();
+                                  },
+                                  child: Text(
+                                    isCheckboxChecked.value
+                                        ? '${selectedValue.value}QU 사용'
+                                        : 'QU 사용하기',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: isCheckboxChecked.value
+                                          ? Colors.black
+                                          : Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
+                      Divider(color: Colors.grey.withOpacity(0.5)),
+                      GestureDetector(
+                        onTap: () {
+                          selectCategory();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 8, 0),
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            children: [
+                              Icon(Icons.arrow_forward_ios_rounded,
+                                  size: 14, color: Theme.of(context).hintColor),
+                              const SizedBox(width: 4),
+                              Obx(
+                                () => Text(
+                                  categoryController.selectedCategory.value,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: categoryController
+                                                .selectedCategory.value !=
+                                            '카테고리'
+                                        ? Colors.black
+                                        : Theme.of(context).hintColor,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5)),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: TextField(
-                        onChanged: (value) => controller.title.value = value,
-                        cursorColor: const Color.fromARGB(255, 104, 0, 123),
-                        cursorWidth: 1,
-                        cursorHeight: 19,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.zero,
-                          isCollapsed: true,
-                          hintText: '제목(선택사항)',
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                        ),
-                        maxLines: null,
-                        keyboardType: TextInputType.multiline,
-                      ),
-                    ),
-                    Divider(color: Colors.grey.withOpacity(0.5)),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-                      child: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.6,
+                      Divider(color: Colors.grey.withOpacity(0.5)),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 8, 0),
                         child: TextField(
-                          onChanged: (value) =>
-                              controller.content.value = value,
+                          onChanged: (value) => controller.title.value = value,
                           cursorColor: const Color.fromARGB(255, 104, 0, 123),
-                          cursorHeight: 16,
                           cursorWidth: 1,
+                          cursorHeight: 19,
                           decoration: const InputDecoration(
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.zero,
                             isCollapsed: true,
-                            hintText:
-                                '궁금한 내용을 질문해보세요!\n\n이용 약관에 위반되거나 부적절한 질문은 삭제될 수 있습니다.\n채택된 답변이 있는 경우 질문을 수정 또는 삭제할 수 없습니다.',
+                            hintText: '제목(선택사항)',
                           ),
                           style: const TextStyle(
-                            fontSize: 13,
+                            fontSize: 16,
                           ),
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
                         ),
                       ),
+                      Divider(color: Colors.grey.withOpacity(0.5)),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 8, 0),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          child: TextField(
+                            onChanged: (value) =>
+                                controller.content.value = value,
+                            cursorColor: const Color.fromARGB(255, 104, 0, 123),
+                            cursorHeight: 16,
+                            cursorWidth: 1,
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.zero,
+                              isCollapsed: true,
+                              hintText:
+                                  '궁금한 내용을 질문해보세요!\n\n이용 약관에 위반되거나 부적절한 질문은 삭제될 수 있습니다.\n채택된 답변이 있는 경우 질문을 수정 또는 삭제할 수 없습니다.',
+                            ),
+                            style: const TextStyle(
+                              fontSize: 13,
+                            ),
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _buildSelectedImages(),
+                    Divider(color: Colors.grey.withOpacity(0.5)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: _pickImage,
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(left: 20, bottom: 10),
+                                padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: const Color.fromARGB(150, 157, 0, 0),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add,
+                                        size: 13,
+                                        color: Color.fromARGB(200, 157, 0, 0)),
+                                    Text(
+                                      '이미지',
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Color.fromARGB(200, 157, 0, 0),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _buildSelectedImages(),
-                  Divider(color: Colors.grey.withOpacity(0.5)),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: _pickImage,
-                            child: Container(
-                              margin:
-                                  const EdgeInsets.only(left: 20, bottom: 10),
-                              padding: const EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: const Color.fromARGB(150, 157, 0, 0),
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add,
-                                      size: 13,
-                                      color: Color.fromARGB(200, 157, 0, 0)),
-                                  Text(
-                                    '이미지',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: Color.fromARGB(200, 157, 0, 0),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          FocusScope.of(context).unfocus();
-                        },
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

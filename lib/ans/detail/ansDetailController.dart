@@ -146,6 +146,10 @@ class AnsDetailController extends GetxController {
           questionSnapshot.data() as Map<String, dynamic>?;
 
       if (data != null) {
+        if (data['qu'] > 0) {
+          var increaseAmount = data['qu'] * 1;
+          authController.increaseUserQu(appUser!.uid, increaseAmount);
+        }
         // 질문의 이미지 삭제
         List<dynamic> questionImages = data['images'] ?? [];
         await _deleteImagesFromStorage(questionImages);

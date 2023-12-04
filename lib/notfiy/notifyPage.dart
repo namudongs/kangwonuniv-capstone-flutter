@@ -60,40 +60,62 @@ class _NotifyPageState extends State<NotifyPage> {
                     snackBar('알림 삭제', '알림이 삭제되었습니다.');
                   });
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.withOpacity(0.3),
+                child: Dismissible(
+                  key: Key(notification['timestamp'].toString()),
+                  onDismissed: (direction) async {
+                    notificationController.deleteAllNotificationsWithTimestamp(
+                        userId, notification['timestamp']);
+                    notificationController.fetchNotifications(userId);
+                    snackBar('알림 삭제', '알림이 삭제되었습니다.');
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ListTile(
-                    leading: const Icon(Icons.notifications,
-                        color: Color.fromARGB(255, 157, 0, 0)), // 아이콘 추가
-                    title: Text(
-                      notification['title'],
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14), // 제목 스타일 조정
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.withOpacity(0.3),
+                        ),
+                      ),
                     ),
-                    subtitle: Text(
-                      notification['message'],
-                      style: const TextStyle(fontSize: 12),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: ListTile(
+                      leading: const Icon(Icons.notifications,
+                          color: Color.fromARGB(255, 157, 0, 0)), // 아이콘 추가
+                      title: Text(
+                        notification['title'],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14), // 제목 스타일 조정
+                      ),
+                      subtitle: Text(
+                        notification['message'],
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      trailing: Text(formattedTime,
+                          style:
+                              const TextStyle(color: Colors.grey)), // 날짜 스타일 조정
+                      onTap: () {
+                        if (notification['articleId'] != '' ||
+                            notification['articleId'] == 'answer') {
+                          Get.to(AnsDetailPage(
+                              articleId: notification['articleId']));
+                        } else {
+                          return;
+                        }
+                      },
                     ),
-                    trailing: Text(formattedTime,
-                        style:
-                            const TextStyle(color: Colors.grey)), // 날짜 스타일 조정
-                    onTap: () {
-                      if (notification['articleId'] != '' ||
-                          notification['articleId'] == 'answer') {
-                        Get.to(AnsDetailPage(
-                            articleId: notification['articleId']));
-                      } else {
-                        return;
-                      }
-                    },
                   ),
                 ),
               );

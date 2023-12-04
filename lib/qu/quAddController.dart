@@ -31,6 +31,7 @@ class QuAddController extends GetxController {
   void setSelectedQu(int value) {
     usedQu.value = value;
     print('컨트롤러의 QU값: ${usedQu.value}');
+    Get.back();
   }
 
   void updateCategory(String newCategory) {

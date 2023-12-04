@@ -19,4 +19,20 @@ class ProfileController extends GetxController {
       await user.delete();
     }
   }
+
+  // SignOut
+  Future<void> signOut() async {
+    // Firebase Authentication 인스턴스 가져오기
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    // 현재 로그인된 사용자 가져오기
+    User? user = auth.currentUser;
+    if (user != null) {
+      // Firebase Authentication에서 사용자 로그아웃
+      await auth.signOut();
+    }
+
+    // 파이어스토어에서 사용자 문서 삭제
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    await firestore.collection('users').doc(user!.uid).delete();
+  }
 }
