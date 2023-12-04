@@ -87,7 +87,7 @@ class MyAnsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
               ),
               child: Text(
-                '${article['category']} 질문', // 질문의 카테고리
+                '${article['category']}', // 질문의 카테고리
                 style: const TextStyle(
                     fontSize: 12,
                     color: Color.fromARGB(200, 106, 0, 0),
@@ -95,14 +95,17 @@ class MyAnsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
-            Text(
-              '${article['title']}', // 질문의 제목 혹은 내용
-              style: const TextStyle(
-                  fontSize: 16,
-                  color: Color.fromARGB(200, 106, 0, 0),
-                  fontFamily: 'NanumSquare'),
+            Visibility(
+              visible: article['title'] != null && article['title'].isNotEmpty,
+              child: Text(
+                '${article['title']}', // 질문의 제목 혹은 내용
+                style: const TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(200, 106, 0, 0),
+                    fontFamily: 'NanumSquare'),
+              ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
             Container(
               margin: const EdgeInsets.only(bottom: 2),
               padding: const EdgeInsets.all(3),
