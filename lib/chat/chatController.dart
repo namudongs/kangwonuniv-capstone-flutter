@@ -62,6 +62,8 @@ class ChatController extends GetxController {
         '채팅을 확인해 주세요.',
         chatRoomId,
         'chat',
+        '',
+        '',
       );
       selectedImages.clear();
     } catch (e) {

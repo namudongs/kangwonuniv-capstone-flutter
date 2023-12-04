@@ -91,7 +91,7 @@ class AnsDetailController extends GetxController {
         await answerRef.update({'is_adopted': true});
 
         notificationController.sendPushNotification(answerWriterId!,
-            "답변이 채택되었습니다!", "보상으로 50QU를 적립해드렸어요.", articleId, 'answer');
+            "답변이 채택되었습니다!", "보상으로 50QU를 적립해드렸어요.", articleId, 'answer', '', '');
         notificationController.updateNotifications(appUser!.uid);
         AuthController authController = Get.find<AuthController>();
         authController.increaseUserQu(answerWriterId, 50);

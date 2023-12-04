@@ -209,7 +209,7 @@ class SignUpController extends GetxController {
       await users.doc(userCredential.user!.uid).set(appUser.toMap());
       snackBar('회원가입', '회원가입에 성공하였습니다.');
       notificationController.saveNotificationToFirestore(
-          appUser.uid, '회원가입을 축하드려요!', '300QU를 적립해드렸어요.', '');
+          appUser.uid, '회원가입을 축하드려요!', '300QU를 적립해드렸어요.', '', '', '');
       notificationController.updateNotifications(appUser.uid);
 
       String? token = await _firebaseMessaging.getToken();

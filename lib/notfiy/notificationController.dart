@@ -216,7 +216,7 @@ class NotificationController extends GetxController {
   }
 
   Future<void> sendPushNotification(String userId, String title, String message,
-      String id, String type) async {
+      String? id, String type, String? senderId, String? receiverId) async {
     const String functionUrl =
         'https://us-central1-capstone-flutter-eb3c2.cloudfunctions.net/sendPushNotification'; // Firebase 함수 URL
 
@@ -238,7 +238,7 @@ class NotificationController extends GetxController {
       if (response.statusCode == 200) {
         print("알림 전송에 성공했습니다.");
         await saveNotificationToFirestore(
-            userId, title, message, id); // Firestore에 알림 저장
+            userId, title, message, id, senderId, receiverId);
       } else {
         print("알림 전송에 실패했습니다.");
       }
@@ -247,8 +247,8 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> saveNotificationToFirestore(
-      String userId, String title, String message, String id) async {
+  Future<void> saveNotificationToFirestore(String userId, String title,
+      String message, String? id, String? senderId, String? receiverId) async {
     String notificationId = DateTime.now().millisecondsSinceEpoch.toString();
 
     try {
