@@ -28,18 +28,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     notificationController.saveDeviceToken();
-
-    // 5초마다 페이지 전환
-    // _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-    //   if (_pageController.hasClients && totalArticles > 0) {
-    //     int nextPage = (_pageController.page!.toInt() + 1) % totalArticles;
-    //     _pageController.animateToPage(
-    //       nextPage,
-    //       duration: const Duration(milliseconds: 400),
-    //       curve: Curves.easeInOut,
-    //     );
-    //   }
-    // });
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:capstone/authController.dart';
+import 'package:capstone/authentication/mainPage.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/profile/myAnsPage.dart';
 import 'package:capstone/profile/myQuPage.dart';
@@ -172,7 +173,7 @@ class ProfilePage extends StatelessWidget {
             TextButton(
               child: const Text('취소'),
               onPressed: () {
-                Navigator.of(context).pop(); // Dialog 닫기
+                Get.back();
               },
             ),
             // '삭제' 버튼
@@ -181,7 +182,7 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 // 여기에 계정 삭제 로직을 넣습니다.
                 controller.deleteUserAccount();
-                Navigator.of(context).pop(); // Dialog 닫기
+                Get.offAll(const MainPage());
               },
             ),
           ],
@@ -203,7 +204,7 @@ class ProfilePage extends StatelessWidget {
             TextButton(
               child: const Text('취소'),
               onPressed: () {
-                Navigator.of(context).pop(); // Dialog 닫기
+                Get.back();
               },
             ),
             // '로그아웃' 버튼
@@ -212,7 +213,7 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 // 여기에 로그아웃 로직을 넣습니다.
                 authController.signOut();
-                Navigator.of(context).pop(); // Dialog 닫기
+                Get.offAll(const MainPage());
               },
             ),
           ],
