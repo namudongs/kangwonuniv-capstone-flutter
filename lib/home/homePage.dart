@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'package:capstone/ans/detail/ansDetailPage.dart';
-import 'package:capstone/group/groupListPage.dart';
 import 'package:capstone/home/homeController.dart';
 import 'package:capstone/notfiy/notificationController.dart';
+import 'package:capstone/timer/timerPage.dart';
 import 'package:capstone/timetable/timeTablePage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     InkWell(
                       onTap: () {
-                        Get.to(const GroupListPage());
+                        Get.to(const TimerPage());
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -215,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              '스터디',
+                              '타이머',
                               style: TextStyle(
                                 fontFamily: 'HomeTitleFont',
                                 color: Colors.white,
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            Icon(Icons.group, color: Colors.white, size: 70),
+                            Icon(Icons.timer, color: Colors.white, size: 70),
                           ],
                         ),
                       ),
