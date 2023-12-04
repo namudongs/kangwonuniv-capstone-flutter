@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, file_names
 
 import 'package:capstone/ans/detail/ansDetailPage.dart';
+import 'package:capstone/group/groupListPage.dart';
 import 'package:capstone/home/homeController.dart';
 import 'package:capstone/notfiy/notificationController.dart';
 import 'package:capstone/timetable/timeTablePage.dart';
@@ -176,50 +177,55 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(
-                          color: Colors.grey.withOpacity(0.3),
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: const LinearGradient(
-                          begin: Alignment.bottomLeft,
-                          end: Alignment.topRight,
-                          colors: [
-                            Color(
-                                0xFFB76652), // This is the color at the top edge of the image
-                            Color.fromARGB(255, 158, 62,
-                                35), // This is the color at the bottom edge of the image
+                    InkWell(
+                      onTap: () {
+                        Get.to(const GroupListPage());
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: const LinearGradient(
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            colors: [
+                              Color(
+                                  0xFFB76652), // This is the color at the top edge of the image
+                              Color.fromARGB(255, 158, 62,
+                                  35), // This is the color at the bottom edge of the image
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              blurRadius: 10,
+                              spreadRadius: 1,
+                              offset: Offset.zero,
+                            ),
                           ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            offset: Offset.zero,
-                          ),
-                        ],
-                      ),
-                      margin: const EdgeInsets.fromLTRB(6, 0, 15, 10),
-                      width: MediaQuery.of(context).size.width / 2 - 21,
-                      height: MediaQuery.of(context).size.height / 6,
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '타이머',
-                            style: TextStyle(
-                              fontFamily: 'HomeTitleFont',
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
+                        margin: const EdgeInsets.fromLTRB(6, 0, 15, 10),
+                        width: MediaQuery.of(context).size.width / 2 - 21,
+                        height: MediaQuery.of(context).size.height / 6,
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              '스터디',
+                              style: TextStyle(
+                                fontFamily: 'HomeTitleFont',
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          Icon(Icons.timer, color: Colors.white, size: 70),
-                        ],
+                            Icon(Icons.group, color: Colors.white, size: 70),
+                          ],
+                        ),
                       ),
                     ),
                   ],
