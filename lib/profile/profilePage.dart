@@ -2,11 +2,13 @@ import 'package:capstone/authController.dart';
 import 'package:capstone/main.dart';
 import 'package:capstone/profile/myAnsPage.dart';
 import 'package:capstone/profile/myQuPage.dart';
+import 'package:capstone/profile/profileController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
   final AuthController authController = Get.put(AuthController());
+  final ProfileController controller = Get.put(ProfileController());
 
   ProfilePage({super.key});
 
@@ -136,15 +138,17 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.exit_to_app),
-                  title: const Text('로그아웃'),
-                  onTap: authController.signOut,
-                ),
+                    leading: const Icon(Icons.exit_to_app),
+                    title: const Text('로그아웃'),
+                    onTap: () {
+                      showLogoutDidalog(context);
+                    }),
                 ListTile(
                   leading: const Icon(Icons.delete),
                   title: const Text('회원탈퇴'),
                   onTap: () {
                     // 회원탈퇴 탭 동작
+                    showDeleteConfirmationDialog(context);
                   },
                 ),
               ],
@@ -152,6 +156,68 @@ class ProfilePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void showDeleteConfirmationDialog(BuildContext context) {
+    // AlertDialog를 보여주는 showDialog 함수
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('계정 삭제'),
+          content: const Text('계정을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.'),
+          actions: <Widget>[
+            // '취소' 버튼
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog 닫기
+              },
+            ),
+            // '삭제' 버튼
+            TextButton(
+              child: const Text('삭제'),
+              onPressed: () {
+                // 여기에 계정 삭제 로직을 넣습니다.
+                controller.deleteUserAccount();
+                Navigator.of(context).pop(); // Dialog 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showLogoutDidalog(BuildContext context) {
+    // AlertDialog를 보여주는 showDialog 함수
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('로그아웃'),
+          content: const Text('로그아웃 하시겠습니까?'),
+          actions: <Widget>[
+            // '취소' 버튼
+            TextButton(
+              child: const Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Dialog 닫기
+              },
+            ),
+            // '로그아웃' 버튼
+            TextButton(
+              child: const Text('로그아웃'),
+              onPressed: () {
+                // 여기에 로그아웃 로직을 넣습니다.
+                authController.signOut();
+                Navigator.of(context).pop(); // Dialog 닫기
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
