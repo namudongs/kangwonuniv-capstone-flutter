@@ -3,6 +3,8 @@
 import 'package:capstone/ans/detail/ansDetailPage.dart';
 import 'package:capstone/home/homeController.dart';
 import 'package:capstone/notfiy/notificationController.dart';
+import 'package:capstone/qu/categoryController.dart';
+import 'package:capstone/qu/selectCategoryPage.dart';
 import 'package:capstone/timer/timerPage.dart';
 import 'package:capstone/timetable/timeTablePage.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final CategoryController categoryController = Get.put(CategoryController());
   final PageController _pageController = PageController();
   final NotificationController notificationController =
       Get.find<NotificationController>();
@@ -217,6 +220,40 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
+                ),
+                InkWell(
+                  onTap: () {
+                    print('관심 분야 설정하기를 탭했습니다.');
+                    Get.to(const SelectCategoryPage(sourcePage: 'INTERESTING'));
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 25,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 10,
+                          spreadRadius: 1,
+                          offset: Offset.zero,
+                        ),
+                      ],
+                    ),
+                    child: const Text('💡관심 분야 설정하기',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: 'HomeTitleFont',
+                          fontSize: 17,
+                          fontWeight: FontWeight.w300,
+                        )),
+                  ),
                 ),
                 Divider(
                   height: 30,

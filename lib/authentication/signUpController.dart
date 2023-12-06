@@ -201,6 +201,7 @@ class SignUpController extends GetxController {
         qu: 300,
         grade: convertGradeToInt(selectedGrade.value),
         major: selectedMajor,
+        interesting: '설정안함',
         timestamp: Timestamp.now(),
         avatar: avatarUrl,
         timetable: [],

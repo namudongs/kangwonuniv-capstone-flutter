@@ -16,12 +16,15 @@ class AnsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('답변하기'),
-          bottom:
-              const TabBar(tabs: [Tab(text: 'QU 질문보기'), Tab(text: '전체 질문보기')]),
+          bottom: const TabBar(tabs: [
+            Tab(text: 'QU 질문보기'),
+            Tab(text: '관심 질문보기'),
+            Tab(text: '전체 질문보기'),
+          ]),
         ),
         body: TabBarView(
           children: [
@@ -36,6 +39,37 @@ class AnsPage extends StatelessWidget {
 
                   if (filteredList.isEmpty) {
                     return const Center(child: Text('QU를 사용한 질문이 없습니다.'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final DocumentSnapshot documentSnapshot =
+                          filteredList[index];
+                      return InkWell(
+                        onTap: () => Get.to(() =>
+                            AnsDetailPage(articleId: documentSnapshot.id)),
+                        child: buildArticleItem(documentSnapshot, context),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.black.withOpacity(0.02)),
+              child: Obx(
+                () {
+                  print(appUser!.interesting);
+
+                  var filteredList = controller.articleList.value
+                      .where((doc) =>
+                          (doc.data() as Map<String, dynamic>)['category'] ==
+                          appUser!.interesting)
+                      .toList();
+
+                  if (filteredList.isEmpty) {
+                    return const Center(child: Text('관심 분야의 질문이 없습니다.'));
                   }
 
                   return ListView.builder(

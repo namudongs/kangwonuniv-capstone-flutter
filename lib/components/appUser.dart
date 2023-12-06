@@ -10,6 +10,7 @@ class AppUser {
   final int grade;
   final int qu;
   final String major;
+  final String interesting;
   final Timestamp timestamp;
   final String avatar;
   List<Map<String, dynamic>> timetable;
@@ -22,6 +23,7 @@ class AppUser {
     required this.grade,
     required this.qu,
     required this.major,
+    required this.interesting,
     required this.timestamp,
     required this.avatar,
     required this.timetable,
@@ -36,6 +38,7 @@ class AppUser {
       'grade': grade,
       'qu': qu,
       'major': major,
+      'interesting': interesting,
       'timestamp': timestamp,
       'avatar': avatar,
       'timetable': timetable,
@@ -51,6 +54,7 @@ class AppUser {
       grade: map['grade'],
       qu: map['qu'],
       major: map['major'],
+      interesting: map['interesting'],
       timestamp: Timestamp.now(),
       avatar: map['avatar'],
       timetable: List<Map<String, dynamic>>.from(map['timetable'] ?? []),

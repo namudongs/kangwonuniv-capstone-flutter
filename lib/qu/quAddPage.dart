@@ -24,7 +24,8 @@ class _QuAddPageState extends State<QuAddPage> {
   final CategoryController categoryController = Get.put(CategoryController());
 
   Future<void> selectCategory() async {
-    final selectedCategory = await Get.to(() => const SelectCategoryPage());
+    final selectedCategory =
+        await Get.to(() => const SelectCategoryPage(sourcePage: 'ADD'));
     if (selectedCategory != null) {
       categoryController.updateCategory(selectedCategory);
     }

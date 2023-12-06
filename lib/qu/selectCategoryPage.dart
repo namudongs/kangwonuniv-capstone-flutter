@@ -1,8 +1,10 @@
+import 'package:capstone/home/homeController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SelectCategoryPage extends StatefulWidget {
-  const SelectCategoryPage({super.key});
+  final String sourcePage;
+  const SelectCategoryPage({super.key, required this.sourcePage});
 
   @override
   State<SelectCategoryPage> createState() => _SelectCategoryPageState();
@@ -22,6 +24,17 @@ class _SelectCategoryPageState extends State<SelectCategoryPage> {
     '대학생활',
   ];
 
+  void handleCategorySelection(String category) {
+    HomeController homeController = Get.put(HomeController());
+
+    if (widget.sourcePage == 'ADD') {
+      selectCategory(category);
+    } else if (widget.sourcePage == 'INTERESTING') {
+      homeController.saveCategory(category);
+      Get.back();
+    }
+  }
+
   void selectCategory(String category) {
     Get.back(result: category);
   }
@@ -37,7 +50,9 @@ class _SelectCategoryPageState extends State<SelectCategoryPage> {
         itemBuilder: (context, index) {
           return ListTile(
             title: Text(categories[index]),
-            onTap: () => selectCategory(categories[index]),
+            onTap: () {
+              handleCategorySelection(categories[index]);
+            },
           );
         },
       ),
