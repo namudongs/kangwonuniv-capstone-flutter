@@ -110,6 +110,23 @@ class QuAddController extends GetxController {
         if (uploadedImages.isNotEmpty) {
           await docRef.update({'images': uploadedImages});
         }
+        await authController.decreaseUserQu(appUser?.uid ?? '', 50);
+        await authController.decreaseUserQu(appUser?.uid ?? '', usedQu.value);
+        await authController.fetchUserData();
+        notificationController.saveNotificationToFirestore(appUser?.uid ?? '',
+            '질문을 등록하셨습니다.', '답변이 등록되면 알림을 드릴게요!', docRef.id, '', '');
+
+        notificationController.updateNotifications(appUser!.uid);
+
+        if (title.value.isEmpty || title.value == '') {
+          notificationController.notifyInterestedUsers(
+              categoryController.selectedCategory.value,
+              docRef.id,
+              content.value);
+        }
+
+        notificationController.notifyInterestedUsers(
+            categoryController.selectedCategory.value, docRef.id, title.value);
 
         categoryController.updateCategory('카테고리');
         title.value = '';
@@ -124,12 +141,6 @@ class QuAddController extends GetxController {
         Get.to(() => AnsDetailPage(articleId: docRef.id));
 
         snackBar('성공', '질문이 등록되었습니다.');
-        await authController.decreaseUserQu(appUser?.uid ?? '', 50);
-        await authController.decreaseUserQu(appUser?.uid ?? '', usedQu.value);
-        await authController.fetchUserData();
-        notificationController.saveNotificationToFirestore(appUser?.uid ?? '',
-            '질문을 등록하셨습니다.', '답변이 등록되면 알림을 드릴게요!', docRef.id, '', '');
-        notificationController.updateNotifications(appUser!.uid);
 
         isLoading.value = false;
       } catch (e) {

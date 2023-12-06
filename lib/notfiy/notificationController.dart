@@ -270,6 +270,34 @@ class NotificationController extends GetxController {
     }
   }
 
+  Future<void> notifyInterestedUsers(
+      String category, String questionId, String questionTitle) async {
+    // 관심 있는 사용자 찾기
+    print('관심 질문 알림을 보낼 사용자를 찾습니다.');
+    print(category);
+    QuerySnapshot interestedUsers = await FirebaseFirestore.instance
+        .collection('users')
+        .where('interesting', isEqualTo: category)
+        .get();
+
+    print('${interestedUsers.docs.length}');
+
+    // 각 사용자에게 알림 보내기
+    for (var userDoc in interestedUsers.docs) {
+      String userId = userDoc.id;
+
+      // 알림 메시지 구성
+      String title = "새로운 $category 관련 질문이 등록되었습니다!";
+      String message = "질문: $questionTitle";
+      print('$userId 사용자에게 알림을 보냈습니다.');
+      print('$category 사용자에게 알림을 보냈습니다.');
+
+      // 알림 전송 함수 호출
+      await sendPushNotification(
+          userId, title, message, 'id', 'type', 'senderId', 'receiverId');
+    }
+  }
+
   Future<List<Map<String, dynamic>>> fetchNotifications(String userId) async {
     QuerySnapshot querySnapshot = await firestore
         .collection('users')
